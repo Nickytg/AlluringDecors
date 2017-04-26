@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+    <ui:composition template="/template/common/commonLayout.xhtml">
+        <ui:define name="content">            
+            <section class="content-box box-style-1 box-4">
+                <div class="zerogrid" style="width: 100%">
+                    <!--Login box-->
+                    <div class="wrap-box" id="loginForm">
+                        <div class="box-header" style="padding-top:53px">
+                            <h2>CONTACT US</h2>
+                        </div>
+                        <div id="contact_form">
+                            <form name="form1" id="ff" method="post" action="contact.php">
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <input type="text" name="name" id="name" placeholder="Please enter your name" required="required"></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <input type="text" name="password" id="phone" placeholder="Please enter your phone" required="required"></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <input type="text" name="password" id="address" placeholder="Please enter your address" required="required"></input>
+                                        </div>
+                                    </div>
+                                    
+                                </label>
+                                <label class="row">
+                                    <div class="wrap-col">
+                                        <textarea name="content" id="content" class="form-control" rows="4" cols="25" required="required"
+                                                  placeholder="Please enter your "></textarea>
+                                    </div>
+                                </label>
+                                <center>
+                                    <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
+                                </center>
+                            </form>
+                        </div>
+                    </div>   
+                    <!-- END -->
+                </div>
+            </section>
+        </ui:define>
+    </ui:composition>
+</html>
