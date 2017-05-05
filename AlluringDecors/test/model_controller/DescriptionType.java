@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dto;
+package model_controller;
 
 import java.io.Serializable;
 
@@ -11,16 +11,16 @@ import java.io.Serializable;
  *
  * @author NamWin
  */
-public class Role implements Serializable{
+public class DescriptionType implements Serializable{
     int id;
     String name;
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setID(int ID) {
+        this.id = ID;
     }
 
     public String getName() {
