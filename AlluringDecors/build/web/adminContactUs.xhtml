@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile"
+      >
+    <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
+        <ui:define name="content">       
+            <script src="adminTemplate/assets/libs/ckeditor.js"></script>
+            <section class="content-box box-style-1 box-4">
+                <div class="zerogrid" style="width: 100%">
+                    <div class="wrap-box"><!--Start Box-->
+                        <div class="box-header" style="padding-top:53px">
+                            <h2>Contact us management</h2>
+                        </div>
+                        <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" width="600" height="600" style="z-index:9999">
+                            <pm:field>
+                                    <p:outputLabel value="ContactUs ID" />
+                            </pm:field>
+                            <pm:field>
+                                    <p:outputLabel for="name" value="Name" />
+                                    <p:inputText id="name" />
+                            </pm:field>
+                            <pm:field>
+                                    <p:outputLabel for="address" value="Address" />
+                                    <p:inputText id="address" />
+                            </pm:field>
+                            <pm:field>
+                                    <p:outputLabel for="phone" value="Phone" />
+                                    <p:inputText id="phone" />
+                            </pm:field>
+                            <pm:field>
+                                    <p:outputLabel for="content" value="Content" />
+                                    <p:inputTextarea id="content" />
+                            </pm:field>
+                            <center>
+                                <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
+                            </center>
+                        </p:dialog>
+                        <h:form prependId="false">
+                            <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
+                        </h:form>                        
+                    </div>                        
+                </div>
+            </section>
+        </ui:define>
+    </ui:composition>
+</html>

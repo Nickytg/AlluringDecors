@@ -8,7 +8,7 @@
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">            
             <section class="content-box box-style-1 box-4">
-                <div class="zerogrid" style="width: 100%">
+                <div class="zerogrid" >
                     <!--Login box-->
                     <div class="wrap-box" id="loginForm">
                         <div class="box-header" style="padding-top:53px">
@@ -17,18 +17,19 @@
                         <div id="contact_form">
                             <form name="form1" id="ff" method="post" action="contact.php">
                                 <label class="row">
-                                    <div class="col-1-2">
+                                    <div class="col-1-1">
                                         <div class="wrap-col">
                                             <input type="text" name="userName" id="account" placeholder="Please enter your account" required="required"></input>
                                         </div>
                                     </div>
-                                    <div class="col-1-2">
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-1">
                                         <div class="wrap-col">
                                             <input type="password" name="password" id="password" placeholder="Please enter your password" required="required"></input>
                                         </div>
                                     </div>
                                 </label>
-                                
                                 <center>
                                     <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
                                     <p>Don't have account yet? <span onclick="toggleRegisterLogin()" style="color:blue; cursor:pointer">CLICK HERE</span> to register</p>

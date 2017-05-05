@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+    <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
+        <ui:define name="content">       
+            <script src="adminTemplate/assets/libs/ckeditor.js"></script>
+            <section class="content-box box-style-1 box-4">
+                <div class="zerogrid" style="width: 100%">
+                    <div class="wrap-box"><!--Start Box-->
+                        <div class="box-header" style="padding-top:53px">
+                            <h2>FAQ's management</h2>
+                        </div>
+                        <div class="row">
+                            <h:form id="tableForm">
+                                <p:dataTable id="table" var="item" value="#{fAQBean.readAll()}" widgetVar="faqTable" paginator="true" rows="10"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                             paginatorPosition="bottom" lazy="true"
+                                             style="width:900px;" emptyMessage="Data not found">  
+                                    <f:facet name="header">
+                                        This is Tour Order content
+                                    </f:facet>
+                                    <p:column headerText="FAQ ID">  
+                                        <h:outputText value="#{item.faqID}" />  
+                                    </p:column>  
+                                    <p:column headerText="Question">  
+                                        <h:outputText value="#{item.question}" />  
+                                    </p:column> 
+                                    <p:column headerText="Answer">  
+                                        <h:outputText value="#{item.answer}" />  
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </div>
+                        <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" width="600" height="600" style="z-index:9999">
+                            <pm:field>
+                                    <p:outputLabel value="FAQ's ID" />
+                            </pm:field>
+                            <pm:field>
+                                    <p:outputLabel for="question" value="Question" />
+                                    <p:inputText id="question" />
+                            </pm:field>
+                            <pm:field>
+                                    <p:outputLabel for="answer" value="Answer" />
+                                    <p:inputTextarea id="answer" />
+                            </pm:field>
+                            <center>
+                                <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
+                            </center>
+                        </p:dialog>
+                        <h:form prependId="false">
+                            <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
+                        </h:form>                           
+                    </div>                        
+                </div>
+            </section>
+        </ui:define>
+    </ui:composition>
+</html>
