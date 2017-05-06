@@ -27,7 +27,7 @@ import utils.DBConnector;
 public class BillBean implements Serializable {
 
 
-    // <editor-fold desc="DTO" defaultstate="collapsed">
+// <editor-fold desc="DTO" defaultstate="collapsed">
     public BillBean() {
     }
     int id, serviceRequestID, domainID;
@@ -175,8 +175,8 @@ public class BillBean implements Serializable {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if(rs.first()) {
-                rs.updateString("Username", this.getUsername());
-                rs.updateString("Password", this.getPassword());
+                rs.updateInt(props[1], this.getServiceRequestID());
+                rs.updateInt(props[2], this.getDomainID());
                 rs.updateRow();
                 return true;
             }
@@ -215,6 +215,14 @@ public class BillBean implements Serializable {
             }
         }
         return false;
+    }
+    
+    public DomainBean getDomain(){
+        return new DomainBean().readById(this.domainID);
+    }
+    
+    public ServicesRequestBean getServicesRequest(){
+        return new ServicesRequestBean().readById(this.serviceRequestID);
     }
 // </editor-fold>
 }

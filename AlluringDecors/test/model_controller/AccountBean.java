@@ -230,5 +230,9 @@ public class AccountBean implements Serializable{
         }
         return false;
     }
+    
+    public RoleBean getRole(){
+        return new RoleBean().readById(this.roleID);
+    }
 // </editor-fold>
 }
