@@ -17,133 +17,168 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Account management</h2>
                         </div>
-                        <div class="row">
-                            <h:form id="tableForm">
-                                <p:dataTable id="table" var="item" value="#{accountBean.readAll()}" widgetVar="accountTable" paginator="true" rows="10"
-                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
-                                             paginatorPosition="bottom" lazy="true"
-                                             style="width:900px;" emptyMessage="Data not found">  
-                                    <f:facet name="header">
-                                        Account data
+                        <center>
+                            <!-- Add form-->
+                            <h:outputText value="User first name" />                                           
+                            <h:outputText value="#{accountBean.user.firstname}" />
+
+                            <h:outputText value="User last name" />
+                            <h:inputText value="#{accountBean.user.lastname}" required="true" requiredMessage="Please enter question" />    
+
+                            <h:outputText value="User Email" />
+                            <h:inputText value="#{accountBean.user.email}" required="true" requiredMessage="Please enter question" />    
+
+                            <h:outputText value="User Address" />
+                            <h:inputText value="#{accountBean.user.address}" required="true" requiredMessage="Please enter question" />    
+
+                            <h:outputText value="User Phone" />
+                            <h:inputText value="#{accountBean.user.phone}" required="true" requiredMessage="Please enter question" />    
+
+                            <h:outputText value="Username" />
+                            <h:inputText value="#{accountBean.username}" required="true" requiredMessage="Please enter answer" /> 
+
+                            <h:outputText value="Password" />
+                            <h:inputText value="#{accountBean.password}" required="true" requiredMessage="Please enter answer" />
+
+                            <h:outputText value="Role" />
+                            <h:selectOneMenu value="#{accountBean.roleID}"
+                                             converter="#{roleConverter}" >
+                                <f:selectItems value="#{roleBean.readAll()}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}"/>
+                                </h:selectOneMenu>    
+
+                            <p:commandButton id="add" actionListener="#{accountBean.create()}" update=":tableForm:table" value="Add">
+                            </p:commandButton>      
+                        </center>
+                        <h:form id="tableForm">
+                            <div class="row">
+                                <center>
+                                    <p:dataTable id="table" var="item" value="#{accountBean.readAll()}" widgetVar="accountTable" paginator="true" rows="10"
+                                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                                 paginatorPosition="bottom" lazy="true"
+                                                 style="width:900px;" emptyMessage="Data not found">  
+                                        <f:facet name="header">
+                                            Account data
+                                        </f:facet>
+                                        <p:column headerText="User ID">  
+                                            <h:outputText value="#{item.userID}" />  
+                                        </p:column>  
+                                        <p:column headerText="Username">  
+                                            <h:outputText value="#{item.username}" />  
+                                        </p:column>
+                                        <p:column headerText="Password">  
+                                            <h:outputText value="#{item.password}" />  
+                                        </p:column> 
+                                        <p:column headerText="Role">  
+                                            <h:outputText value="#{item.role.name}" />  
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton update=":tableForm:accountDetail" oncomplete="PF('accountDialog').show()" icon="ui-icon-search" title="View">
+                                                <f:setPropertyActionListener value="#{item}" target="#{accountBean.selectedAccount}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:accountEdit" oncomplete="PF('accountEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                                <f:setPropertyActionListener value="#{item}" target="#{accountBean.selectedAccount}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:accountDelete" oncomplete="PF('accountDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                                <f:setPropertyActionListener value="#{item}" target="#{accountBean.selectedAccount}"  />
+                                            </p:commandButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </center>
+
+                                <!-- Dialog for view Detail-->
+                                <p:dialog header="Account Info" widgetVar="accountDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="accountDetail" style="text-align:center;">
+                                        <p:panelGrid  columns="2" rendered="#{not empty accountBean.selectedAccount}" >
+                                            <h:outputText value="UserID" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID}" />
+
+                                            <h:outputText value="User first name" />
+                                            <h:outputText value="#{accountBean.selectedAccount.user.firstname}" />
+
+                                            <h:outputText value="User last name" />
+                                            <h:outputText value="#{accountBean.selectedAccount.user.lastname}" />
+
+                                            <h:outputText value="User Email" />
+                                            <h:outputText value="#{accountBean.selectedAccount.user.email}" />
+
+                                            <h:outputText value="User Address" />
+                                            <h:outputText value="#{accountBean.selectedAccount.user.address}" />
+
+                                            <h:outputText value="User Phone" />
+                                            <h:outputText value="#{accountBean.selectedAccount.user.phone}"/>
+
+                                            <h:outputText value="Username" />
+                                            <h:outputText value="#{accountBean.selectedAccount.username}"/>
+
+                                            <h:outputText value="Password" />
+                                            <h:outputText value="#{accountBean.selectedAccount.password}"/>
+
+                                            <h:outputText value="Role" />
+                                            <h:outputText value="#{accountBean.selectedAccount.role.name}"/>
+
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
+
+                                <!-- Dialog for edit-->
+                                <p:dialog header="Tour Order Edit" widgetVar="accountEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="accountEdit" style="text-align:center;">
+                                        <p:panelGrid  columns="2" rendered="#{not empty accountBean.selectedAccount}" >
+                                            <h:outputText value="User ID" />                                           
+                                            <h:outputText value="#{accountBean.selectedAccount.userID}" />
+
+                                            <h:outputText value="User first name" />                                           
+                                            <h:outputText value="#{accountBean.selectedAccount.user.firstname}" />
+
+                                            <h:outputText value="User last name" />
+                                            <h:inputText value="#{accountBean.selectedAccount.user.lastname}" required="true" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="User Email" />
+                                            <h:inputText value="#{accountBean.selectedAccount.user.email}" required="true" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="User Address" />
+                                            <h:inputText value="#{accountBean.selectedAccount.user.address}" required="true" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="User Phone" />
+                                            <h:inputText value="#{accountBean.selectedAccount.user.phone}" required="true" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="Username" />
+                                            <h:inputText value="#{accountBean.selectedAccount.username}" required="true" requiredMessage="Please enter answer" /> 
+
+                                            <h:outputText value="Password" />
+                                            <h:inputText value="#{accountBean.selectedAccount.password}" required="true" requiredMessage="Please enter answer" />
+
+                                            <h:outputText value="Password" />
+                                            <h:inputText value="#{accountBean.selectedAccount.roleID}" required="true" requiredMessage="Please enter answer" />
+
+                                            <p:commandButton id="save" actionListener="#{accountBean.update()}" update=":tableForm:table" oncomplete="PF('accountEditDialog').hide();" 
+                                                             value="Save"/>
+                                            <p:commandButton id="cancelButton" onclick="PF('accountEditDialog').hide()" value="Cancel"/>
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
+
+                                <!-- Dialog for Delete confirmation-->
+                                <p:confirmDialog 
+                                    header="Delete Feed back Confirmation" severity="alert"
+                                    widgetVar="accountDeleteDialog"
+                                    id="accountDelete">
+                                    <f:facet name="message">
+                                        <h:outputText value="Are you sure to delete Feed back '#{accountBean.selectedAccount.userID}' ?" />
                                     </f:facet>
-                                    <p:column headerText="User ID">  
-                                        <h:outputText value="#{item.userID}" />  
-                                    </p:column>  
-                                    <p:column headerText="Username">  
-                                        <h:outputText value="#{item.username}" />  
-                                    </p:column>
-                                    <p:column headerText="Password">  
-                                        <h:outputText value="#{item.password}" />  
-                                    </p:column> 
-                                    <p:column headerText="Role">  
-                                        <h:outputText value="#{item.role.name}" />  
-                                    </p:column>
-                                    <p:column>
-                                        <p:commandButton update=":tableForm:accountDetail" oncomplete="PF('accountDialog').show()" icon="ui-icon-search" title="View">
-                                            <f:setPropertyActionListener value="#{item}" target="#{accountBean.selectedAccount}" />
-                                        </p:commandButton>
-                                        <p:commandButton update=":tableForm:accountEdit" oncomplete="PF('accountEditDialog').show()" icon="ui-icon-pencil" title="Edit">
-                                            <f:setPropertyActionListener value="#{item}" target="#{accountBean.selectedAccount}" />
-                                        </p:commandButton>
-                                        <p:commandButton update=":tableForm:accountDelete" oncomplete="PF('accountDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
-                                            <f:setPropertyActionListener value="#{item}" target="#{accountBean.selectedAccount}"  />
-                                        </p:commandButton>
-                                    </p:column>
 
-                                </p:dataTable>
-                            </h:form>
+                                    <p:commandButton value="Yes" actionListener="#{accountBean.delete(accountBean.selectedAccount.userID)}" update=":tableForm:table"
+                                                     oncomplete="PF('accountDeleteDialog').hide()">
+                                        <f:ajax render="table" />
+                                    </p:commandButton>
 
-                            <!-- Dialog for view Detail-->
-                            <p:dialog header="Account Info" widgetVar="accountDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                                <p:outputPanel id="accountDetail" style="text-align:center;">
-                                    <p:panelGrid  columns="2" rendered="#{not empty accountBean.selectedAccount}" >
-                                        <h:outputText value="UserID" />
-                                        <h:outputText value="#{accountBean.selectedAccount.userID}" />
+                                    <p:commandButton value="No" onclick="PF('accountDeleteDialog').hide()" type="button" />
 
-                                        <h:outputText value="User first name" />
-                                        <h:outputText value="#{accountBean.selectedAccount.user.firstname}" />
-                                        
-                                        <h:outputText value="User last name" />
-                                        <h:outputText value="#{accountBean.selectedAccount.user.lastname}" />
-                                        
-                                        <h:outputText value="User Email" />
-                                        <h:outputText value="#{accountBean.selectedAccount.user.email}" />
+                                </p:confirmDialog>
 
-                                        <h:outputText value="User Address" />
-                                        <h:outputText value="#{accountBean.selectedAccount.user.address}" />
-
-                                        <h:outputText value="User Phone" />
-                                        <h:outputText value="#{accountBean.selectedAccount.user.phone}"/>
-                                        
-                                        <h:outputText value="Username" />
-                                        <h:outputText value="#{accountBean.selectedAccount.username}"/>
-                                        
-                                        <h:outputText value="Password" />
-                                        <h:outputText value="#{accountBean.selectedAccount.password}"/>
-                                        
-                                        <h:outputText value="Role" />
-                                        <h:outputText value="#{accountBean.selectedAccount.role.name}"/>
-
-                                    </p:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
-
-                            <!-- Dialog for edit-->
-                            <p:dialog header="Tour Order Edit" widgetVar="accountEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                                <p:outputPanel id="accountEdit" style="text-align:center;">
-                                    <p:panelGrid  columns="2" rendered="#{not empty accountBean.selectedAccount}" >
-                                        <h:outputText value="User ID" />                                           
-                                        <h:outputText value="#{accountBean.selectedAccount.userID}" />
-
-                                        <h:outputText value="User first name" />                                           
-                                        <h:outputText value="#{accountBean.selectedAccount.user.firstname}" />
-
-                                        <h:outputText value="User last name" />
-                                        <h:inputText value="#{accountBean.selectedAccount.user.lastname}" required="true" requiredMessage="Please enter question" />    
-
-                                        <h:outputText value="User Email" />
-                                        <h:inputText value="#{accountBean.selectedAccount.user.email}" required="true" requiredMessage="Please enter question" />    
-
-                                        <h:outputText value="User Address" />
-                                        <h:inputText value="#{accountBean.selectedAccount.user.address}" required="true" requiredMessage="Please enter question" />    
-
-                                        <h:outputText value="User Phone" />
-                                        <h:inputText value="#{accountBean.selectedAccount.user.phone}" required="true" requiredMessage="Please enter question" />    
-
-                                        <h:outputText value="Username" />
-                                        <h:inputText value="#{accountBean.selectedAccount.username}" required="true" requiredMessage="Please enter answer" /> 
-                                        
-                                        <h:outputText value="Password" />
-                                        <h:inputText value="#{accountBean.selectedAccount.password}" required="true" requiredMessage="Please enter answer" />
-                                        
-                                        <h:outputText value="Password" />
-                                        <h:inputText value="#{accountBean.selectedAccount.roleID}" required="true" requiredMessage="Please enter answer" />
-
-                                        <p:commandButton id="save" actionListener="#{accountBean.update()}" update=":tableForm:table" oncomplete="PF('accountEditDialog').hide();" 
-                                                         value="Save"/>
-                                        <p:commandButton id="cancelButton" onclick="PF('accountEditDialog').hide()" value="Cancel"/>
-                                    </p:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
-
-                            <!-- Dialog for Delete confirmation-->
-                            <p:confirmDialog 
-                                header="Delete Feed back Confirmation" severity="alert"
-                                widgetVar="accountDeleteDialog"
-                                id="tourOrderDelete">
-                                <f:facet name="message">
-                                    <h:outputText value="Are you sure to delete Feed back '#{accountBean.selectedAccount.userID}' ?" />
-                                </f:facet>
-
-                                <p:commandButton value="Yes" actionListener="#{accountBean.delete(accountBean.selectedAccount.userID)}" update=":tableForm:table"
-                                                 oncomplete="PF('accountDeleteDialog').hide()">
-                                    <f:ajax render="table" />
-                                </p:commandButton>
-
-                                <p:commandButton value="No" onclick="PF('accountDeleteDialog').hide()" type="button" />
-
-                            </p:confirmDialog>
-                        </div>                
+                            </div>      
+                        </h:form>          
                     </div>                        
                 </div>
             </section>

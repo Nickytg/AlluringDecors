@@ -13,27 +13,26 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.persistence.EntityManager;
-import model_controller.DescriptionBean;
 import model_controller.DescriptionTypeBean;
+import model_controller.RoleBean;
 
 /**
  *
  * @author USER
  */
-@Named(value = "descriptionTypeConverter")
-@FacesConverter(value = "descriptionTypeConverter")
-public class DescriptionTypeConverter implements Converter{
-
+@Named(value = "roleConverter")
+@FacesConverter(value = "roleConverter")
+public class RoleConverter implements Converter{
     private transient EntityManager em;
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-       return em.find(DescriptionTypeBean.class, new BigInteger(value));
+        return em.find(RoleBean.class, new BigInteger(value));
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return String.valueOf(((DescriptionTypeBean) value).getID());
+        return String.valueOf(((RoleBean) value).getId());
     }
 
     

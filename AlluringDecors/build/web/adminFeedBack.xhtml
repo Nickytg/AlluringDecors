@@ -7,7 +7,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
       xmlns:f="http://java.sun.com/jsf/core"
-      >
+          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">    
             <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -19,8 +20,25 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>About Us management</h2>
                         </div>
+                        <center>
+                            <!-- Add form-->
+                            <h:form id="addForm">
+                                <h:panelGrid border="0" cellpadding="30" cellspacing="30" columns="3">
+                                    <h:outputLabel>Question</h:outputLabel>
+                                    <h:inputText value="#{feedbackBean.question}" required="true" requiredMessage="Password required" id="errPasswordMess"/>
+                                    <h:message for="errPasswordMess"/>
+                                    <h:outputLabel>Answer</h:outputLabel>
+                                    <h:inputText value="#{feedbackBean.answer}" required="true" requiredMessage="Role No required" id="errDesMess"/>
+                                    <h:message for="errDesMess"/>
+                                    
+                                    <p:commandButton id="add" actionListener="#{feedbackBean.create()}" update=":tableForm:table" value="Add">
+                                    </p:commandButton>         
+                                </h:panelGrid>
+                            </h:form>
+                        </center>
                         <h:form id="tableForm">
                             <div class="row">
+                                <center>
                                 <p:dataTable id="table" var="item" value="#{feedbackBean.readAll()}" widgetVar="feedBackTable" paginator="true" rows="10"
                                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                              paginatorPosition="bottom" lazy="true"
@@ -53,6 +71,7 @@
                                     </p:column>
 
                                 </p:dataTable>
+                                    </center>
                             </div>
 
                             <!-- Dialog for view Detail-->

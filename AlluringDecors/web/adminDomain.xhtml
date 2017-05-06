@@ -19,8 +19,8 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Domain management</h2>
                         </div>
-                        <div class="row">
-                            <h:form id="tableForm">
+                        <h:form id="tableForm">
+                            <div class="row">
                                 <p:dataTable id="table" var="item" value="#{domainBean.readAll()}" widgetVar="domainTable" paginator="true" rows="10"
                                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                              paginatorPosition="bottom" lazy="true"
@@ -45,58 +45,57 @@
                                             <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}"  />
                                         </p:commandButton>
                                     </p:column>
-
                                 </p:dataTable>
-                            </h:form>
-                        </div>
+                            </div>
 
-                        <!-- Dialog for view Detail-->
-                        <p:dialog header="Domain Info" widgetVar="domainDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel id="domainDetail" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty domainBean.selectedDomain}" >
-                                    <h:outputText value="Domain ID" />
-                                    <h:outputText value="#{domainBean.selectedDomain.id}" />
+                            <!-- Dialog for view Detail-->
+                            <p:dialog header="Domain Info" widgetVar="domainDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="domainDetail" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty domainBean.selectedDomain}" >
+                                        <h:outputText value="Domain ID" />
+                                        <h:outputText value="#{domainBean.selectedDomain.id}" />
 
-                                    <h:outputText value="Name" />
-                                    <h:outputText value="#{domainBean.selectedDomain.name}" />
-                                </p:panelGrid>
-                            </p:outputPanel>
-                        </p:dialog>
-                        
-                        <!-- Dialog for edit-->
-                        <p:dialog header="Domain Edit" widgetVar="domainEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel id="domainEdit" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty domainBean.selectedDomain}" >
-                                    <h:outputText value="Domain ID" />                                           
-                                    <h:outputText value="#{domainBean.selectedDomain.id}" />
-                                    
-                                    <h:outputText value="Name" />                                           
-                                    <h:outputText value="#{domainBean.selectedDomain.name}" />
-                                    <p:commandButton id="save" actionListener="#{domainBean.update()}" update=":tableForm:table" oncomplete="PF('domainEditDialog').hide();" 
-                                                     value="Save"/>
-                                    <p:commandButton id="cancelButton" onclick="PF('domainEditDialog').hide()" value="Cancel"/>
-                                </p:panelGrid>
-                            </p:outputPanel>
-                        </p:dialog>
+                                        <h:outputText value="Name" />
+                                        <h:outputText value="#{domainBean.selectedDomain.name}" />
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
 
-                        <!-- Dialog for Delete confirmation-->
-                        <p:confirmDialog 
-                            header="Delete Domain Confirmation" severity="alert"
-                            widgetVar="domainDeleteDialog"
-                            id="tourOrderDelete">
-                            <f:facet name="message">
-                                <h:outputText value="Are you sure to delete Domain '#{domainBean.selectedDomain.id}' ?" />
-                            </f:facet>
+                            <!-- Dialog for edit-->
+                            <p:dialog header="Domain Edit" widgetVar="domainEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="domainEdit" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty domainBean.selectedDomain}" >
+                                        <h:outputText value="Domain ID" />                                           
+                                        <h:outputText value="#{domainBean.selectedDomain.id}" />
 
-                            <p:commandButton value="Yes" actionListener="#{domainBean.delete(domainBean.selectedDomain.id)}" update=":tableForm:table"
-                                             oncomplete="PF('domainDeleteDialog').hide()">
-                                <f:ajax render="table" />
-                            </p:commandButton>
+                                        <h:outputText value="Name" />                                           
+                                        <h:outputText value="#{domainBean.selectedDomain.name}" />
+                                        <p:commandButton id="save" actionListener="#{domainBean.update()}" update=":tableForm:table" oncomplete="PF('domainEditDialog').hide();" 
+                                                         value="Save"/>
+                                        <p:commandButton id="cancelButton" onclick="PF('domainEditDialog').hide()" value="Cancel"/>
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
 
-                            <p:commandButton value="No" onclick="PF('domainDeleteDialog').hide()" type="button" />
+                            <!-- Dialog for Delete confirmation-->
+                            <p:confirmDialog 
+                                header="Delete Domain Confirmation" severity="alert"
+                                widgetVar="domainDeleteDialog"
+                                id="domainDelete">
+                                <f:facet name="message">
+                                    <h:outputText value="Are you sure to delete Domain '#{domainBean.selectedDomain.id}' ?" />
+                                </f:facet>
 
-                        </p:confirmDialog>
+                                <p:commandButton value="Yes" actionListener="#{domainBean.delete(domainBean.selectedDomain.id)}" update=":tableForm:table"
+                                                 oncomplete="PF('domainDeleteDialog').hide()">
+                                    <f:ajax render="table" />
+                                </p:commandButton>
 
+                                <p:commandButton value="No" onclick="PF('domainDeleteDialog').hide()" type="button" />
+
+                            </p:confirmDialog>
+
+                        </h:form>
                     </div>                        
                 </div>
             </section>
