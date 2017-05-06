@@ -23,26 +23,23 @@ import utils.DBConnector;
  *
  * @author lehainam
  */
-@Named(value = "fAQBean")
+@Named(value = "contactUsBean")
 @SessionScoped
-public class FAQBean implements Serializable {
+public class ContactUsBean implements Serializable {
 
-   // <editor-fold desc="DTO" defaultstate="collapsed">
-     /**
-     * Creates a new instance of FAQBean
-     */
-    public FAQBean() {
+// <editor-fold desc="DTO" defaultstate="collapsed">
+    public ContactUsBean() {
     }
     int id;
-    String question,answer;
-    FAQBean selectedFAQ;
+    String name, phone, address, content;
+    ContactUsBean selectedContactUs;
 
-    public FAQBean getSelectedFAQ() {
-        return selectedFAQ;
+    public ContactUsBean getSelectedContactUs() {
+        return selectedContactUs;
     }
 
-    public void setSelectedFAQ(FAQBean selectedFAQ) {
-        this.selectedFAQ = selectedFAQ;
+    public void setSelectedContactUs(ContactUsBean selectedContactUs) {
+        this.selectedContactUs = selectedContactUs;
     }
     
 
@@ -54,27 +51,42 @@ public class FAQBean implements Serializable {
         this.id = id;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getName() {
+        return name;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
-    
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
     // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
-    final String tableName = "FAQ";
-    final String props[] = {"FAQID", "Question", "Answer"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
+// <editor-fold desc="DAO" defaultstate="collapsed">  
+    final String tableName = "ContactUs";
+    final String props[] = {"ContactUsID", "Name", "Phone", "Address", "Content"};
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -90,8 +102,10 @@ public class FAQBean implements Serializable {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
             pst.setInt(1, this.getId());
-            pst.setString(2, this.getQuestion());
-            pst.setString(3, this.getAnswer());
+            pst.setString(2, this.getName());
+            pst.setString(3, this.getPhone());
+            pst.setString(4, this.getAddress());
+            pst.setString(5, this.getContent());
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -102,7 +116,7 @@ public class FAQBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -113,26 +127,28 @@ public class FAQBean implements Serializable {
      *
      * @return
      */
-    public ArrayList<FAQBean> readAll() {
+    public ArrayList<ContactUsBean> readAll() {
         try {
-            ArrayList<FAQBean> list = new ArrayList<FAQBean>();
+            ArrayList<ContactUsBean> list = new ArrayList<ContactUsBean>();
             rs = DBConnector.getConnection().createStatement().executeQuery(sqlRead);
             while (rs.next()) {
-                FAQBean obj = new FAQBean();
+                ContactUsBean obj = new ContactUsBean();
                 obj.setId(rs.getInt(props[0]));
-                obj.setQuestion(rs.getString(props[1]));
-                obj.setAnswer(rs.getString(props[2]));
+                obj.setName(rs.getString(props[1]));
+                obj.setPhone(rs.getString(props[2]));
+                obj.setAddress(rs.getString(props[3]));
+                obj.setContent(rs.getString(props[4]));
                 list.add(obj);
             }
             return list;
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
@@ -141,28 +157,30 @@ public class FAQBean implements Serializable {
     /**
      * Read Customer base id
      */
-    public FAQBean readById(int id) {
+    public ContactUsBean readById(int id) {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                FAQBean obj = new FAQBean();
+                ContactUsBean obj = new ContactUsBean();
                 obj.setId(rs.getInt(props[0]));
-                obj.setQuestion(rs.getString(props[1]));
-                obj.setAnswer(rs.getString(props[2]));
+                obj.setName(rs.getString(props[1]));
+                obj.setPhone(rs.getString(props[2]));
+                obj.setAddress(rs.getString(props[3]));
+                obj.setContent(rs.getString(props[4]));
                 return obj;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
@@ -172,10 +190,12 @@ public class FAQBean implements Serializable {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
         int id = Integer.valueOf(request.getParameter("id"));
-        FAQBean data = this.readById(id);
+        ContactUsBean data = this.readById(id);
         this.id = id;
-        this.question = data.getQuestion();
-        this.answer = data.getAnswer();
+        this.name = data.getName();
+        this.phone = data.getPhone();
+        this.content = data.getContent();
+        this.address = data.getAddress();
     }
 
     /**
@@ -191,21 +211,23 @@ public class FAQBean implements Serializable {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getQuestion());
-                rs.updateString(props[2], this.getAnswer());
+                rs.updateString(props[1], this.getName());
+                rs.updateString(props[2], this.getPhone());
+                rs.updateString(props[3], this.getAddress());
+                rs.updateString(props[4], this.getContent());
 
                 rs.updateRow();
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -222,13 +244,13 @@ public class FAQBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;

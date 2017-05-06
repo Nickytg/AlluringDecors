@@ -6,6 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
+      xmlns:f="http://java.sun.com/jsf/core"
       >
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">    
@@ -18,27 +19,104 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>About Us management</h2>
                         </div>
-                        <div class="row">
-                            <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" width="600" height="600" style="z-index:9999">
-                                <pm:field>
-                                    <p:outputLabel value="Bao Nguyen" />
-                                </pm:field>
-                                <pm:field>
-                                    <p:outputLabel for="question" value="Question" />
-                                    <p:inputText id="question" />
-                                </pm:field>
-                                <pm:field>
-                                    <p:outputLabel for="answer" value="Answer" />
-                                    <p:inputTextarea id="answer" />
-                                </pm:field>
-                                <center>
-                                    <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
-                                </center>
+                        <h:form id="tableForm">
+                            <div class="row">
+                                <p:dataTable id="table" var="item" value="#{feedbackBean.readAll()}" widgetVar="feedBackTable" paginator="true" rows="10"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                             paginatorPosition="bottom" lazy="true"
+                                             style="width:900px;" emptyMessage="Data not found">  
+                                    <f:facet name="header">
+                                        Feedback data
+                                    </f:facet>
+                                    <p:column headerText="Feedback ID">  
+                                        <h:outputText value="#{item.id}" />  
+                                    </p:column>  
+                                    <p:column headerText="User email">  
+                                        <h:outputText value="#{item.user.email}" />  
+                                    </p:column>
+                                    <p:column headerText="Question">  
+                                        <h:outputText value="#{item.question}" />  
+                                    </p:column> 
+                                    <p:column headerText="Answer">  
+                                        <h:outputText value="#{item.answer}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton update=":tableForm:feedBackDetail" oncomplete="PF('feedBackDialog').show()" icon="ui-icon-search" title="View">
+                                            <f:setPropertyActionListener value="#{item}" target="#{feedbackBean.selectedFeedback}" />
+                                        </p:commandButton>
+                                        <p:commandButton update=":tableForm:feedBackEdit" oncomplete="PF('feedBackEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                            <f:setPropertyActionListener value="#{item}" target="#{feedbackBean.selectedFeedback}" />
+                                        </p:commandButton>
+                                        <p:commandButton update=":tableForm:feedBackDelete" oncomplete="PF('feedBackDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                            <f:setPropertyActionListener value="#{item}" target="#{feedbackBean.selectedFeedback}"  />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+
+                            <!-- Dialog for view Detail-->
+                            <p:dialog header="Feedback Info" widgetVar="feedBackDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="feedBackDetail" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty feedbackBean.selectedFeedback}" >
+                                        <h:outputText value="Feedback ID" />
+                                        <h:outputText value="#{feedbackBean.selectedFeedback.id}" />
+
+                                        <h:outputText value="User email" />
+                                        <h:outputText value="#{feedbackBean.selectedFeedback.user.email}" />
+
+                                        <h:outputText value="Question" />
+                                        <h:outputText value="#{feedbackBean.selectedFeedback.question}" />
+
+                                        <h:outputText value="Answer" />
+                                        <h:outputText value="#{feedbackBean.selectedFeedback.answer}"/>
+
+                                    </p:panelGrid>
+                                </p:outputPanel>
                             </p:dialog>
-                            <h:form prependId="false">
-                                <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
-                            </h:form>
-                        </div>                        
+
+                            <!-- Dialog for edit-->
+                            <p:dialog header="Tour Order Edit" widgetVar="feedBackEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="feedBackEdit" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty feedbackBean.selectedFeedback}" >
+                                        <h:outputText value="Feedback ID" />                                           
+                                        <h:outputText value="#{feedbackBean.selectedFeedback.id}" />
+
+                                        <h:outputText value="User email" />                                           
+                                        <h:outputText value="#{feedbackBean.selectedFeedback.user.email}" />
+
+                                        <h:outputText value="Question" />
+                                        <h:inputText value="#{feedbackBean.selectedFeedback.question}" required="true" requiredMessage="Please enter question" />    
+
+                                        <h:outputText value="Answer" />
+                                        <h:inputText value="#{feedbackBean.selectedFeedback.answer}" required="true" requiredMessage="Please enter answer" />    
+
+                                        <p:commandButton id="save" actionListener="#{feedbackBean.update()}" update=":tableForm:table" oncomplete="PF('feedBackEditDialog').hide();" 
+                                                         value="Save"/>
+                                        <p:commandButton id="cancelButton" onclick="PF('feedBackEditDialog').hide()" value="Cancel"/>
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
+                            <!-- Dialog for Delete confirmation-->
+                            <p:confirmDialog 
+                                header="Delete Feed back Confirmation" severity="alert"
+                                widgetVar="feedBackDeleteDialog"
+                                id="feedBackDelete">
+                                <f:facet name="message">
+                                    <h:outputText value="Are you sure to delete Feed back '#{feedbackBean.selectedFeedback.id}' ?" />
+                                </f:facet>
+
+                                <p:commandButton value="Yes" actionListener="#{feedbackBean.delete(feedbackBean.selectedFeedback.id)}" update=":tableForm:table"
+                                                 oncomplete="PF('feedBackDeleteDialog').hide()">
+                                    <f:ajax render="table" />
+                                </p:commandButton>
+
+                                <p:commandButton value="No" onclick="PF('feedBackDeleteDialog').hide()" type="button" />
+
+                            </p:confirmDialog>
+
+                        </h:form>
                     </div>                        
                 </div>
             </section>

@@ -24,10 +24,10 @@
                                              paginatorPosition="bottom" lazy="true"
                                              style="width:900px;" emptyMessage="Data not found">  
                                     <f:facet name="header">
-                                        This is Tour Order content
+                                        Feedback data
                                     </f:facet>
                                     <p:column headerText="FAQ ID">  
-                                        <h:outputText value="#{item.faqID}" />  
+                                        <h:outputText value="#{item.id}" />  
                                     </p:column>  
                                     <p:column headerText="Question">  
                                         <h:outputText value="#{item.question}" />  
@@ -35,29 +35,77 @@
                                     <p:column headerText="Answer">  
                                         <h:outputText value="#{item.answer}" />  
                                     </p:column>
+                                    <p:column>
+                                        <p:commandButton update=":tableForm:faqDetail" oncomplete="PF('faqDialog').show()" icon="ui-icon-search" title="View">
+                                            <f:setPropertyActionListener value="#{item}" target="#{fAQBean.selectedFAQ}" />
+                                        </p:commandButton>
+                                        <p:commandButton update=":tableForm:faqEdit" oncomplete="PF('faqEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                            <f:setPropertyActionListener value="#{item}" target="#{fAQBean.selectedFAQ}" />
+                                        </p:commandButton>
+                                        <p:commandButton update=":tableForm:faqDelete" oncomplete="PF('faqDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                            <f:setPropertyActionListener value="#{item}" target="#{fAQBean.selectedFAQ}"  />
+                                        </p:commandButton>
+                                    </p:column>
 
                                 </p:dataTable>
                             </h:form>
-                        </div>
-                        <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" width="600" height="600" style="z-index:9999">
-                            <pm:field>
-                                    <p:outputLabel value="FAQ's ID" />
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="question" value="Question" />
-                                    <p:inputText id="question" />
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="answer" value="Answer" />
-                                    <p:inputTextarea id="answer" />
-                            </pm:field>
-                            <center>
-                                <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
-                            </center>
+                        </div>       
+                        
+                        <!-- Dialog for view Detail-->
+                        <p:dialog header="Feedback Info" widgetVar="faqDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="faqDetail" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty fAQBean.selectedFAQ}" >
+                                    <h:outputText value="FAQ ID" />
+                                    <h:outputText value="#{fAQBean.selectedFAQ.id}" />
+
+                                    <h:outputText value="Question" />
+                                    <h:outputText value="#{fAQBean.selectedFAQ.question}" />
+
+                                    <h:outputText value="Answer" />
+                                    <h:outputText value="#{fAQBean.selectedFAQ.answer}"/>
+
+                                </p:panelGrid>
+                            </p:outputPanel>
                         </p:dialog>
-                        <h:form prependId="false">
-                            <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
-                        </h:form>                           
+                        
+                        <!-- Dialog for edit-->
+                        <p:dialog header="Tour Order Edit" widgetVar="faqEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="faqEdit" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty fAQBean.selectedFAQ}" >
+                                    <h:outputText value="FAQ ID" />                                           
+                                    <h:outputText value="#{fAQBean.selectedFAQ.id}" />
+                                    
+                                    <h:outputText value="Question" />
+                                    <h:inputText value="#{fAQBean.selectedFAQ.question}" required="true" requiredMessage="Please enter question" />    
+
+                                    <h:outputText value="Answer" />
+                                    <h:inputText value="#{fAQBean.selectedFAQ.answer}" required="true" requiredMessage="Please enter answer" />    
+
+                                    <p:commandButton id="save" actionListener="#{fAQBean.update()}" update=":tableForm:table" oncomplete="PF('faqEditDialog').hide();" 
+                                                     value="Save"/>
+                                    <p:commandButton id="cancelButton" onclick="PF('faqEditDialog').hide()" value="Cancel"/>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <!-- Dialog for Delete confirmation-->
+                        <p:confirmDialog 
+                            header="Delete FAQ Confirmation" severity="alert"
+                            widgetVar="faqDeleteDialog"
+                            id="tourOrderDelete">
+                            <f:facet name="message">
+                                <h:outputText value="Are you sure to delete FAQ '#{fAQBean.selectedFAQ.id}' ?" />
+                            </f:facet>
+
+                            <p:commandButton value="Yes" actionListener="#{fAQBean.delete(fAQBean.selectedFAQ.id)}" update=":tableForm:table"
+                                             oncomplete="PF('faqDeleteDialog').hide()">
+                                <f:ajax render="table" />
+                            </p:commandButton>
+
+                            <p:commandButton value="No" onclick="PF('faqDeleteDialog').hide()" type="button" />
+
+                        </p:confirmDialog>
+                        
                     </div>                        
                 </div>
             </section>

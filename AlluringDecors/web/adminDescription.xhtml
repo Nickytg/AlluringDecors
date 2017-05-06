@@ -6,6 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
+      xmlns:f="http://java.sun.com/jsf/core"
       >
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">       
@@ -17,18 +18,25 @@
                             <h2>Description management</h2>
                         </div>
                         <div class="row">
-                            <form method="POST">
-                                <textarea name="editor1" id="editor1" rows="200" cols="80"/>
+                            <h:form id="addForm">
+                                <h:outputLabel>Description Type:</h:outputLabel>
+                                <h:selectOneMenu value="#{descriptionBean.descriptionTypeID}"
+                                                 converter="#{descriptionTypeConverter}" >
+                                    <f:selectItems value="#{descriptionTypeBean.readAll()}" var="descriptionType" itemValue="#{descriptionType.ID}" itemLabel="#{descriptionType.name}"/>
+                                </h:selectOneMenu>    
+                                <textarea name="editor1" id="editor1" rows="200" cols="80" value="#{descriptionBean.content}"/>
                                 <center>
-                                    <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
-                                    
+                                    <p:commandButton id="add" actionListener="#{descriptionBean.create()}" value="Add">
+                                    </p:commandButton>
                                 </center>
-                                <script>
-                                    CKEDITOR.replace('editor1');
-                                    CKEDITOR.config.height = 500;
-                                </script>
-                            </form>
-                        </div>                        
+                                
+                            </h:form>
+                        </div>  
+
+                        <script>
+                            CKEDITOR.replace('editor1');
+                            CKEDITOR.config.height = 500;
+                        </script>
                     </div>                        
                 </div>
             </section>

@@ -17,47 +17,103 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Service Requested management</h2>
                         </div>
-                        <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" width="600" height="600" style="z-index:9999">
-                            <pm:field>
-                                    <p:outputLabel value="Service Offered ID" />
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="name" value="Name" />
-                                    <p:inputText id="name" />
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="serviceOfferedID" value="Service Offered ID" />
-                                    <p:selectOneMenu id="serviceOfferedID">
-                                            <f:selectItem itemLabel="Select One" itemValue="" />
-                                            <f:selectItem itemLabel="Option 1" itemValue="1" />
-                                            <f:selectItem itemLabel="Option 2" itemValue="2" />
-                                            <f:selectItem itemLabel="Option 3" itemValue="3" />
-                                        </p:selectOneMenu>
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="userID" value="User" />
-                                    <p:inputText id="userID" />
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="serviceRequestStatus" value="Service Request status" />
-                                    <p:selectOneMenu id="serviceRequestStatus">
-                                            <f:selectItem itemLabel="Select One" itemValue="" />
-                                            <f:selectItem itemLabel="Option 1" itemValue="1" />
-                                            <f:selectItem itemLabel="Option 2" itemValue="2" />
-                                            <f:selectItem itemLabel="Option 3" itemValue="3" />
-                                        </p:selectOneMenu>
-                            </pm:field>
-                            <pm:field>
-                                    <p:outputLabel for="content" value="Content" />
-                                    <p:inputTextarea id="content" />
-                            </pm:field>
-                            <center>
-                                <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
-                            </center>
+                        <div class="row">
+                            <h:form id="tableForm">
+                                <p:dataTable id="table" var="item" value="#{servicesRequestBean.readAll()}" widgetVar="servicesRequestTable" paginator="true" rows="10"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                             paginatorPosition="bottom" lazy="true"
+                                             style="width:900px;" emptyMessage="Data not found">  
+                                    <f:facet name="header">
+                                        Feedback data
+                                    </f:facet>
+                                    <p:column headerText="ServicesOfferedID">  
+                                        <h:outputText value="#{item.id}" />  
+                                    </p:column>  
+                                    <p:column headerText="User email">  
+                                        <h:outputText value="#{item.user.email}" />  
+                                    </p:column>
+                                    <p:column headerText="ServicesRequestStatusID">  
+                                        <h:outputText value="#{item.servicesOffered.name}" />  
+                                    </p:column> 
+                                    <p:column headerText="Remark">  
+                                        <h:outputText value="#{item.remark}" />  
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton update=":tableForm:servicesRequestDetail" oncomplete="PF('servicesRequestDialog').show()" icon="ui-icon-search" title="View">
+                                            <f:setPropertyActionListener value="#{item}" target="#{servicesRequestBean.selectedServicesRequest}" />
+                                        </p:commandButton>
+                                        <p:commandButton update=":tableForm:servicesRequestEdit" oncomplete="PF('servicesRequestEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                            <f:setPropertyActionListener value="#{item}" target="#{servicesRequestBean.selectedServicesRequest}" />
+                                        </p:commandButton>
+                                        <p:commandButton update=":tableForm:servicesRequestDelete" oncomplete="PF('servicesRequestDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                            <f:setPropertyActionListener value="#{item}" target="#{servicesRequestBean.selectedServicesRequest}"  />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </div>           
+                        
+                        <!-- Dialog for view Detail-->
+                        <p:dialog header="Services Request Info" widgetVar="servicesRequestDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="servicesRequestDetail" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty servicesRequestBean.selectedServicesRequest}" >
+                                    <h:outputText value="ServicesOfferedID" />
+                                    <h:outputText value="#{servicesRequestBean.selectedServicesRequest.id}" />
+
+                                    <h:outputText value="User email" />
+                                    <h:outputText value="#{servicesRequestBean.selectedServicesRequest.user.email}" />
+
+                                    <h:outputText value="ServicesRequestStatusID" />
+                                    <h:outputText value="#{servicesRequestBean.selectedServicesRequest.servicesRequestStatus.name}" />
+
+                                    <h:outputText value="Remark" />
+                                    <h:outputText value="#{servicesRequestBean.selectedServicesRequest.remark}"/>
+
+                                </p:panelGrid>
+                            </p:outputPanel>
                         </p:dialog>
-                        <h:form prependId="false">
-                            <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
-                        </h:form>                           
+                        
+                        <!-- Dialog for edit-->
+                        <p:dialog header="Services Request Edit" widgetVar="servicesRequestEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="servicesRequestEdit" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty servicesRequestBean.selectedServicesRequest}" >
+                                    <h:outputText value="ServicesOfferedID" />                                           
+                                    <h:outputText value="#{servicesRequestBean.selectedServicesRequest.id}" />
+                                    
+                                    <h:outputText value="User email" />                                           
+                                    <h:outputText value="#{servicesRequestBean.selectedServicesRequest.user.email}" />
+
+                                    <h:outputText value="ServicesRequestStatusID" />
+                                    <h:inputText value="#{servicesRequestBean.selectedServicesRequest.servicesOfferID}" required="true" requiredMessage="Please enter question" />    
+
+                                    <h:outputText value="Remark" />
+                                    <h:inputText value="#{servicesRequestBean.selectedServicesRequest.remark}" required="true" requiredMessage="Please enter answer" />    
+
+                                    <p:commandButton id="save" actionListener="#{servicesRequestBean.update()}" update=":tableForm:table" oncomplete="PF('servicesRequestEditDialog').hide();" 
+                                                     value="Save"/>
+                                    <p:commandButton id="cancelButton" onclick="PF('servicesRequestEditDialog').hide()" value="Cancel"/>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <!-- Dialog for Delete confirmation-->
+                        <p:confirmDialog 
+                            header="Delete Services Request Confirmation" severity="alert"
+                            widgetVar="servicesRequestDeleteDialog"
+                            id="tourOrderDelete">
+                            <f:facet name="message">
+                                <h:outputText value="Are you sure to delete Services Request '#{servicesRequestBean.selectedServicesRequest.id}' ?" />
+                            </f:facet>
+
+                            <p:commandButton value="Yes" actionListener="#{servicesRequestBean.delete(servicesRequestBean.selectedServicesRequest.id)}" update=":tableForm:table"
+                                             oncomplete="PF('servicesRequestDeleteDialog').hide()">
+                                <f:ajax render="table" />
+                            </p:commandButton>
+
+                            <p:commandButton value="No" onclick="PF('servicesRequestDeleteDialog').hide()" type="button" />
+
+                        </p:confirmDialog>
                     </div>                        
                 </div>
             </section>

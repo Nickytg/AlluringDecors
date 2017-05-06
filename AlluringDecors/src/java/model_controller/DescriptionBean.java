@@ -23,57 +23,47 @@ import utils.DBConnector;
  *
  * @author lehainam
  */
-@Named(value = "fAQBean")
+@Named(value = "descriptionBean")
 @SessionScoped
-public class FAQBean implements Serializable {
+public class DescriptionBean implements Serializable {
 
-   // <editor-fold desc="DTO" defaultstate="collapsed">
-     /**
-     * Creates a new instance of FAQBean
+ // <editor-fold desc="DTO" defaultstate="collapsed">
+       /**
+     * Creates a new instance of DescriptionBean
      */
-    public FAQBean() {
+    public DescriptionBean() {
     }
-    int id;
-    String question,answer;
-    FAQBean selectedFAQ;
+     int id,descriptionTypeID;
+    String content;
 
-    public FAQBean getSelectedFAQ() {
-        return selectedFAQ;
-    }
-
-    public void setSelectedFAQ(FAQBean selectedFAQ) {
-        this.selectedFAQ = selectedFAQ;
-    }
-    
-
-    public int getId() {
+    public int getDescriptionID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDescriptionID(int descriptionID) {
+        this.id = descriptionID;
     }
 
-    public String getQuestion() {
-        return question;
+    public int getDescriptionTypeID() {
+        return descriptionTypeID;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setDescriptionTypeID(int descriptionTypeID) {
+        this.descriptionTypeID = descriptionTypeID;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getContent() {
+        return content;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setContent(String content) {
+        this.content = content;
     }
-    
     // </editor-fold>
+    
     // <editor-fold desc="DAO" defaultstate="collapsed">  
-    final String tableName = "FAQ";
-    final String props[] = {"FAQID", "Question", "Answer"};
+    final String tableName = "Description";
+    final String props[] = {"DescriptionID", "DescriptionTypeID", "Content"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
@@ -86,12 +76,11 @@ public class FAQBean implements Serializable {
      * Create new Customer
      */
     public boolean create() {
-
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getQuestion());
-            pst.setString(3, this.getAnswer());
+            pst.setInt(1, this.getDescriptionID());
+            pst.setInt(2, this.getDescriptionTypeID());
+            pst.setString(3, this.getContent());
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -102,7 +91,7 @@ public class FAQBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -113,26 +102,26 @@ public class FAQBean implements Serializable {
      *
      * @return
      */
-    public ArrayList<FAQBean> readAll() {
+    public ArrayList<DescriptionBean> readAll() {
         try {
-            ArrayList<FAQBean> list = new ArrayList<FAQBean>();
+            ArrayList<DescriptionBean> list = new ArrayList<DescriptionBean>();
             rs = DBConnector.getConnection().createStatement().executeQuery(sqlRead);
             while (rs.next()) {
-                FAQBean obj = new FAQBean();
-                obj.setId(rs.getInt(props[0]));
-                obj.setQuestion(rs.getString(props[1]));
-                obj.setAnswer(rs.getString(props[2]));
+                DescriptionBean obj = new DescriptionBean();
+                obj.setDescriptionID(rs.getInt(props[0]));
+                obj.setDescriptionTypeID(rs.getInt(props[1]));
+                obj.setContent(rs.getString(props[2]));
                 list.add(obj);
             }
             return list;
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
@@ -141,28 +130,28 @@ public class FAQBean implements Serializable {
     /**
      * Read Customer base id
      */
-    public FAQBean readById(int id) {
+    public DescriptionBean readById(int id) {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                FAQBean obj = new FAQBean();
-                obj.setId(rs.getInt(props[0]));
-                obj.setQuestion(rs.getString(props[1]));
-                obj.setAnswer(rs.getString(props[2]));
+                DescriptionBean obj = new DescriptionBean();
+                obj.setDescriptionID(rs.getInt(props[0]));
+                obj.setDescriptionTypeID(rs.getInt(props[1]));
+                obj.setContent(rs.getString(props[2]));
                 return obj;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
@@ -172,10 +161,10 @@ public class FAQBean implements Serializable {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
         int id = Integer.valueOf(request.getParameter("id"));
-        FAQBean data = this.readById(id);
+        DescriptionBean data = this.readById(id);
         this.id = id;
-        this.question = data.getQuestion();
-        this.answer = data.getAnswer();
+        this.descriptionTypeID = data.getDescriptionTypeID();
+        this.content = data.getContent();
     }
 
     /**
@@ -191,21 +180,21 @@ public class FAQBean implements Serializable {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getQuestion());
-                rs.updateString(props[2], this.getAnswer());
+                rs.updateInt(props[1], this.getDescriptionTypeID());
+                rs.updateString(props[2], this.getContent());
 
                 rs.updateRow();
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -222,16 +211,21 @@ public class FAQBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
+    
+    public DescriptionTypeBean getDescriptionType(){
+        return new DescriptionTypeBean().readById(this.descriptionTypeID);
+    }
 // </editor-fold>
+    
 }

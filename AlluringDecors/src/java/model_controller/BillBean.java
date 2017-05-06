@@ -21,77 +21,64 @@ import utils.DBConnector;
 
 /**
  *
- * @author lehainam
+ * @author NamWin
  */
-@Named(value = "fAQBean")
+@Named(value = "billBean")
 @SessionScoped
-public class FAQBean implements Serializable {
+public class BillBean implements Serializable {
 
-   // <editor-fold desc="DTO" defaultstate="collapsed">
-     /**
-     * Creates a new instance of FAQBean
-     */
-    public FAQBean() {
+
+// <editor-fold desc="DTO" defaultstate="collapsed">
+    public BillBean() {
     }
-    int id;
-    String question,answer;
-    FAQBean selectedFAQ;
+    int id, serviceRequestID, domainID;
 
-    public FAQBean getSelectedFAQ() {
-        return selectedFAQ;
-    }
-
-    public void setSelectedFAQ(FAQBean selectedFAQ) {
-        this.selectedFAQ = selectedFAQ;
-    }
-    
-
-    public int getId() {
+    public int getBillID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBillID(int billID) {
+        this.id = billID;
     }
 
-    public String getQuestion() {
-        return question;
+    public int getServiceRequestID() {
+        return serviceRequestID;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setServiceRequestID(int serviceRequestID) {
+        this.serviceRequestID = serviceRequestID;
     }
 
-    public String getAnswer() {
-        return answer;
+    public int getDomainID() {
+        return domainID;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setDomainID(int domainID) {
+        this.domainID = domainID;
     }
-    
-    // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
-    final String tableName = "FAQ";
-    final String props[] = {"FAQID", "Question", "Answer"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
-    private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
-    private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
-    private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
+// </editor-fold>
+// <editor-fold desc="DAO" defaultstate="collapsed">  
+    final String tableName = "Bill";
+    final String props[] = {"BillID","ServicesRequestID","DomainID"};
+     private final String sqlCreate = "INSERT INTO "+tableName+" VALUES(?,?,?)";
+    private final String sqlRead = "SELECT * FROM "+tableName;
+    private final String sqlReadById = "SELECT * FROM "+tableName+" WHERE "+props[0]+" = ?";
+    private final String sqlUpdate = "UPDATE "+tableName+" WHERE "+props[0]+" = ?";
+    private final String sqlDelete = "DELETE FROM "+tableName+" WHERE "+props[0]+" = ?";
     private ResultSet rs;
     private PreparedStatement pst;
-
+    
     /**
      * Create new Customer
      */
     public boolean create() {
-
+      
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getQuestion());
-            pst.setString(3, this.getAnswer());
+            pst.setInt(1, this.getBillID());
+            pst.setInt(2, this.getServiceRequestID());
+            pst.setInt(3, this.getDomainID());
+           
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -102,82 +89,80 @@ public class FAQBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-
+    
     /**
      * read all Customer in database
-     *
-     * @return
+     * @return 
      */
-    public ArrayList<FAQBean> readAll() {
+    public ArrayList<BillBean> readAll() {
         try {
-            ArrayList<FAQBean> list = new ArrayList<FAQBean>();
+            ArrayList<BillBean> list = new ArrayList<BillBean>();
             rs = DBConnector.getConnection().createStatement().executeQuery(sqlRead);
             while (rs.next()) {
-                FAQBean obj = new FAQBean();
-                obj.setId(rs.getInt(props[0]));
-                obj.setQuestion(rs.getString(props[1]));
-                obj.setAnswer(rs.getString(props[2]));
+                BillBean obj = new BillBean();
+                obj.setBillID(rs.getInt(props[0]));
+                obj.setServiceRequestID(rs.getInt(props[1]));
+                obj.setDomainID(rs.getInt(props[2]));
                 list.add(obj);
             }
             return list;
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
-
+    
     /**
      * Read Customer base id
      */
-    public FAQBean readById(int id) {
+    public BillBean readById(int id) {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                FAQBean obj = new FAQBean();
-                obj.setId(rs.getInt(props[0]));
-                obj.setQuestion(rs.getString(props[1]));
-                obj.setAnswer(rs.getString(props[2]));
+                  BillBean obj = new BillBean();
+                obj.setBillID(rs.getInt(props[0]));
+                obj.setServiceRequestID(rs.getInt(props[1]));
+                obj.setDomainID(rs.getInt(props[2]));
                 return obj;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
-
     public void editRedirect() {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
         int id = Integer.valueOf(request.getParameter("id"));
-        FAQBean data = this.readById(id);
+        BillBean data = this.readById(id);
         this.id = id;
-        this.question = data.getQuestion();
-        this.answer = data.getAnswer();
+        this.serviceRequestID = data.getServiceRequestID();
+        this.domainID = data.getDomainID();
     }
-
+    
     /**
      * Update Customer base id
      */
@@ -185,32 +170,31 @@ public class FAQBean implements Serializable {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
-
+        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+        int id = Integer.valueOf(request.getParameter("id"));
+        
             pst.setInt(1, id);
             rs = pst.executeQuery();
-            if (rs.first()) {
-                rs.updateString(props[1], this.getQuestion());
-                rs.updateString(props[2], this.getAnswer());
-
+            if(rs.first()) {
+                rs.updateInt(props[1], this.getServiceRequestID());
+                rs.updateInt(props[2], this.getDomainID());
                 rs.updateRow();
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-
+    
     /**
      * Delete TourBean base id
      */
@@ -222,16 +206,24 @@ public class FAQBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
+    }
+    
+    public DomainBean getDomain(){
+        return new DomainBean().readById(this.domainID);
+    }
+    
+    public ServicesRequestBean getServicesRequest(){
+        return new ServicesRequestBean().readById(this.serviceRequestID);
     }
 // </editor-fold>
 }
