@@ -36,6 +36,17 @@ public class DescriptionBean implements Serializable {
      int id,descriptionTypeID;
     String content;
 
+    DescriptionBean selectedItem;
+
+    public DescriptionBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(DescriptionBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+    
+    
     public int getDescriptionID() {
         return id;
     }
@@ -62,7 +73,7 @@ public class DescriptionBean implements Serializable {
     // </editor-fold>
     
     // <editor-fold desc="DAO" defaultstate="collapsed">  
-    final String tableName = "Description";
+    final String tableName = "[Description]";
     final String props[] = {"DescriptionID", "DescriptionTypeID", "Content"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
@@ -173,15 +184,11 @@ public class DescriptionBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
-
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateInt(props[1], this.getDescriptionTypeID());
-                rs.updateString(props[2], this.getContent());
+                rs.updateInt(props[1], this.selectedItem.getDescriptionTypeID());
+                rs.updateString(props[2], this.selectedItem.getContent());
 
                 rs.updateRow();
                 return true;

@@ -37,6 +37,16 @@ public class ServicesRequestStatusBean implements Serializable {
     int id;
     String name;
 
+    ServicesRequestStatusBean selectedItem;
+
+    public ServicesRequestStatusBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(ServicesRequestStatusBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+    
     public int getId() {
         return id;
     }
@@ -53,7 +63,7 @@ public class ServicesRequestStatusBean implements Serializable {
         this.name = name;
     }
     // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
+    // <editor-fold desc="DAO">  
     final String tableName = "ServicesRequestStatus";
     final String props[] = {"ServicesRequestStatusID", "Name"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?)";
@@ -162,14 +172,14 @@ public class ServicesRequestStatusBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getName());
+                rs.updateString(props[1], this.selectedItem.getName());
 
                 rs.updateRow();
                 return true;

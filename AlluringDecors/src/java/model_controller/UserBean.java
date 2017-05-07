@@ -35,6 +35,15 @@ public class UserBean implements Serializable {
     }
     int id;
     String firstname,lastname,email,address,phone;
+UserBean selectedItem;
+
+    public UserBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(UserBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
 
     public int getId() {
         return id;
@@ -84,7 +93,7 @@ public class UserBean implements Serializable {
         this.phone = phone;
     }
     // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
+    // <editor-fold desc="DAO">  
     final String tableName = "User";
     final String props[] = {"UserID", "FirstName", "LastName", "Email", "Address","Phone"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?)";
@@ -209,18 +218,18 @@ public class UserBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getFirstname());
-                rs.updateString(props[2], this.getLastname());
-                rs.updateString(props[3], this.getEmail());
-                rs.updateString(props[4], this.getAddress());
-                 rs.updateString(props[5], this.getPhone());
+                rs.updateString(props[1], this.selectedItem.getFirstname());
+                rs.updateString(props[2], this.selectedItem.getLastname());
+                rs.updateString(props[3], this.selectedItem.getEmail());
+                rs.updateString(props[4], this.selectedItem.getAddress());
+                 rs.updateString(props[5], this.selectedItem.getPhone());
 
                 rs.updateRow();
                 return true;

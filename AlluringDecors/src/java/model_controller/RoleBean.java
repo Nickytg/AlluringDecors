@@ -35,6 +35,15 @@ public class RoleBean implements Serializable {
     }
     int id;
     String name;
+RoleBean selectedItem;
+
+    public RoleBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(RoleBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
 
     public int getId() {
         return id;
@@ -161,14 +170,14 @@ public class RoleBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getName());
+                rs.updateString(props[1], this.selectedItem.getName());
 
                 rs.updateRow();
                 return true;

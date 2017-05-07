@@ -83,7 +83,6 @@ public class FeedbackBean implements Serializable {
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
-    private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
     private PreparedStatement pst;
@@ -210,15 +209,7 @@ public class FeedbackBean implements Serializable {
             }
         } catch (SQLException ex) {
             Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-//            try {
-//                rs.close();
-//                pst.close();
-//                DBConnector.closeConnection();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        }
+        } 
         return false;
     }
 

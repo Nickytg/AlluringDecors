@@ -34,6 +34,16 @@ public class ContactUsBean implements Serializable {
     String name, phone, address, content;
     ContactUsBean selectedContactUs;
 
+    BillBean selectedItem;
+
+    public BillBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(BillBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+    
     public ContactUsBean getSelectedContactUs() {
         return selectedContactUs;
     }
@@ -204,17 +214,17 @@ public class ContactUsBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedContactUs.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getName());
-                rs.updateString(props[2], this.getPhone());
-                rs.updateString(props[3], this.getAddress());
-                rs.updateString(props[4], this.getContent());
+                rs.updateString(props[1], this.selectedContactUs.getName());
+                rs.updateString(props[2], this.selectedContactUs.getPhone());
+                rs.updateString(props[3], this.selectedContactUs.getAddress());
+                rs.updateString(props[4], this.selectedContactUs.getContent());
 
                 rs.updateRow();
                 return true;

@@ -63,7 +63,7 @@ public class DomainBean implements Serializable {
     }
     // </editor-fold>
     // <editor-fold desc="DAO" defaultstate="collapsed">  
-    final String tableName = "Domain";
+    final String tableName = "[Domain]";
     final String props[] = {"DomainID", "Name"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
@@ -171,14 +171,14 @@ public class DomainBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1,this.selectedDomain.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getName());
+                rs.updateString(props[1], this.selectedDomain.getName());
 
                 rs.updateRow();
                 return true;

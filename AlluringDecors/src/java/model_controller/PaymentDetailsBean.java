@@ -39,6 +39,17 @@ public class PaymentDetailsBean implements Serializable {
     double totalBillAmount, dueAmount, balanceAmount, totalPaidAmount;
     boolean maintained;
 
+    PaymentDetailsBean selectedItem;
+
+    public PaymentDetailsBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(PaymentDetailsBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+    
+    
     public int getId() {
         return id;
     }
@@ -237,20 +248,20 @@ public class PaymentDetailsBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateInt(props[1], this.getBillID());
-                rs.updateDate(props[2], this.getDatetime());
-                rs.updateDouble(props[3], this.getTotalBillAmount());
-                rs.updateDouble(props[4], this.getDueAmount());
-                rs.updateDouble(props[5], this.getBalanceAmount());
-                rs.updateDouble(props[6], this.getTotalPaidAmount());
-                rs.updateBoolean(props[7], this.isMaintained());
+                rs.updateInt(props[1], this.selectedItem.getBillID());
+                rs.updateDate(props[2], this.selectedItem.getDatetime());
+                rs.updateDouble(props[3], this.selectedItem.getTotalBillAmount());
+                rs.updateDouble(props[4], this.selectedItem.getDueAmount());
+                rs.updateDouble(props[5], this.selectedItem.getBalanceAmount());
+                rs.updateDouble(props[6], this.selectedItem.getTotalPaidAmount());
+                rs.updateBoolean(props[7], this.selectedItem.isMaintained());
 
                 rs.updateRow();
                 return true;

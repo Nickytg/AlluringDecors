@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
 
 /**
- *
+ *8
  * @author NamWin
  */
 @Named(value = "accountBean")
@@ -192,16 +192,16 @@ public class AccountBean implements Serializable{
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-        int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//        int id = Integer.valueOf(request.getParameter("id"));
         
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedAccount.userID);
             rs = pst.executeQuery();
             if(rs.first()) {
-                rs.updateString("Username", this.getUsername());
-                rs.updateString("Password", this.getPassword());
-                rs.updateInt("RoleID", this.getRoleID());
+                rs.updateString("Username", this.selectedAccount.getUsername());
+                rs.updateString("Password", this.selectedAccount.getPassword());
+                rs.updateInt("RoleID", this.selectedAccount.getRoleID());
                 rs.updateRow();
                 return true;
             }

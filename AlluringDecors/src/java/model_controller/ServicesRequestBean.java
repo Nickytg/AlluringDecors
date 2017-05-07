@@ -207,17 +207,17 @@ public class ServicesRequestBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-            int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//            int id = Integer.valueOf(request.getParameter("id"));
 
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedServicesRequest.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateInt(props[1], this.getServicesOfferID());
-                rs.updateInt(props[2], this.getUserID());
-                rs.updateInt(props[3], this.getServicesRequestStatusID());
-                rs.updateString(props[4], this.getRemark());
+                rs.updateInt(props[1], this.selectedServicesRequest.getServicesOfferID());
+                rs.updateInt(props[2], this.selectedServicesRequest.getUserID());
+                rs.updateInt(props[3], this.selectedServicesRequest.getServicesRequestStatusID());
+                rs.updateString(props[4], this.selectedServicesRequest.getRemark());
 
                 rs.updateRow();
                 return true;

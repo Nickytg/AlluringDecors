@@ -28,11 +28,24 @@ import utils.DBConnector;
 public class BillBean implements Serializable {
 
 
+    
 // <editor-fold desc="DTO" defaultstate="collapsed">
     public BillBean() {
     }
     int id, serviceRequestID, domainID;
+    
+    BillBean selectedItem;
 
+    public BillBean getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(BillBean selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+    
+    
+    
     public int getBillID() {
         return id;
     }
@@ -169,15 +182,15 @@ public class BillBean implements Serializable {
     public boolean update() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            FacesContext fc = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-        int id = Integer.valueOf(request.getParameter("id"));
+//            FacesContext fc = FacesContext.getCurrentInstance();
+//        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+//        int id = Integer.valueOf(request.getParameter("id"));
         
-            pst.setInt(1, id);
+            pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if(rs.first()) {
-                rs.updateInt(props[1], this.getServiceRequestID());
-                rs.updateInt(props[2], this.getDomainID());
+                rs.updateInt(props[1], this.selectedItem.getServiceRequestID());
+                rs.updateInt(props[2], this.selectedItem.getDomainID());
                 rs.updateRow();
                 return true;
             }
