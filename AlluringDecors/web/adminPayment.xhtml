@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      >
+    <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
+        <ui:define name="content">       
+            <script src="adminTemplate/assets/libs/ckeditor.js"></script>
+            <section class="content-box box-style-1 box-4">
+                <div class="zerogrid" style="width: 100%">
+                    <div class="wrap-box"><!--Start Box-->
+                        <div class="box-header" style="padding-top:53px">
+                            <h2>Payment management</h2>
+                        </div>
+
+                        <h:form id="tableForm">
+                            <center>
+                                <!-- Add form-->
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:outputText value="Request ID" />
+                                            <h:selectOneMenu value="#{paymentDetailsBean.billID.serviceRequestID.id}"
+                                                             converter="#{servicesRequestedConverter}" >
+                                                <f:selectItems value="#{servicesRequestBean.readAll()}" var="requested" itemValue="#{requested.id}" itemLabel="#{requested.id}"/>
+                                            </h:selectOneMenu> 
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{paymentDetailsBean.totalBillAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />    
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Due Amount" value="#{paymentDetailsBean.dueAmount}"  requiredMessage="Please enter question" /> </div>   </div>
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Balance Amount" value="#{paymentDetailsBean.balanceAmount}" requiredMessage="Please enter question" /></div> </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Total Paid" value="#{paymentDetailsBean.totalPaidAmount}"  requiredMessage="Please enter question" /></div></div>
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="isMaintance" value="#{paymentDetailsBean.maintained}"  requiredMessage="Please enter question" /></div></div>
+                                </label>                                
+                                <p:commandButton id="add" actionListener="#{paymentDetailsBean.create()}" update=":tableForm:table" value="Create">
+                                </p:commandButton>      
+                            </center>
+                            <div class="row">
+                                <center>
+                                    <p:dataTable id="table" var="item" value="#{paymentDetailsBean.readAll()}" widgetVar="paymentDetailsTable" paginator="true" rows="10"
+                                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                                 paginatorPosition="bottom" lazy="true"
+                                                 style="width:900px;" emptyMessage="Data not found">  
+                                        <f:facet name="header">
+                                            Payment data
+                                        </f:facet>
+                                        <p:column headerText="Bill ID">  
+                                            <h:outputText value="#{item.billID.billID}" />  
+                                        </p:column>  
+                                        <p:column headerText="Date">  
+                                            <h:outputText value="#{item.datetime}" />  
+                                        </p:column>
+                                        <p:column headerText="Total Bill">  
+                                            <h:outputText value="#{item.totalBillAmount}" />  
+                                        </p:column> 
+                                        <p:column headerText="Due">  
+                                            <h:outputText value="#{item.dueAmount}" />  
+                                        </p:column>
+                                        <p:column headerText="Balance">  
+                                            <h:outputText value="#{item.balanceAmount}" />  
+                                        </p:column>
+                                        <p:column headerText="Total Paid">  
+                                            <h:outputText value="#{item.totalPaidAmount}" />  
+                                        </p:column>
+                                        <p:column headerText="isMaintaince">  
+                                            <h:outputText value="#{item.maintained}" />  
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton update=":tableForm:paymentDetailsDetail" oncomplete="PF('paymentDetailsDialog').show()" icon="ui-icon-search" title="View">
+                                                <f:setPropertyActionListener value="#{item}" target="#{paymentDetailsBean.selectedItem}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:paymentDetailsEdit" oncomplete="PF('paymentDetailsEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                                <f:setPropertyActionListener value="#{item}" target="#{paymentDetailsBean.selectedItem}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:paymentDetailsDelete" oncomplete="PF('paymentDetailsDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                                <f:setPropertyActionListener value="#{item}" target="#{paymentDetailsBean.selectedItem}"  />
+                                            </p:commandButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </center>
+
+                                <!-- Dialog for view Detail-->
+                                <p:dialog header="Account Info" widgetVar="paymentDetailsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="paymentDetailsDetail" style="text-align:center;">
+                                        <p:panelGrid  columns="2" rendered="#{not empty paymentDetailsBean.selectedItem}" >
+                                            <h:outputText value="BillID" />
+                                            <h:outputText value="#{paymentDetailsBean.billID.billID}" />
+
+                                            <h:outputText value="Requested ID" />
+                                            <h:outputText value="#{paymentDetailsBean.billID.serviceRequestID.id}" />
+
+                                            <h:outputText value="Date" />
+                                            <h:outputText value="#{paymentDetailsBean.datetime}" />
+
+                                            <h:outputText value="Total Bill" />
+                                            <h:outputText value="#{paymentDetailsBean.totalBillAmount}" />
+
+                                            <h:outputText value="Due" />
+                                            <h:outputText value="#{paymentDetailsBean.dueAmount}" />
+
+                                            <h:outputText value="Balance" />
+                                            <h:outputText value="#{paymentDetailsBean.balanceAmount}" />
+
+                                            <h:outputText value="Total Paid" />
+                                            <h:outputText value="#{paymentDetailsBean.totalPaidAmount}"/>
+
+                                            <h:outputText value="isMaintance" />
+                                            <h:outputText value="#{paymentDetailsBean.maintained}"/>
+
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
+
+                                <!-- Dialog for edit-->
+                                <p:dialog header="Tour Order Edit" widgetVar="paymentDetailsEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="paymentDetailsEdit" style="text-align:center;">
+                                        <p:panelGrid  columns="2" rendered="#{not empty paymentDetailsBean.selectedItem}" >
+                                            <h:outputText value="Bill ID" />                                           
+                                            <h:outputText value="#{paymentDetailsBean.billID.billID}" />
+
+                                            <h:outputText value="Requested ID" />            
+                                            <h:selectOneMenu value="#{paymentDetailsBean.billID.serviceRequestID.id}"
+                                                             converter="#{servicesRequestedConverter}" >
+                                                <f:selectItems value="#{servicesRequestBean.readAll()}" var="requested" itemValue="#{requested.id}" itemLabel="#{requested.id}"/>
+                                            </h:selectOneMenu> 
+
+                                            <h:outputText value="Date" />
+                                            <h:inputText value="#{paymentDetailsBean.datetime}" required="true" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="Total Bill" />
+                                            <h:inputText value="#{paymentDetailsBean.totalBillAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />
+
+                                            <h:outputText value="Due" />
+                                            <h:inputText value="#{paymentDetailsBean.dueAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="Balance" />
+                                            <h:inputText value="#{paymentDetailsBean.balanceAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />    
+
+                                            <h:outputText value="Total Paid" />
+                                            <h:inputText value="#{paymentDetailsBean.totalPaidAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter answer" /> 
+
+                                            <h:outputText value="isMaintance" />
+                                            <h:inputText value="#{paymentDetailsBean.maintained}" a:placeholder="Total bill amount" requiredMessage="Please enter answer" />
+
+                                            <p:commandButton id="save" actionListener="#{paymentDetailsBean.update()}" update=":tableForm:table" oncomplete="PF('paymentDetailsEditDialog').hide();" 
+                                                             value="Save"/>
+                                            <p:commandButton id="cancelButton" onclick="PF('paymentDetailsEditDialog').hide()" value="Cancel"/>
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
+
+                                <!-- Dialog for Delete confirmation-->
+                                <p:confirmDialog 
+                                    header="Delete Feed back Confirmation" severity="alert"
+                                    widgetVar="paymentDetailsDeleteDialog"
+                                    id="paymentDetailsDelete">
+                                    <f:facet name="message">
+                                        <h:outputText value="Are you sure to delete Feed back '#{paymentDetailsBean.billID.billID}' ?" />
+                                    </f:facet>
+
+                                    <p:commandButton value="Yes" actionListener="#{paymentDetailsBean.delete(paymentDetailsBean.billID.billID)}" update=":tableForm:table"
+                                                     oncomplete="PF('paymentDetailsDeleteDialog').hide()">
+                                        <f:ajax render="table" />
+                                    </p:commandButton>
+
+                                    <p:commandButton value="No" onclick="PF('paymentDetailsDeleteDialog').hide()" type="button" />
+
+                                </p:confirmDialog>
+
+                            </div>      
+                        </h:form>          
+                    </div>                        
+                </div>
+            </section>
+        </ui:define>
+    </ui:composition>
+</html>

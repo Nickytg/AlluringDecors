@@ -33,7 +33,10 @@ public class ServicesRequestBean implements Serializable {
      */
     public ServicesRequestBean() {
     }
-    int id,servicesOfferID,userID,servicesRequestStatusID;
+    int id;
+    ServicesOfferedBean servicesOfferID;
+    UserBean userID;
+    ServicesRequestStatusBean servicesRequestStatusID;
     String remark;
     ServicesRequestBean selectedServicesRequest;
 
@@ -54,29 +57,34 @@ public class ServicesRequestBean implements Serializable {
         this.id = id;
     }
 
-    public int getServicesOfferID() {
+    public ServicesOfferedBean getServicesOfferID() {
+        if(servicesOfferID == null) servicesOfferID = new ServicesOfferedBean();
         return servicesOfferID;
     }
 
-    public void setServicesOfferID(int servicesOfferID) {
+    public void setServicesOfferID(ServicesOfferedBean servicesOfferID) {
         this.servicesOfferID = servicesOfferID;
     }
 
-    public int getUserID() {
+    public UserBean getUserID() {
+        if(userID == null) userID = new UserBean();
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(UserBean userID) {
         this.userID = userID;
     }
 
-    public int getServicesRequestStatusID() {
+    public ServicesRequestStatusBean getServicesRequestStatusID() {
+        if(servicesRequestStatusID == null) servicesRequestStatusID = new ServicesRequestStatusBean();
         return servicesRequestStatusID;
     }
 
-    public void setServicesRequestStatusID(int servicesRequestStatusID) {
+    public void setServicesRequestStatusID(ServicesRequestStatusBean servicesRequestStatusID) {
         this.servicesRequestStatusID = servicesRequestStatusID;
     }
+
+    
 
     public String getRemark() {
         return remark;
@@ -89,7 +97,7 @@ public class ServicesRequestBean implements Serializable {
       // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "ServicesRequest";
     final String props[] = {"ServicesRequestID", "ServicesOfferedID", "UserID","ServicesRequestStatusID","Remark"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?)";
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -104,11 +112,11 @@ public class ServicesRequestBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setInt(2, this.getServicesOfferID());
-            pst.setInt(3, this.getUserID());
-            pst.setInt(4, this.getServicesRequestStatusID());
-            pst.setString(5, this.getRemark());
+//            pst.setInt(1, this.getId());
+            pst.setInt(1, this.getServicesOfferID().id);
+            pst.setInt(2, this.getUserID().id);
+            pst.setInt(3, this.getServicesRequestStatusID().id);
+            pst.setString(4, this.getRemark());
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -137,9 +145,9 @@ public class ServicesRequestBean implements Serializable {
             while (rs.next()) {
                 ServicesRequestBean obj = new ServicesRequestBean();
                 obj.setId(rs.getInt(props[0]));
-                obj.setServicesOfferID(rs.getInt(props[1]));
-                obj.setUserID(rs.getInt(props[2]));
-                obj.setServicesRequestStatusID(rs.getInt(props[3]));
+                obj.setServicesOfferID(new ServicesOfferedBean().readById(rs.getInt(props[1])));
+                obj.setUserID(new UserBean().readById(rs.getInt(props[2])));
+                obj.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(rs.getInt(props[3])));
                 obj.setRemark(rs.getString(props[4]));
                 list.add(obj);
             }
@@ -169,9 +177,9 @@ public class ServicesRequestBean implements Serializable {
             if (rs.first()) {
                ServicesRequestBean obj = new ServicesRequestBean();
                  obj.setId(rs.getInt(props[0]));
-                obj.setServicesOfferID(rs.getInt(props[1]));
-                obj.setUserID(rs.getInt(props[2]));
-                obj.setServicesRequestStatusID(rs.getInt(props[3]));
+                obj.setServicesOfferID(new ServicesOfferedBean().readById(rs.getInt(props[1])));
+                obj.setUserID(new UserBean().readById(rs.getInt(props[2])));
+                obj.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(rs.getInt(props[3])));
                 obj.setRemark(rs.getString(props[4]));
                 return obj;
             }
@@ -214,9 +222,9 @@ public class ServicesRequestBean implements Serializable {
             pst.setInt(1, this.selectedServicesRequest.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateInt(props[1], this.selectedServicesRequest.getServicesOfferID());
-                rs.updateInt(props[2], this.selectedServicesRequest.getUserID());
-                rs.updateInt(props[3], this.selectedServicesRequest.getServicesRequestStatusID());
+                rs.updateInt(props[1], this.selectedServicesRequest.getServicesOfferID().id);
+                rs.updateInt(props[2], this.selectedServicesRequest.getUserID().id);
+                rs.updateInt(props[3], this.selectedServicesRequest.getServicesRequestStatusID().id);
                 rs.updateString(props[4], this.selectedServicesRequest.getRemark());
 
                 rs.updateRow();
@@ -259,17 +267,17 @@ public class ServicesRequestBean implements Serializable {
         return false;
     }
     
-    public UserBean getUser(){
-        return new UserBean().readById(this.userID);
-        
-    }
-    
-    public ServicesOfferedBean getServicesOffered(){
-        return new ServicesOfferedBean().readById(this.servicesOfferID);
-    }
-    
-    public ServicesRequestStatusBean getServicesRequestStatus(){
-        return new ServicesRequestStatusBean().readById(this.servicesRequestStatusID);
-    }
+//    public UserBean getUser(){
+//        return new UserBean().readById(this.userID);
+//        
+//    }
+//    
+//    public ServicesOfferedBean getServicesOffered(){
+//        return new ServicesOfferedBean().readById(this.servicesOfferID);
+//    }
+//    
+//    public ServicesRequestStatusBean getServicesRequestStatus(){
+//        return new ServicesRequestStatusBean().readById(this.servicesRequestStatusID);
+//    }
 // </editor-fold>
 }

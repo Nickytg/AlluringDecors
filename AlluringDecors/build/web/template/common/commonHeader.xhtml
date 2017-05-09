@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
       >
     <body>
         <ui:composition>
@@ -15,6 +16,7 @@
                 </div>
                 <div id="cssmenu" class="align-center">
                     <ul>
+                        <li><h:link rendered="#{accountBean.administrator}" outcome="adminIndex" ><span>Administrator Panel</span></h:link></li>
                         <li><h:link outcome="index" ><span>Home</span></h:link></li>
                         <li><h:link outcome="aboutUs" ><span>About</span></h:link></li>
                         <li class="has-sub"><a href="archive.html"><span>Projects</span></a>
@@ -24,7 +26,9 @@
                                 <li class="last"><h:link outcome="accomplishedProjects" ><span>Accomplished Projects</span></h:link></li>
                             </ul>
                         </li>
-                        <li><h:link outcome="registerAndLogin" ><span>Register or Login</span></h:link></li>
+                        <li><h:link rendered="#{!accountBean.logged}" outcome="registerAndLogin" ><span>Register or Login</span></h:link></li>
+                        <li><h:link rendered="#{accountBean.logged}" outcome="logout" ><span>Logout</span></h:link></li>
+                        
                         <li class="has-sub"><h:link outcome="registerAndLogin" ><span>Services Offered</span></h:link>
                             <ul>
                                 <li class="has-sub"><a href="#"><span>House</span></a>

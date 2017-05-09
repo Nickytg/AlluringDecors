@@ -27,26 +27,36 @@ import utils.DBConnector;
 @SessionScoped
 public class DescriptionBean implements Serializable {
 
- // <editor-fold desc="DTO" defaultstate="collapsed">
-       /**
+    // <editor-fold desc="DTO" defaultstate="collapsed">
+    /**
      * Creates a new instance of DescriptionBean
      */
     public DescriptionBean() {
+//        DescriptionBean selectedItem = new DescriptionBean();
+//        selectedItem = this.readAll().get(0);
+//            this.selectedItem = new DescriptionBean();
+        
     }
-     int id,descriptionTypeID;
+    int id, descriptionTypeID;
     String content;
 
     DescriptionBean selectedItem;
 
     public DescriptionBean getSelectedItem() {
+        if (selectedItem == null) {
+            DescriptionBean temp = new DescriptionBean();
+            temp.setDescriptionID(0);
+            temp.setDescriptionID(0);
+            temp.setContent("");
+            selectedItem =temp;
+        }
         return selectedItem;
     }
 
     public void setSelectedItem(DescriptionBean selectedItem) {
         this.selectedItem = selectedItem;
     }
-    
-    
+
     public int getDescriptionID() {
         return id;
     }
@@ -71,7 +81,7 @@ public class DescriptionBean implements Serializable {
         this.content = content;
     }
     // </editor-fold>
-    
+
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "[Description]";
     final String props[] = {"DescriptionID", "DescriptionTypeID", "Content"};
@@ -183,7 +193,7 @@ public class DescriptionBean implements Serializable {
      */
     public boolean update() {
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
@@ -229,10 +239,10 @@ public class DescriptionBean implements Serializable {
         }
         return false;
     }
-    
-    public DescriptionTypeBean getDescriptionType(){
+
+    public DescriptionTypeBean getDescriptionType() {
         return new DescriptionTypeBean().readById(this.descriptionTypeID);
     }
 // </editor-fold>
-    
+
 }

@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,11 +95,11 @@ UserBean selectedItem;
     }
     // </editor-fold>
     // <editor-fold desc="DAO">  
-    final String tableName = "User";
+    final String tableName = "[User]";
     final String props[] = {"UserID", "FirstName", "LastName", "Email", "Address","Phone"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?)";
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
-    private final String sqlReadById = "SELECT * FROM [" + tableName + "] WHERE " + props[0] + " = ?";
+    private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
@@ -111,12 +112,12 @@ UserBean selectedItem;
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getFirstname());
-            pst.setString(3, this.getLastname());
-            pst.setString(4, this.getEmail());
-            pst.setString(5, this.getAddress());
-            pst.setString(6, this.getPhone());
+            
+            pst.setString(1, this.getFirstname());
+            pst.setString(2, this.getLastname());
+            pst.setString(3, this.getEmail());
+            pst.setString(4, this.getAddress());
+            pst.setString(5, this.getPhone());
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -131,6 +132,42 @@ UserBean selectedItem;
             }
         }
         return false;
+    }
+    
+    /**
+     * Create new Customer
+     */
+    public int createReturnID() {
+
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlCreate,Statement.RETURN_GENERATED_KEYS);
+            
+            pst.setString(1, this.getFirstname());
+            pst.setString(2, this.getLastname());
+            pst.setString(3, this.getEmail());
+            pst.setString(4, this.getAddress());
+            pst.setString(5, this.getPhone());
+            if (pst.executeUpdate() > 0) {
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            return 0;
+        } finally {
+            try {
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return 0;
     }
 
     /**

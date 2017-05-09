@@ -17,26 +17,81 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Description management</h2>
                         </div>
-                        <div class="row">
-                            <h:form id="addForm">
-                                <h:outputLabel>Description Type:</h:outputLabel>
-                                <h:selectOneMenu value="#{descriptionBean.descriptionTypeID}"
-                                                 converter="#{descriptionTypeConverter}" >
-                                    <f:selectItems value="#{descriptionTypeBean.readAll()}" var="descriptionType" itemValue="#{descriptionType.ID}" itemLabel="#{descriptionType.name}"/>
-                                </h:selectOneMenu>    
-                                <textarea name="editor1" id="editor1" rows="200" cols="80" value="#{descriptionBean.content}"/>
-                                <center>
-                                    <p:commandButton id="add" actionListener="#{descriptionBean.create()}" value="Add">
-                                    </p:commandButton>
-                                </center>
-                                
-                            </h:form>
-                        </div>  
+                        <h:form id="tableForm">
+                            <center>
+                                <div class="row">
+                                    <p:outputPanel id="descriptionEdit" style="text-align:center;">
+                                        <h:outputLabel>Description Type:</h:outputLabel>
+                                        <h:outputText value="#{descriptionBean.selectedItem.descriptionType.name}" />
+                                        <h:outputLabel>Description Content</h:outputLabel>
+                                        <h:inputHidden value="#{descriptionBean.selectedItem.content}" id="editorValue"/> 
 
-                        <script>
-                            CKEDITOR.replace('editor1');
-                            CKEDITOR.config.height = 500;
-                        </script>
+                                        <textarea class="ckeditor" cols="80" id="editor1" rows="10"/>
+
+                                        <center>
+                                            <p:commandButton onclick="document.getElementById('tableForm:editorValue').value = CKEDITOR.instances.editor1.getData();"  id="add" action="#{descriptionBean.update()}" value="Update">
+                                            </p:commandButton>
+                                        </center>
+                                        <script>
+                                            $(document).ready(function () {
+                                                CKEDITOR.replace('editor1');
+                                                var content = `#{descriptionBean.selectedItem.content}`;
+                                                console.log(content);
+                                                CKEDITOR.config.height = 500;
+                                                CKEDITOR.instances['editor1'].setData(content);
+                                            });
+                                        </script>
+                                    </p:outputPanel>
+                                </div>  
+                            </center>
+                            <center>
+                                <div class="row">
+                                    <p:dataTable id="table" var="item" value="#{descriptionBean.readAll()}" widgetVar="descriptionTable" paginator="true" rows="10"
+                                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                                 paginatorPosition="bottom" lazy="true"
+                                                 style="width:900px;" emptyMessage="Data not found">  
+                                        <f:facet name="header">
+                                            Description data
+                                        </f:facet>
+                                        <p:column headerText="Contact Us ID">  
+                                            <h:outputText value="#{item.descriptionID}" />  
+                                        </p:column>  
+                                        <p:column headerText="Name">  
+                                            <h:outputText value="#{item.descriptionType.name}" />  
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton update=":tableForm:descriptionDetail" oncomplete="PF('descriptionDialog').show()" icon="ui-icon-search" title="View">
+                                                <f:setPropertyActionListener value="#{item}" target="#{descriptionBean.selectedItem}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:descriptionEdit"  icon="ui-icon-pencil" title="Edit">
+                                                <f:setPropertyActionListener value="#{item}" target="#{descriptionBean.selectedItem}" />
+                                            </p:commandButton>
+
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </div>
+                            </center>
+                            <!-- Dialog for view Detail-->
+                            <p:dialog header="Feedback Info" widgetVar="descriptionDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="descriptionDetail" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty descriptionBean.selectedItem}" >
+                                        <h:outputText value="Description ID" />
+                                        <h:outputText value="#{descriptionBean.selectedItem.descriptionID}" />
+
+                                        <h:outputText value="Type" />
+                                        <h:outputText value="#{descriptionBean.selectedItem.descriptionType.name}" />
+
+                                        <h:outputText value="Content" />
+                                        <h:outputText value="#{descriptionBean.selectedItem.content}" />
+
+
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
+                        </h:form>
+
                     </div>                        
                 </div>
             </section>

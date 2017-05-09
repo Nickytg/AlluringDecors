@@ -33,7 +33,8 @@ public class FeedbackBean implements Serializable {
      */
     public FeedbackBean() {
     }
-    int id, userID;
+    int id ;
+    UserBean userID;
     String question,answer;
     FeedbackBean selectedFeedback;
 
@@ -53,13 +54,17 @@ public class FeedbackBean implements Serializable {
         this.id = id;
     }
 
-    public int getUserID() {
+    public UserBean getUserID() {
+        if(userID == null) userID = new UserBean();
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(UserBean userID) {
+        
         this.userID = userID;
     }
+
+    
 
     public String getQuestion() {
         return question;
@@ -80,7 +85,7 @@ public class FeedbackBean implements Serializable {
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "[FeedBack]";
     final String props[] = {"FeedBackID", "Question", "Answer", "UserID"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
@@ -94,10 +99,10 @@ public class FeedbackBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getQuestion());
-            pst.setString(3, this.getAnswer());
-            pst.setInt(4, this.getUserID());
+//            pst.setInt(1, this.getId());
+            pst.setString(1, this.getQuestion());
+            pst.setString(2, this.getAnswer());
+            pst.setInt(3, this.getUserID().id);
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -128,7 +133,7 @@ public class FeedbackBean implements Serializable {
                 obj.setId(rs.getInt(props[0]));
                 obj.setQuestion(rs.getString(props[1]));
                 obj.setAnswer(rs.getString(props[2]));
-                obj.setUserID(rs.getInt(props[3]));
+                obj.setUserID(new UserBean().readById(rs.getInt(props[3])));
                 list.add(obj);
             }
             return list;
@@ -159,7 +164,7 @@ public class FeedbackBean implements Serializable {
                 obj.setId(rs.getInt(props[0]));
                 obj.setQuestion(rs.getString(props[1]));
                 obj.setAnswer(rs.getString(props[2]));
-                obj.setUserID(rs.getInt(props[3]));
+                obj.setUserID(new UserBean().readById(rs.getInt(props[3])));
                 return obj;
             }
         } catch (SQLException ex) {
@@ -202,7 +207,7 @@ public class FeedbackBean implements Serializable {
             if (rs.first()) {
                 rs.updateString(props[1], this.selectedFeedback.getQuestion());
                 rs.updateString(props[2], this.selectedFeedback.getAnswer());
-                rs.updateInt(props[3], this.selectedFeedback.getUserID());
+                rs.updateInt(props[3], this.selectedFeedback.getUserID().id);
 
                 rs.updateRow();
                 return true;
@@ -236,8 +241,8 @@ public class FeedbackBean implements Serializable {
         return false;
     }
     
-    public UserBean getUser(){
-        return new UserBean().readById(this.userID);
-    }
+//    public UserBean getUser(){
+//        return new UserBean().readById(this.userID);
+//    }
 // </editor-fold>
 }

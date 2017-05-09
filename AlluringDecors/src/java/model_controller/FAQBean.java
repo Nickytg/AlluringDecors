@@ -74,7 +74,7 @@ public class FAQBean implements Serializable {
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "FAQ";
     final String props[] = {"FAQID", "Question", "Answer"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -89,9 +89,9 @@ public class FAQBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getQuestion());
-            pst.setString(3, this.getAnswer());
+//            pst.setInt(1, this.getId());
+            pst.setString(1, this.getQuestion());
+            pst.setString(2, this.getAnswer());
             if (pst.executeUpdate() > 0) {
                 return true;
             }

@@ -16,14 +16,16 @@
                 <div id="cssmenu" class="align-center">
                     <ul>
                         <li><h:link outcome="adminDescription" ><span>Description</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>Account</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>Projects</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>Services Offered</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>Services Requested</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>About Us</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>FAQ’s</span></h:link></li>
-                        <li><h:link outcome="adminDescription" ><span>Feedback</span></h:link></li>
-                        <li class="last"><h:link outcome="contactUs" ><span>Contact</span></h:link></li>
+                        <li><h:link outcome="adminAccount" ><span>Account</span></h:link></li>
+                        <li><h:link outcome="adminDomain" ><span>Domain</span></h:link></li>
+                        <li><h:link outcome="adminServiceOffered" ><span>Services Offered</span></h:link></li>
+                        <li><h:link outcome="adminServiceRequested" ><span>Services Requested</span></h:link></li>
+                        <!--<li><h:link outcome="adminAboutUs" ><span>About Us</span></h:link></li>-->
+                        <li><h:link outcome="adminFAQ" ><span>FAQ’s</span></h:link></li>
+                        <li><h:link outcome="adminFeedBack" ><span>Feedback</span></h:link></li>
+                        <li><h:link outcome="adminContactUs" ><span>Contact</span></h:link></li>
+                        <li><h:link outcome="adminPayment" ><span>Payment</span></h:link></li>
+                        <li class="last"><h:link rendered="#{accountBean.logged}" outcome="logout" ><span>Logout</span></h:link></li>
                     </ul>
                 </div>
             </header>

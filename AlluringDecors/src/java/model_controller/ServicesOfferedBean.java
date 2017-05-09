@@ -27,14 +27,15 @@ import utils.DBConnector;
 @SessionScoped
 public class ServicesOfferedBean implements Serializable {
 
-  // <editor-fold desc="DTO" defaultstate="collapsed">
-      /**
+    // <editor-fold desc="DTO" defaultstate="collapsed">
+    /**
      * Creates a new instance of ServicesOfferedBean
      */
     public ServicesOfferedBean() {
     }
-     int id,domainID;
-    String name,content;
+    int id;
+    DomainBean domainID;
+    String name, content;
     ServicesOfferedBean selectedServicesOffered;
 
     public ServicesOfferedBean getSelectedServicesOffered() {
@@ -44,7 +45,6 @@ public class ServicesOfferedBean implements Serializable {
     public void setSelectedServicesOffered(ServicesOfferedBean selectedServicesOffered) {
         this.selectedServicesOffered = selectedServicesOffered;
     }
-    
 
     public int getId() {
         return id;
@@ -54,13 +54,18 @@ public class ServicesOfferedBean implements Serializable {
         this.id = id;
     }
 
-    public int getDomainID() {
+    public DomainBean getDomainID() {
+        if(domainID == null){
+            domainID = new DomainBean();
+        }
         return domainID;
     }
 
-    public void setDomainID(int domainID) {
+    public void setDomainID(DomainBean domainID) {
         this.domainID = domainID;
     }
+
+    
 
     public String getName() {
         return name;
@@ -80,8 +85,8 @@ public class ServicesOfferedBean implements Serializable {
     // </editor-fold>
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "ServicesOffered";
-    final String props[] = {"ServicesOfferedID", "Name", "DomainID","Content"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
+    final String props[] = {"ServicesOfferedID", "Name", "DomainID", "Content"};
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -96,10 +101,10 @@ public class ServicesOfferedBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getName());
-            pst.setInt(3, this.getDomainID());
-            pst.setString(4, this.getContent());
+//            pst.setInt(1, this.getId());
+            pst.setString(1, this.getName());
+            pst.setInt(2, this.getDomainID().id);
+            pst.setString(3, this.getContent());
             if (pst.executeUpdate() > 0) {
                 return true;
             }
@@ -129,7 +134,7 @@ public class ServicesOfferedBean implements Serializable {
                 ServicesOfferedBean obj = new ServicesOfferedBean();
                 obj.setId(rs.getInt(props[0]));
                 obj.setName(rs.getString(props[1]));
-                obj.setDomainID(rs.getInt(props[2]));
+                obj.setDomainID(new DomainBean().readById(rs.getInt(props[2])));
                 obj.setContent(rs.getString(props[3]));
                 list.add(obj);
             }
@@ -157,10 +162,10 @@ public class ServicesOfferedBean implements Serializable {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-               ServicesOfferedBean obj = new ServicesOfferedBean();
+                ServicesOfferedBean obj = new ServicesOfferedBean();
                 obj.setId(rs.getInt(props[0]));
                 obj.setName(rs.getString(props[1]));
-                obj.setDomainID(rs.getInt(props[2]));
+                obj.setDomainID(new DomainBean().readById(rs.getInt(props[2])));
                 obj.setContent(rs.getString(props[3]));
                 return obj;
             }
@@ -203,7 +208,7 @@ public class ServicesOfferedBean implements Serializable {
             rs = pst.executeQuery();
             if (rs.first()) {
                 rs.updateString(props[1], this.selectedServicesOffered.getName());
-                rs.updateInt(props[2], this.selectedServicesOffered.getDomainID());
+                rs.updateInt(props[2], this.selectedServicesOffered.getDomainID().id);
                 rs.updateString(props[3], this.selectedServicesOffered.getContent());
 
                 rs.updateRow();
@@ -245,9 +250,9 @@ public class ServicesOfferedBean implements Serializable {
         }
         return false;
     }
-    
-    public DomainBean getDomain(){
-        return new DomainBean().readById(this.domainID);
-    }
+
+//    public DomainBean getDomain() {
+//        return new DomainBean().readById(this.domainID.id);
+//    }
 // </editor-fold>
 }

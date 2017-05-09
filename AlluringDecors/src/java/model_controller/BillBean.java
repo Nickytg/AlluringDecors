@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,8 @@ public class BillBean implements Serializable {
 // <editor-fold desc="DTO" defaultstate="collapsed">
     public BillBean() {
     }
-    int id, serviceRequestID, domainID;
+    int id;
+    ServicesRequestBean serviceRequestID;
     
     BillBean selectedItem;
 
@@ -54,26 +56,21 @@ public class BillBean implements Serializable {
         this.id = billID;
     }
 
-    public int getServiceRequestID() {
+    public ServicesRequestBean getServiceRequestID() {
+        if(serviceRequestID == null) serviceRequestID = new ServicesRequestBean();
         return serviceRequestID;
     }
 
-    public void setServiceRequestID(int serviceRequestID) {
+    public void setServiceRequestID(ServicesRequestBean serviceRequestID) {
         this.serviceRequestID = serviceRequestID;
     }
 
-    public int getDomainID() {
-        return domainID;
-    }
-
-    public void setDomainID(int domainID) {
-        this.domainID = domainID;
-    }
+    
 // </editor-fold>
 // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "Bill";
     final String props[] = {"BillID","ServicesRequestID","DomainID"};
-     private final String sqlCreate = "INSERT INTO "+tableName+" VALUES(?,?,?)";
+     private final String sqlCreate = "INSERT INTO "+tableName+" VALUES(?)";
     private final String sqlRead = "SELECT * FROM "+tableName;
     private final String sqlReadById = "SELECT * FROM "+tableName+" WHERE "+props[0]+" = ?";
     private final String sqlUpdate = "UPDATE "+tableName+" WHERE "+props[0]+" = ?";
@@ -89,8 +86,7 @@ public class BillBean implements Serializable {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
             pst.setInt(1, this.getBillID());
-            pst.setInt(2, this.getServiceRequestID());
-            pst.setInt(3, this.getDomainID());
+            pst.setInt(2, this.getServiceRequestID().id);
            
             if (pst.executeUpdate() > 0) {
                 return true;
@@ -109,6 +105,39 @@ public class BillBean implements Serializable {
     }
     
     /**
+     * Create new Customer
+     */
+    public int createReturnID() {
+      
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlCreate,Statement.RETURN_GENERATED_KEYS);
+            //pst.setInt(1, this.getBillID());
+            pst.setInt(1, this.getServiceRequestID().id);
+           
+            if (pst.executeUpdate() > 0) {
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            return 0;
+        } finally {
+            try {
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return 0;
+    }
+    
+    /**
      * read all Customer in database
      * @return 
      */
@@ -119,8 +148,7 @@ public class BillBean implements Serializable {
             while (rs.next()) {
                 BillBean obj = new BillBean();
                 obj.setBillID(rs.getInt(props[0]));
-                obj.setServiceRequestID(rs.getInt(props[1]));
-                obj.setDomainID(rs.getInt(props[2]));
+                obj.setServiceRequestID(new ServicesRequestBean().readById(rs.getInt(props[1])));
                 list.add(obj);
             }
             return list;
@@ -149,8 +177,7 @@ public class BillBean implements Serializable {
             if (rs.first()) {
                   BillBean obj = new BillBean();
                 obj.setBillID(rs.getInt(props[0]));
-                obj.setServiceRequestID(rs.getInt(props[1]));
-                obj.setDomainID(rs.getInt(props[2]));
+                obj.setServiceRequestID(new ServicesRequestBean().readById(rs.getInt(props[1])));
                 return obj;
             }
         } catch (SQLException ex) {
@@ -173,7 +200,6 @@ public class BillBean implements Serializable {
         BillBean data = this.readById(id);
         this.id = id;
         this.serviceRequestID = data.getServiceRequestID();
-        this.domainID = data.getDomainID();
     }
     
     /**
@@ -189,8 +215,7 @@ public class BillBean implements Serializable {
             pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if(rs.first()) {
-                rs.updateInt(props[1], this.selectedItem.getServiceRequestID());
-                rs.updateInt(props[2], this.selectedItem.getDomainID());
+                rs.updateInt(props[1], this.selectedItem.getServiceRequestID().id);
                 rs.updateRow();
                 return true;
             }
@@ -231,12 +256,12 @@ public class BillBean implements Serializable {
         return false;
     }
     
-    public DomainBean getDomain(){
-        return new DomainBean().readById(this.domainID);
-    }
-    
-    public ServicesRequestBean getServicesRequest(){
-        return new ServicesRequestBean().readById(this.serviceRequestID);
-    }
+//    public DomainBean getDomain(){
+//        return new DomainBean().readById(this.domainID);
+//    }
+//    
+//    public ServicesRequestBean getServicesRequest(){
+//        return new ServicesRequestBean().readById(this.serviceRequestID);
+//    }
 // </editor-fold>
 }

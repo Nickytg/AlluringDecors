@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">            
@@ -15,26 +16,30 @@
                             <h2>Login</h2>
                         </div>
                         <div id="contact_form">
-                            <form name="form1" id="ff" method="post" action="contact.php">
+                            <h:form id="ff">
                                 <label class="row">
                                     <div class="col-1-1">
                                         <div class="wrap-col">
-                                            <input type="text" name="userName" id="account" placeholder="Please enter your account" required="required"></input>
+                                            <h:inputText value="#{accountBean.username}" required="true" requiredMessage="Please enter username" />    
+                                            <!--<input type="text" name="userName" id="account" placeholder="Please enter your account" required="required"></input>-->
                                         </div>
                                     </div>
                                 </label>
                                 <label class="row">
                                     <div class="col-1-1">
                                         <div class="wrap-col">
-                                            <input type="password" name="password" id="password" placeholder="Please enter your password" required="required"></input>
+                                            <h:inputText value="#{accountBean.password}" required="true" requiredMessage="Please enter password" />  
+                                            <!--<input type="password" name="password" id="password" placeholder="Please enter your password" required="required"></input>-->
                                         </div>
                                     </div>
                                 </label>
                                 <center>
-                                    <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
+                                    <p:commandButton id="add"  styleClass="sendButton" actionListener="#{accountBean.loginValidation()}" value="Submit">
+                                    </p:commandButton>       
+<!--                                    <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>-->
                                     <p>Don't have account yet? <span onclick="toggleRegisterLogin()" style="color:blue; cursor:pointer">CLICK HERE</span> to register</p>
                                 </center>
-                            </form>
+                            </h:form>
                         </div>
                     </div>   
                     <!-- END -->

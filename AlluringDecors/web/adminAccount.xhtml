@@ -7,6 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       >
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">       
@@ -17,39 +18,48 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Account management</h2>
                         </div>
-                        <center>
-                            <!-- Add form-->
-                            <h:outputText value="User first name" />                                           
-                            <h:outputText value="#{accountBean.user.firstname}" />
 
-                            <h:outputText value="User last name" />
-                            <h:inputText value="#{accountBean.user.lastname}" required="true" requiredMessage="Please enter question" />    
-
-                            <h:outputText value="User Email" />
-                            <h:inputText value="#{accountBean.user.email}" required="true" requiredMessage="Please enter question" />    
-
-                            <h:outputText value="User Address" />
-                            <h:inputText value="#{accountBean.user.address}" required="true" requiredMessage="Please enter question" />    
-
-                            <h:outputText value="User Phone" />
-                            <h:inputText value="#{accountBean.user.phone}" required="true" requiredMessage="Please enter question" />    
-
-                            <h:outputText value="Username" />
-                            <h:inputText value="#{accountBean.username}" required="true" requiredMessage="Please enter answer" /> 
-
-                            <h:outputText value="Password" />
-                            <h:inputText value="#{accountBean.password}" required="true" requiredMessage="Please enter answer" />
-
-                            <h:outputText value="Role" />
-                            <h:selectOneMenu value="#{accountBean.roleID}"
-                                             converter="#{roleConverter}" >
-                                <f:selectItems value="#{roleBean.readAll()}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}"/>
-                                </h:selectOneMenu>    
-
-                            <p:commandButton id="add" actionListener="#{accountBean.create()}" update=":tableForm:table" value="Add">
-                            </p:commandButton>      
-                        </center>
                         <h:form id="tableForm">
+                            <center>
+                                <!-- Add form-->
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{accountBean.userID.firstname}" a:placeholder="Firstname" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{accountBean.userID.lastname}" a:placeholder="Lastname" requiredMessage="Please enter question" />    
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Email" value="#{accountBean.userID.email}"  requiredMessage="Please enter question" /> </div>   </div>
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Address" value="#{accountBean.userID.address}" requiredMessage="Please enter question" /></div> </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Phone number" value="#{accountBean.userID.phone}"  requiredMessage="Please enter question" /></div></div>
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Username" value="#{accountBean.username}" requiredMessage="Please enter answer" /> </div></div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Password" value="#{accountBean.password}" requiredMessage="Please enter answer" /></div></div>
+                                    <div class="col-1-2"></div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-1">
+                                        <div class="wrap-col">
+                                            <h:outputText value="Role" />
+                                            <h:selectOneMenu value="#{accountBean.roleID.id}"
+                                                             converter="#{roleConverter}" >
+                                                <f:selectItems value="#{roleBean.readAll()}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}"/>
+                                            </h:selectOneMenu> 
+                                        </div>
+                                    </div>
+                                </label>
+                                <p:commandButton id="add" actionListener="#{accountBean.create()}" update=":tableForm:table" value="Create">
+                                </p:commandButton>      
+                            </center>
                             <div class="row">
                                 <center>
                                     <p:dataTable id="table" var="item" value="#{accountBean.readAll()}" widgetVar="accountTable" paginator="true" rows="10"
@@ -60,7 +70,7 @@
                                             Account data
                                         </f:facet>
                                         <p:column headerText="User ID">  
-                                            <h:outputText value="#{item.userID}" />  
+                                            <h:outputText value="#{item.userID.id}" />  
                                         </p:column>  
                                         <p:column headerText="Username">  
                                             <h:outputText value="#{item.username}" />  
@@ -69,7 +79,7 @@
                                             <h:outputText value="#{item.password}" />  
                                         </p:column> 
                                         <p:column headerText="Role">  
-                                            <h:outputText value="#{item.role.name}" />  
+                                            <h:outputText value="#{item.roleID.name}" />  
                                         </p:column>
                                         <p:column>
                                             <p:commandButton update=":tableForm:accountDetail" oncomplete="PF('accountDialog').show()" icon="ui-icon-search" title="View">
@@ -91,22 +101,22 @@
                                     <p:outputPanel id="accountDetail" style="text-align:center;">
                                         <p:panelGrid  columns="2" rendered="#{not empty accountBean.selectedAccount}" >
                                             <h:outputText value="UserID" />
-                                            <h:outputText value="#{accountBean.selectedAccount.userID}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.id}" />
 
                                             <h:outputText value="User first name" />
-                                            <h:outputText value="#{accountBean.selectedAccount.user.firstname}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.firstname}" />
 
                                             <h:outputText value="User last name" />
-                                            <h:outputText value="#{accountBean.selectedAccount.user.lastname}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.lastname}" />
 
                                             <h:outputText value="User Email" />
-                                            <h:outputText value="#{accountBean.selectedAccount.user.email}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.email}" />
 
                                             <h:outputText value="User Address" />
-                                            <h:outputText value="#{accountBean.selectedAccount.user.address}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.address}" />
 
                                             <h:outputText value="User Phone" />
-                                            <h:outputText value="#{accountBean.selectedAccount.user.phone}"/>
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.phone}"/>
 
                                             <h:outputText value="Username" />
                                             <h:outputText value="#{accountBean.selectedAccount.username}"/>
@@ -115,7 +125,7 @@
                                             <h:outputText value="#{accountBean.selectedAccount.password}"/>
 
                                             <h:outputText value="Role" />
-                                            <h:outputText value="#{accountBean.selectedAccount.role.name}"/>
+                                            <h:outputText value="#{accountBean.selectedAccount.roleID.name}"/>
 
                                         </p:panelGrid>
                                     </p:outputPanel>
@@ -126,22 +136,22 @@
                                     <p:outputPanel id="accountEdit" style="text-align:center;">
                                         <p:panelGrid  columns="2" rendered="#{not empty accountBean.selectedAccount}" >
                                             <h:outputText value="User ID" />                                           
-                                            <h:outputText value="#{accountBean.selectedAccount.userID}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.id}" />
 
                                             <h:outputText value="User first name" />                                           
-                                            <h:outputText value="#{accountBean.selectedAccount.user.firstname}" />
+                                            <h:outputText value="#{accountBean.selectedAccount.userID.firstname}" />
 
                                             <h:outputText value="User last name" />
-                                            <h:inputText value="#{accountBean.selectedAccount.user.lastname}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.lastname}" required="true" requiredMessage="Please enter question" />    
 
                                             <h:outputText value="User Email" />
-                                            <h:inputText value="#{accountBean.selectedAccount.user.email}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.email}" required="true" requiredMessage="Please enter question" />    
 
                                             <h:outputText value="User Address" />
-                                            <h:inputText value="#{accountBean.selectedAccount.user.address}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.address}" required="true" requiredMessage="Please enter question" />    
 
                                             <h:outputText value="User Phone" />
-                                            <h:inputText value="#{accountBean.selectedAccount.user.phone}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.phone}" required="true" requiredMessage="Please enter question" />    
 
                                             <h:outputText value="Username" />
                                             <h:inputText value="#{accountBean.selectedAccount.username}" required="true" requiredMessage="Please enter answer" /> 
@@ -149,8 +159,8 @@
                                             <h:outputText value="Password" />
                                             <h:inputText value="#{accountBean.selectedAccount.password}" required="true" requiredMessage="Please enter answer" />
 
-                                            <h:outputText value="Password" />
-                                            <h:inputText value="#{accountBean.selectedAccount.roleID}" required="true" requiredMessage="Please enter answer" />
+                                            <h:outputText value="Role" />
+                                            <h:inputText value="#{accountBean.selectedAccount.roleID.name}" required="true" requiredMessage="Please enter answer" />
 
                                             <p:commandButton id="save" actionListener="#{accountBean.update()}" update=":tableForm:table" oncomplete="PF('accountEditDialog').hide();" 
                                                              value="Save"/>
@@ -165,10 +175,10 @@
                                     widgetVar="accountDeleteDialog"
                                     id="accountDelete">
                                     <f:facet name="message">
-                                        <h:outputText value="Are you sure to delete Feed back '#{accountBean.selectedAccount.userID}' ?" />
+                                        <h:outputText value="Are you sure to delete Feed back '#{accountBean.selectedAccount.userID.id}' ?" />
                                     </f:facet>
 
-                                    <p:commandButton value="Yes" actionListener="#{accountBean.delete(accountBean.selectedAccount.userID)}" update=":tableForm:table"
+                                    <p:commandButton value="Yes" actionListener="#{accountBean.delete(accountBean.selectedAccount.userID.id)}" update=":tableForm:table"
                                                      oncomplete="PF('accountDeleteDialog').hide()">
                                         <f:ajax render="table" />
                                     </p:commandButton>

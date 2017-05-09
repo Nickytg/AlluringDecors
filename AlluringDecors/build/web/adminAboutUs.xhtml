@@ -17,7 +17,8 @@
                             <h2>About Us management</h2>
                         </div>
                         <div class="row">
-                            <form method="POST">
+                            <h:form id="tableForm">
+                                <h:inputHidden value="#{descriptionBean.selectedItem.content}" id="editorValue"/> 
                                 <textarea name="editor1" id="editor1" rows="200" cols="80"/>
                                 <center>
                                     <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
@@ -27,7 +28,7 @@
                                     CKEDITOR.replace('editor1');
                                     CKEDITOR.config.height = 500;
                                 </script>
-                            </form>
+                            </h:form>
                         </div>                        
                     </div>                        
                 </div>

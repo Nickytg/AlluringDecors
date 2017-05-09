@@ -7,6 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       >
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">    
@@ -20,34 +21,48 @@
                             <h2>Domain management</h2>
                         </div>
                         <h:form id="tableForm">
-                            <div class="row">
-                                <p:dataTable id="table" var="item" value="#{domainBean.readAll()}" widgetVar="domainTable" paginator="true" rows="10"
-                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
-                                             paginatorPosition="bottom" lazy="true"
-                                             style="width:900px;" emptyMessage="Data not found">  
-                                    <f:facet name="header">
-                                        Domain data
-                                    </f:facet>
-                                    <p:column headerText="Domain ID">  
-                                        <h:outputText value="#{item.id}" />  
-                                    </p:column>  
-                                    <p:column headerText="Name">  
-                                        <h:outputText value="#{item.name}" />  
-                                    </p:column>
-                                    <p:column>
-                                        <p:commandButton update=":tableForm:domainDetail" oncomplete="PF('domainDialog').show()" icon="ui-icon-search" title="View">
-                                            <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}" />
-                                        </p:commandButton>
-                                        <p:commandButton update=":tableForm:domainEdit" oncomplete="PF('domainEditDialog').show()" icon="ui-icon-pencil" title="Edit">
-                                            <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}" />
-                                        </p:commandButton>
-                                        <p:commandButton update=":tableForm:domainDelete" oncomplete="PF('domainDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
-                                            <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}"  />
-                                        </p:commandButton>
-                                    </p:column>
-                                </p:dataTable>
-                            </div>
+                            <center>
+                                <!-- Add form-->
+                                <label class="row">
+                                    <div class="col-1-1">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{domainBean.name}" a:placeholder="Domain name" />
+                                        </div>
+                                    </div>
+                                </label>
+                                <p:commandButton id="add" actionListener="#{domainBean.create()}" update=":tableForm:table" value="Create">
+                                </p:commandButton>      
+                            </center>
 
+                            <center>
+                                <div class="row">
+                                    <p:dataTable id="table" var="item" value="#{domainBean.readAll()}" widgetVar="domainTable" paginator="true" rows="10"
+                                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                                 paginatorPosition="bottom" lazy="true"
+                                                 style="width:900px;" emptyMessage="Data not found">  
+                                        <f:facet name="header">
+                                            Domain data
+                                        </f:facet>
+                                        <p:column headerText="Domain ID">  
+                                            <h:outputText value="#{item.id}" />  
+                                        </p:column>  
+                                        <p:column headerText="Name">  
+                                            <h:outputText value="#{item.name}" />  
+                                        </p:column>
+                                        <p:column>
+                                            <p:commandButton update=":tableForm:domainDetail" oncomplete="PF('domainDialog').show()" icon="ui-icon-search" title="View">
+                                                <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:domainEdit" oncomplete="PF('domainEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                                <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:domainDelete" oncomplete="PF('domainDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                                <f:setPropertyActionListener value="#{item}" target="#{domainBean.selectedDomain}"  />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </div>
+                            </center>
                             <!-- Dialog for view Detail-->
                             <p:dialog header="Domain Info" widgetVar="domainDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                                 <p:outputPanel id="domainDetail" style="text-align:center;">
@@ -69,7 +84,7 @@
                                         <h:outputText value="#{domainBean.selectedDomain.id}" />
 
                                         <h:outputText value="Name" />                                           
-                                        <h:outputText value="#{domainBean.selectedDomain.name}" />
+                                        <h:inputText value="#{domainBean.selectedDomain.name}" />
                                         <p:commandButton id="save" actionListener="#{domainBean.update()}" update=":tableForm:table" oncomplete="PF('domainEditDialog').hide();" 
                                                          value="Save"/>
                                         <p:commandButton id="cancelButton" onclick="PF('domainEditDialog').hide()" value="Cancel"/>

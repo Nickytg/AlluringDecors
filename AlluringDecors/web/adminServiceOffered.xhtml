@@ -7,6 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       >
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">       
@@ -17,104 +18,143 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Services Offered management</h2>
                         </div>
-                        <div class="row">
-                            <h:form id="tableForm">
-                                <p:dataTable id="table" var="item" value="#{servicesOfferedBean.readAll()}" widgetVar="servicesOfferedTable" paginator="true" rows="10"
-                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
-                                             paginatorPosition="bottom" lazy="true"
-                                             style="width:900px;" emptyMessage="Data not found">  
-                                    <f:facet name="header">
-                                        Feedback data
-                                    </f:facet>
-                                    <p:column headerText="ID">  
-                                        <h:outputText value="#{item.id}" />  
-                                    </p:column>  
-                                    <p:column headerText="Name">  
-                                        <h:outputText value="#{item.name}" />  
-                                    </p:column>
-                                    <p:column headerText="DomainID">  
-                                        <h:outputText value="#{item.domain.name}" />  
-                                    </p:column> 
-                                    <p:column headerText="Content">  
-                                        <h:outputText value="#{item.content}" />  
-                                    </p:column>
-                                    <p:column>
-                                        <p:commandButton update=":tableForm:servicesOfferedDetail" oncomplete="PF('servicesOfferedDialog').show()" icon="ui-icon-search" title="View">
-                                            <f:setPropertyActionListener value="#{item}" target="#{servicesOfferedBean.selectedServicesOffered}" />
-                                        </p:commandButton>
-                                        <p:commandButton update=":tableForm:servicesOfferedEdit" oncomplete="PF('servicesOfferedEditDialog').show()" icon="ui-icon-pencil" title="Edit">
-                                            <f:setPropertyActionListener value="#{item}" target="#{servicesOfferedBean.selectedServicesOffered}" />
-                                        </p:commandButton>
-                                        <p:commandButton update=":tableForm:servicesOfferedDelete" oncomplete="PF('servicesOfferedDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
-                                            <f:setPropertyActionListener value="#{item}" target="#{servicesOfferedBean.selectedServicesOffered}"  />
-                                        </p:commandButton>
-                                    </p:column>
-
-                                </p:dataTable>
-                            </h:form>
-                        </div>
-                        
-                        <!-- Dialog for view Detail-->
-                        <p:dialog header="Services Offered Info" widgetVar="servicesOfferedDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel id="servicesOfferedDetail" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty servicesOfferedBean.selectedServicesOffered}" >
-                                    <h:outputText value="ID" />
-                                    <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.id}" />
-
-                                    <h:outputText value="Name" />
-                                    <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.name}" />
-
-                                    <h:outputText value="DomainID" />
-                                    <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.domain.name}" />
-
-                                    <h:outputText value="Content" />
-                                    <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.content}"/>
-
-                                </p:panelGrid>
+                        <h:form id="tableForm">
+                            <p:outputPanel id="ServiceOfferedEdit" style="text-align:center;">
+                                <center>
+                                    <!-- Add form-->
+                                    <label class="row">
+                                        <div class="col-1-2">
+                                            <div class="wrap-col">
+                                                <h:inputText value="#{servicesOfferedBean.name}" a:placeholder="Name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-1-2">
+                                            <div class="wrap-col">
+                                                <div class="wrap-col">
+                                                    <h:outputText value="Domain" />
+                                                    <h:selectOneMenu value="#{servicesOfferedBean.domainID.id}"
+                                                                     converter="#{domainConverter}" >
+                                                        <f:selectItems value="#{domainBean.readAll()}" var="domain" itemValue="#{domain.id}" itemLabel="#{domain.name}"/>
+                                                    </h:selectOneMenu> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label class="row">
+                                        <div class="col-1-1">
+                                            <h:inputHidden value="#{servicesOfferedBean.content}" id="editorValue"/>
+                                            <textarea class="ckeditor" cols="80" id="editor1" rows="10"/>
+                                        </div>
+                                    </label>
+                                    <p:commandButton id="add" onclick="document.getElementById('tableForm:editorValue').value = CKEDITOR.instances.editor1.getData();" actionListener="#{servicesOfferedBean.create()}" update=":tableForm:table" value="Create">
+                                    </p:commandButton>    
+                                    <script>
+                                        $(document).ready(function () {
+                                            CKEDITOR.replace('editor1');
+//                                                var content = `#{descriptionBean.selectedItem.content}`;
+//                                                console.log(content);
+                                            CKEDITOR.config.height = 500;
+//                                                CKEDITOR.instances['editor1'].setData(content);
+                                        });
+                                    </script>
+                                </center>
                             </p:outputPanel>
-                        </p:dialog>
-                        
-                        <!-- Dialog for edit-->
-                        <p:dialog header="Services Offered Edit" widgetVar="servicesOfferedEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel id="servicesOfferedEdit" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty servicesOfferedBean.selectedServicesOffered}" >
-                                    <h:outputText value="ID" />                                           
-                                    <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.id}" />
-                                    
-                                    <h:outputText value="Name" />                                           
-                                    <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.name}" />
+                            <center>
+                                <div class="row">
+                                    <p:dataTable id="table" var="item" value="#{servicesOfferedBean.readAll()}" widgetVar="servicesOfferedTable" paginator="true" rows="10"
+                                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+                                                 paginatorPosition="bottom" lazy="true"
+                                                 style="width:900px;" emptyMessage="Data not found">  
+                                        <f:facet name="header">
+                                            Feedback data
+                                        </f:facet>
+                                        <p:column headerText="ID">  
+                                            <h:outputText value="#{item.id}" />  
+                                        </p:column>  
+                                        <p:column headerText="Name">  
+                                            <h:outputText value="#{item.name}" />  
+                                        </p:column>
+                                        <p:column headerText="DomainID">  
+                                            <h:outputText value="#{item.domainID.name}" />  
+                                        </p:column> 
+                                        <p:column>
+                                            <p:commandButton update=":tableForm:servicesOfferedDetail" oncomplete="PF('servicesOfferedDialog').show()" icon="ui-icon-search" title="View">
+                                                <f:setPropertyActionListener value="#{item}" target="#{servicesOfferedBean.selectedServicesOffered}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:servicesOfferedEdit" oncomplete="PF('servicesOfferedEditDialog').show()" icon="ui-icon-pencil" title="Edit">
+                                                <f:setPropertyActionListener value="#{item}" target="#{servicesOfferedBean.selectedServicesOffered}" />
+                                            </p:commandButton>
+                                            <p:commandButton update=":tableForm:servicesOfferedDelete" oncomplete="PF('servicesOfferedDeleteDialog').show()"  icon="ui-icon-trash" title="Delete" >
+                                                <f:setPropertyActionListener value="#{item}" target="#{servicesOfferedBean.selectedServicesOffered}"  />
+                                            </p:commandButton>
+                                        </p:column>
 
-                                    <h:outputText value="Domain ID" />
-                                    <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.domainID}" required="true" requiredMessage="Please enter question" />    
+                                    </p:dataTable>
+                                </div>
+                            </center>
 
-                                    <h:outputText value="Content" />
-                                    <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.content}" required="true" requiredMessage="Please enter answer" />    
+                            <!-- Dialog for view Detail-->
+                            <p:dialog header="Services Offered Info" widgetVar="servicesOfferedDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="servicesOfferedDetail" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty servicesOfferedBean.selectedServicesOffered}" >
+                                        <h:outputText value="ID" />
+                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.id}" />
 
-                                    <p:commandButton id="save" actionListener="#{servicesOfferedBean.update()}" update=":tableForm:table" oncomplete="PF('servicesOfferedEditDialog').hide();" 
-                                                     value="Save"/>
-                                    <p:commandButton id="cancelButton" onclick="PF('servicesOfferedEditDialog').hide()" value="Cancel"/>
-                                </p:panelGrid>
-                            </p:outputPanel>
-                        </p:dialog>
+                                        <h:outputText value="Name" />
+                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.name}" />
 
-                        <!-- Dialog for Delete confirmation-->
-                        <p:confirmDialog 
-                            header="Delete Services Offered Confirmation" severity="alert"
-                            widgetVar="servicesOfferedDeleteDialog"
-                            id="tourOrderDelete">
-                            <f:facet name="message">
-                                <h:outputText value="Are you sure to delete Services Offered  '#{servicesOfferedBean.selectedServicesOffered.id}' ?" />
-                            </f:facet>
+                                        <h:outputText value="DomainID" />
+                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.domainID.name}" />
 
-                            <p:commandButton value="Yes" actionListener="#{servicesOfferedBean.delete(servicesOfferedBean.selectedServicesOffered.id)}" update=":tableForm:table"
-                                             oncomplete="PF('servicesOfferedDeleteDialog').hide()">
-                                <f:ajax render="table" />
-                            </p:commandButton>
+                                        <h:outputText value="Content" />
+                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.content}"/>
 
-                            <p:commandButton value="No" onclick="PF('servicesOfferedDeleteDialog').hide()" type="button" />
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
 
-                        </p:confirmDialog>
-                        
+                            <!-- Dialog for edit-->
+                            <p:dialog header="Services Offered Edit" widgetVar="servicesOfferedEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                <p:outputPanel id="servicesOfferedEdit" style="text-align:center;">
+                                    <p:panelGrid  columns="2" rendered="#{not empty servicesOfferedBean.selectedServicesOffered}" >
+                                        <h:outputText value="ID" />                                           
+                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.id}" />
+
+                                        <h:outputText value="Name" />                                           
+                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.name}" />
+
+                                        <h:outputText value="Domain ID" />
+                                        <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.domainID}" required="true" requiredMessage="Please enter question" />    
+
+                                        <h:outputText value="Content" />
+                                        <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.content}" required="true" requiredMessage="Please enter answer" />    
+
+                                        <p:commandButton id="save" actionListener="#{servicesOfferedBean.update()}" update=":tableForm:table" oncomplete="PF('servicesOfferedEditDialog').hide();" 
+                                                         value="Save"/>
+                                        <p:commandButton id="cancelButton" onclick="PF('servicesOfferedEditDialog').hide()" value="Cancel"/>
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
+                            <!-- Dialog for Delete confirmation-->
+                            <p:confirmDialog 
+                                header="Delete Services Offered Confirmation" severity="alert"
+                                widgetVar="servicesOfferedDeleteDialog"
+                                id="servicesOfferedDelete">
+                                <f:facet name="message">
+                                    <h:outputText value="Are you sure to delete Services Offered  '#{servicesOfferedBean.selectedServicesOffered.id}' ?" />
+                                </f:facet>
+
+                                <p:commandButton value="Yes" actionListener="#{servicesOfferedBean.delete(servicesOfferedBean.selectedServicesOffered.id)}" update=":tableForm:table"
+                                                 oncomplete="PF('servicesOfferedDeleteDialog').hide()">
+                                    <f:ajax render="table" />
+                                </p:commandButton>
+
+                                <p:commandButton value="No" onclick="PF('servicesOfferedDeleteDialog').hide()" type="button" />
+
+                            </p:confirmDialog>
+
+                        </h:form>
                     </div>                        
                 </div>
             </section>

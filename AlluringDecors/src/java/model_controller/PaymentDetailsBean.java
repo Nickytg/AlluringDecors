@@ -34,7 +34,8 @@ public class PaymentDetailsBean implements Serializable {
      */
     public PaymentDetailsBean() {
     }
-    int id, billID;
+    int id;
+    BillBean billID;
     Date datetime;
     double totalBillAmount, dueAmount, balanceAmount, totalPaidAmount;
     boolean maintained;
@@ -48,8 +49,7 @@ public class PaymentDetailsBean implements Serializable {
     public void setSelectedItem(PaymentDetailsBean selectedItem) {
         this.selectedItem = selectedItem;
     }
-    
-    
+
     public int getId() {
         return id;
     }
@@ -58,11 +58,14 @@ public class PaymentDetailsBean implements Serializable {
         this.id = id;
     }
 
-    public int getBillID() {
+    public BillBean getBillID() {
+        if (billID == null) {
+            billID = new BillBean();
+        }
         return billID;
     }
 
-    public void setBillID(int billID) {
+    public void setBillID(BillBean billID) {
         this.billID = billID;
     }
 
@@ -118,7 +121,7 @@ public class PaymentDetailsBean implements Serializable {
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "PaymentDetail";
     final String props[] = {"PaymentDetaiID", "BillID", "Date", "TotalBillAmount", "DueAmount", "BalanceAmount", "TotalPaidAmount", "isMaintained"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?,?,?)";
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -132,17 +135,23 @@ public class PaymentDetailsBean implements Serializable {
     public boolean create() {
 
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setInt(2, this.getBillID());
-            pst.setDate(3, this.getDatetime());
-            pst.setDouble(4, this.getTotalBillAmount());
-            pst.setDouble(5, this.getDueAmount());
-            pst.setDouble(6, this.getBalanceAmount());
-            pst.setDouble(7, this.getTotalPaidAmount());
-            pst.setBoolean(8, isMaintained());
-            if (pst.executeUpdate() > 0) {
-                return true;
+            BillBean billTemp = new BillBean();
+            billTemp.setServiceRequestID(this.billID.serviceRequestID);
+            int newBillID = billTemp.createReturnID();
+            if (newBillID != 0) {
+                pst = DBConnector.getConnection().prepareStatement(sqlCreate);
+//            pst.setInt(1, this.getId());
+                java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+                pst.setInt(1, newBillID);
+                pst.setTimestamp(2,date);
+                pst.setDouble(3, this.getTotalBillAmount());
+                pst.setDouble(4, this.getDueAmount());
+                pst.setDouble(5, this.getBalanceAmount());
+                pst.setDouble(6, this.getTotalPaidAmount());
+                pst.setBoolean(7, isMaintained());
+                if (pst.executeUpdate() > 0) {
+                    return true;
+                }
             }
         } catch (SQLException ex) {
             return false;
@@ -169,7 +178,7 @@ public class PaymentDetailsBean implements Serializable {
             while (rs.next()) {
                 PaymentDetailsBean obj = new PaymentDetailsBean();
                 obj.setId(rs.getInt(props[0]));
-                obj.setBillID(rs.getInt(props[1]));
+                obj.setBillID(new BillBean().readById(rs.getInt(props[1])));
                 obj.setDatetime(rs.getDate(props[2]));
                 obj.setTotalBillAmount(rs.getDouble(props[3]));
                 obj.setDueAmount(rs.getDouble(props[4]));
@@ -204,7 +213,7 @@ public class PaymentDetailsBean implements Serializable {
             if (rs.first()) {
                 PaymentDetailsBean obj = new PaymentDetailsBean();
                 obj.setId(rs.getInt(props[0]));
-                obj.setBillID(rs.getInt(props[1]));
+                obj.setBillID(new BillBean().readById(rs.getInt(props[1])));
                 obj.setDatetime(rs.getDate(props[2]));
                 obj.setTotalBillAmount(rs.getDouble(props[3]));
                 obj.setDueAmount(rs.getDouble(props[4]));
@@ -255,7 +264,7 @@ public class PaymentDetailsBean implements Serializable {
             pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateInt(props[1], this.selectedItem.getBillID());
+                rs.updateInt(props[1], this.selectedItem.getBillID().id);
                 rs.updateDate(props[2], this.selectedItem.getDatetime());
                 rs.updateDouble(props[3], this.selectedItem.getTotalBillAmount());
                 rs.updateDouble(props[4], this.selectedItem.getDueAmount());
@@ -302,9 +311,9 @@ public class PaymentDetailsBean implements Serializable {
         }
         return false;
     }
-    
-    public BillBean getBill(){
-        return new BillBean().readById(this.billID);
-    }
+
+//    public BillBean getBill(){
+//        return new BillBean().readById(this.billID);
+//    }
 // </editor-fold>
 }
