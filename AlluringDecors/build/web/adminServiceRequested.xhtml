@@ -21,6 +21,18 @@
 
                         <h:form id="tableForm">
                             <center>
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Remark" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="User email" />
+                                        </div>
+                                    </div>
+                                </label>
                                 <!-- Add form-->
                                 <label class="row">
                                     <div class="col-1-2">
@@ -30,7 +42,6 @@
                                     </div>
                                     <div class="col-1-2">
                                         <div class="wrap-col">
-                                            <h:outputText value="User email" />
                                             <h:selectOneMenu value="#{servicesRequestBean.userID.id}"
                                                              converter="#{userConventer}" >
                                                 <f:selectItems value="#{userBean.readAll()}" var="user" itemValue="#{user.id}" itemLabel="#{user.email}"/>
@@ -41,8 +52,19 @@
                                 <label class="row">
                                     <div class="col-1-2">
                                         <div class="wrap-col">
+                                            <h:outputLabel value="Services Offered" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Status" />
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
                                             <div class="wrap-col">
-                                                <h:outputText value="Services Offered" />
                                                 <h:selectOneMenu value="#{servicesRequestBean.servicesOfferID.id}"
                                                                  converter="#{servicesOfferedConverter}" >
                                                     <f:selectItems value="#{servicesOfferedBean.readAll()}" var="offered" itemValue="#{offered.id}" itemLabel="#{offered.name}"/>
@@ -53,7 +75,6 @@
                                     <div class="col-1-2">
                                         <div class="wrap-col">
                                             <div class="wrap-col">
-                                                <h:outputText value="Status" />
                                                 <h:selectOneMenu value="#{servicesRequestBean.servicesRequestStatusID.id}"
                                                                  converter="#{servicesOfferedStatusConventer}" >
                                                     <f:selectItems value="#{servicesRequestStatusBean.readAll()}" var="status" itemValue="#{status.id}" itemLabel="#{status.name}"/>
@@ -170,6 +191,12 @@
                     </div>                        
                 </div>
             </section>
+            <style>
+                select{
+                    width:100%;
+                    padding:23px;
+                }
+            </style>
         </ui:define>
     </ui:composition>
 </html>

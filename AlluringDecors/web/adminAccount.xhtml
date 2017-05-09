@@ -23,40 +23,77 @@
                             <center>
                                 <!-- Add form-->
                                 <label class="row">
-                                    <div class="col-1-2">
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Firstname" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Lastname" />    
+                                        </div>
+                                    </div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Email" />    
+                                        </div>
+                                    </div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Address" />    
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-4">
                                         <div class="wrap-col">
                                             <h:inputText value="#{accountBean.userID.firstname}" a:placeholder="Firstname" />
                                         </div>
                                     </div>
-                                    <div class="col-1-2">
+                                    <div class="col-1-4">
                                         <div class="wrap-col">
                                             <h:inputText value="#{accountBean.userID.lastname}" a:placeholder="Lastname" requiredMessage="Please enter question" />    
                                         </div>
                                     </div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Email" value="#{accountBean.userID.email}"  requiredMessage="Please enter question" /> </div>   </div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Address" value="#{accountBean.userID.address}" requiredMessage="Please enter question" /></div> </div>
                                 </label>
                                 <label class="row">
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Email" value="#{accountBean.userID.email}"  requiredMessage="Please enter question" /> </div>   </div>
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Address" value="#{accountBean.userID.address}" requiredMessage="Please enter question" /></div> </div>
-                                </label>
-                                <label class="row">
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Phone number" value="#{accountBean.userID.phone}"  requiredMessage="Please enter question" /></div></div>
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Username" value="#{accountBean.username}" requiredMessage="Please enter answer" /> </div></div>
-                                </label>
-                                <label class="row">
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Password" value="#{accountBean.password}" requiredMessage="Please enter answer" /></div></div>
-                                    <div class="col-1-2"></div>
-                                </label>
-                                <label class="row">
-                                    <div class="col-1-1">
+                                    <div class="col-1-4">
                                         <div class="wrap-col">
-                                            <h:outputText value="Role" />
-                                            <h:selectOneMenu value="#{accountBean.roleID.id}"
-                                                             converter="#{roleConverter}" >
-                                                <f:selectItems value="#{roleBean.readAll()}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}"/>
-                                            </h:selectOneMenu> 
+                                            <h:outputLabel value="Phone number" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Username" />    
+                                        </div>
+                                    </div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Password" />    
+                                        </div>
+                                    </div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Role" />    
                                         </div>
                                     </div>
                                 </label>
+                                <label class="row">
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Phone number" value="#{accountBean.userID.phone}"  requiredMessage="Please enter question" /></div></div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Username" value="#{accountBean.username}" requiredMessage="Please enter answer" /> </div></div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Password" value="#{accountBean.password}" requiredMessage="Please enter answer" /></div></div>
+                                    <div class="col-1-4">
+                                        <div class="wrap-col">
+                                        <h:selectOneMenu value="#{accountBean.roleID.id}"
+                                                             converter="#{roleConverter}" >
+                                                <f:selectItems value="#{roleBean.readAll()}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}"/>
+                                            </h:selectOneMenu>
+                                        </div>                                            
+                                    </div>
+                                </label>
+                                
                                 <p:commandButton id="add" actionListener="#{accountBean.create()}" update=":tableForm:table" value="Create">
                                 </p:commandButton>      
                             </center>
@@ -191,6 +228,12 @@
                         </h:form>          
                     </div>                        
                 </div>
+                <style>
+                    select{
+                        width:100%;
+                        padding:23px;
+                    }
+                </style>
             </section>
         </ui:define>
     </ui:composition>

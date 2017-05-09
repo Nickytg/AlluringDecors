@@ -20,27 +20,48 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Feedback management</h2>
                         </div>
-                        <center>
-                            <!-- Add form-->
-                            <h:form id="addForm">
-                                <h:panelGrid border="0" cellpadding="30" cellspacing="30" columns="3">
-                                    <h:outputLabel>Question</h:outputLabel>
-                                    <h:inputText value="#{feedbackBean.question}" required="true" requiredMessage="Password required" id="errPasswordMess"/>
-                                    <h:message for="errPasswordMess"/>
-                                    <h:outputLabel>Answer</h:outputLabel>
-                                    <h:inputText value="#{feedbackBean.answer}" required="true" requiredMessage="Role No required" id="errDesMess"/>
-                                    <h:message for="errDesMess"/>
-                                    <h:outputText value="User email" />
-                                    <h:selectOneMenu value="#{feedbackBean.userID.id}"
-                                                     converter="#{userConventer}" >
-                                        <f:selectItems value="#{userBean.readAll()}" var="user" itemValue="#{user.id}" itemLabel="#{user.email}"/>
-                                    </h:selectOneMenu> 
-                                    <p:commandButton id="add" actionListener="#{feedbackBean.create()}" update=":tableForm:table" value="Add">
-                                    </p:commandButton>         
-                                </h:panelGrid>
-                            </h:form>
-                        </center>
                         <h:form id="tableForm">
+                            <center>
+                                <!-- Add form-->
+                                <label class="row">
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Question" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Answer" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="User Email" />
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="row">
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{feedbackBean.question}" required="true" requiredMessage="Password required" id="errPasswordMess"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{feedbackBean.answer}" required="true" requiredMessage="Role No required" id="errDesMess"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:selectOneMenu value="#{feedbackBean.userID.id}"
+                                                             converter="#{userConventer}" >
+                                                <f:selectItems value="#{userBean.readAll()}" var="user" itemValue="#{user.id}" itemLabel="#{user.email}"/>
+                                            </h:selectOneMenu> 
+                                        </div>
+                                    </div>
+                                </label>
+
+                            </center>
                             <div class="row">
                                 <center>
                                     <p:dataTable id="table" var="item" value="#{feedbackBean.readAll()}" widgetVar="feedBackTable" paginator="true" rows="10"
@@ -143,6 +164,12 @@
                     </div>                        
                 </div>
             </section>
+            <style>
+                select{
+                    width:100%;
+                    padding:23px;
+                }
+            </style>
         </ui:define>
     </ui:composition>
 </html>

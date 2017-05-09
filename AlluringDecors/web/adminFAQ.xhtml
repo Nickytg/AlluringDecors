@@ -7,6 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       >
     <ui:composition template="/adminTemplate/common/commonLayout.xhtml">
         <ui:define name="content">       
@@ -17,23 +18,38 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>FAQ's management</h2>
                         </div>
+                        <h:form id="tableForm">
                         <center>
                             <!-- Add form-->
-                            <h:form id="addForm">
-                                <h:panelGrid border="0" cellpadding="30" cellspacing="30" columns="3">
-                                    <h:outputLabel>Question</h:outputLabel>
-                                    <h:inputText value="#{fAQBean.question}" required="true" requiredMessage="Password required" id="errPasswordMess"/>
-                                    <h:message for="errPasswordMess"/>
-                                    <h:outputLabel>Answer</h:outputLabel>
-                                    <h:inputText value="#{fAQBean.answer}" required="true" requiredMessage="Role No required" id="errDesMess"/>
-                                    <h:message for="errDesMess"/>
-                                    
-                                    <p:commandButton id="add" actionListener="#{fAQBean.create()}" update=":tableForm:table" value="Add">
-                                    </p:commandButton>         
-                                </h:panelGrid>
-                            </h:form>
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Question" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Answer" />
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="row">
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{fAQBean.question}" required="true" requiredMessage="Password required" id="errPasswordMess"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-1-2">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{fAQBean.answer}" required="true" requiredMessage="Role No required" id="errDesMess"/>
+                                        </div>
+                                    </div>
+                                </label>
+                                
+                                <p:commandButton id="add" actionListener="#{fAQBean.create()}" update=":tableForm:table" value="Add">
+                                </p:commandButton>   
                         </center>
-                        <h:form id="tableForm">
                             <div class="row">
                                 <center>
                                     <p:dataTable id="table" var="item" value="#{fAQBean.readAll()}" widgetVar="faqTable" paginator="true" rows="10"

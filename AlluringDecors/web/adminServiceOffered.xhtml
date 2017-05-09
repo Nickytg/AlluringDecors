@@ -25,13 +25,25 @@
                                     <label class="row">
                                         <div class="col-1-2">
                                             <div class="wrap-col">
+                                                <h:outputLabel value="Service Offered name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-1-2">
+                                            <div class="wrap-col">
+                                                <h:outputLabel value="Domain" />
+                                            </div>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="row">
+                                        <div class="col-1-2">
+                                            <div class="wrap-col">
                                                 <h:inputText value="#{servicesOfferedBean.name}" a:placeholder="Name" />
                                             </div>
                                         </div>
                                         <div class="col-1-2">
                                             <div class="wrap-col">
                                                 <div class="wrap-col">
-                                                    <h:outputText value="Domain" />
                                                     <h:selectOneMenu value="#{servicesOfferedBean.domainID.id}"
                                                                      converter="#{domainConverter}" >
                                                         <f:selectItems value="#{domainBean.readAll()}" var="domain" itemValue="#{domain.id}" itemLabel="#{domain.name}"/>
@@ -157,6 +169,12 @@
                         </h:form>
                     </div>                        
                 </div>
+                <style>
+                    select{
+                        width:100%;
+                        padding:23px;
+                    }
+                </style>
             </section>
         </ui:define>
     </ui:composition>

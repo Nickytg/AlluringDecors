@@ -45,6 +45,7 @@
             <!-- carousel -->
             <script src="template/assets/owl-carousel/owl.carousel.js"></script>
             <script>
+
                 $(document).ready(function () {
                     $("#owl-slide").owlCarousel({
                         autoPlay: 3000,
@@ -57,7 +58,37 @@
                         navigationText: ['<i class="fa fa-chevron-left fa-5x"></i>', '<i class="fa fa-chevron-right fa-5x"></i>'],
                         pagination: false
                     });
+
                 });
+            </script>
+            <script type="text/javascript">
+                var offeredList = [
+                    <ui:repeat value="#{servicesOfferedBean.readAll()}" var="offered" varStatus="loop">
+                      { id: #{offered.id}, name: "#{offered.name}", domain: "#{offered.domainID.name}" }#{loop.last ? '' : ','}
+                    </ui:repeat>
+                  ];
+                <!--//--><![CDATA[//><!--
+                var domainList = [];
+                var html = "";
+                for (var i = 0; i < offeredList.length; i++) {
+                    var domain = offeredList[i];
+                    var pos = domainList.indexOf(domain.domain); 
+                    if(pos == -1){
+                        domainList.push(domain.domain);
+                    }
+                }
+                for(var i = 0; i < domainList.length; i++){
+                    html += '<li class="has-sub"><a href="#"><span>'+domainList[i]+'</span></a><ul>';
+                        for (var i = 0; i < offeredList.length; i++) {
+                                if(domain.domain == offeredList[i]['domain']){
+                                html += '<li><a href="faces/servicesOffered.xhtml?id='+offeredList[i].id+'"><span>'+offeredList[i].name+'</span></a></li>';
+                            }
+                        }
+                    html += '</ul></li>';
+                }
+                //console.log(domainList);
+                $("#serviceOfferedMenu").html(html);
+                //--><!]]>
             </script>
         </div>
     </h:body>

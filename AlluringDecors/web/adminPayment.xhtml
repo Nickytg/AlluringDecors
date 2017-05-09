@@ -23,29 +23,81 @@
                             <center>
                                 <!-- Add form-->
                                 <label class="row">
-                                    <div class="col-1-2">
+                                    <div class="col-1-3">
                                         <div class="wrap-col">
-                                            <h:outputText value="Request ID" />
+                                            <h:outputLabel value="RequestID" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Total Bill Amount" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Due Amount" />
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="row">
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
                                             <h:selectOneMenu value="#{paymentDetailsBean.billID.serviceRequestID.id}"
                                                              converter="#{servicesRequestedConverter}" >
                                                 <f:selectItems value="#{servicesRequestBean.readAll()}" var="requested" itemValue="#{requested.id}" itemLabel="#{requested.id}"/>
                                             </h:selectOneMenu> 
                                         </div>
                                     </div>
-                                    <div class="col-1-2">
+                                    <div class="col-1-3">
                                         <div class="wrap-col">
                                             <h:inputText value="#{paymentDetailsBean.totalBillAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />    
+
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:inputText a:placeholder="Due Amount" value="#{paymentDetailsBean.dueAmount}"  requiredMessage="Please enter question" />
                                         </div>
                                     </div>
                                 </label>
+                                
                                 <label class="row">
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Due Amount" value="#{paymentDetailsBean.dueAmount}"  requiredMessage="Please enter question" /> </div>   </div>
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Balance Amount" value="#{paymentDetailsBean.balanceAmount}" requiredMessage="Please enter question" /></div> </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Balance Amount" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="Total Paid Amount" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:outputLabel value="isMaintance" />
+                                        </div>
+                                    </div>
                                 </label>
+
                                 <label class="row">
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="Total Paid" value="#{paymentDetailsBean.totalPaidAmount}"  requiredMessage="Please enter question" /></div></div>
-                                    <div class="col-1-2"><div class="wrap-col"><h:inputText a:placeholder="isMaintance" value="#{paymentDetailsBean.maintained}"  requiredMessage="Please enter question" /></div></div>
-                                </label>                                
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:inputText a:placeholder="Balance Amount" value="#{paymentDetailsBean.balanceAmount}" requiredMessage="Please enter question" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:inputText a:placeholder="Total Paid" value="#{paymentDetailsBean.totalPaidAmount}"  requiredMessage="Please enter question" />
+                                        </div>
+                                    </div>
+                                    <div class="col-1-3">
+                                        <div class="wrap-col">
+                                            <h:inputText a:placeholder="isMaintance" value="#{paymentDetailsBean.maintained}"  requiredMessage="Please enter question" />
+                                        </div>
+                                    </div>
+                                </label>
+                       
                                 <p:commandButton id="add" actionListener="#{paymentDetailsBean.create()}" update=":tableForm:table" value="Create">
                                 </p:commandButton>      
                             </center>
@@ -187,6 +239,12 @@
                     </div>                        
                 </div>
             </section>
+            <style>
+                select{
+                    width:100%;
+                    padding:23px;
+                }
+            </style>
         </ui:define>
     </ui:composition>
 </html>

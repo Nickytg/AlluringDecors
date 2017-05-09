@@ -111,6 +111,20 @@ public class AccountBean implements Serializable {
             return false;
         }
     }
+    
+    public boolean isClient() {
+        try {
+            HttpSession session = SessionUtils.getSession();
+            int userId = Integer.parseInt(session.getAttribute("userid").toString());
+            AccountBean temp = readById(userId);
+            if (temp.roleID.name.equals("client")) {
+                return true;
+            }
+            return false;
+        } catch (NullPointerException ne) {
+            return false;
+        }
+    }
 
     public void logout() throws IOException {
         HttpSession session = SessionUtils.getSession();

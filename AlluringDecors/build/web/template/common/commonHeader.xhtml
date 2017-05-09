@@ -17,6 +17,7 @@
                 <div id="cssmenu" class="align-center">
                     <ul>
                         <li><h:link rendered="#{accountBean.administrator}" outcome="adminIndex" ><span>Administrator Panel</span></h:link></li>
+                        <li><h:link rendered="#{accountBean.client}" outcome="adminIndex" ><span>Client Panel</span></h:link></li>
                         <li><h:link outcome="index" ><span>Home</span></h:link></li>
                         <li><h:link outcome="aboutUs" ><span>About</span></h:link></li>
                         <li class="has-sub"><a href="archive.html"><span>Projects</span></a>
@@ -27,10 +28,10 @@
                             </ul>
                         </li>
                         <li><h:link rendered="#{!accountBean.logged}" outcome="registerAndLogin" ><span>Register or Login</span></h:link></li>
-                        <li><h:link rendered="#{accountBean.logged}" outcome="logout" ><span>Logout</span></h:link></li>
+                        
                         
                         <li class="has-sub"><h:link outcome="registerAndLogin" ><span>Services Offered</span></h:link>
-                            <ul>
+                            <ul id="serviceOfferedMenu">
                                 <li class="has-sub"><a href="#"><span>House</span></a>
                                     <ul>
                                         <li><a href="#"><span>Furniture And Glass</span></a></li>
@@ -83,6 +84,7 @@
                         <li><h:link outcome="faq" ><span>FAQ’s</span></h:link></li>
                         <li><h:link outcome="feedBack" ><span>Feedback</span></h:link></li>
                         <li class="last"><h:link outcome="contactUs" ><span>Contact</span></h:link></li>
+                        <li><h:link rendered="#{accountBean.logged}" outcome="logout" ><span>Logout</span></h:link></li>
                     </ul>
                 </div>
             </header>
