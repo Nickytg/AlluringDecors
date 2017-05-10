@@ -13,44 +13,36 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Feedback</h2>
                         </div>
-                        <div class="row">
-                            <article>
-                                <div class="col-1-1">
-                                    <div class="entry-content t-center">
-                                        <h3>How to register with the site?</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia. Morbi rutrum vulputate est sed faucibus.consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia.</p>
-                                        
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        
-                        <div class="row">
-                            <article>
-                                <div class="col-1-1">
-                                    <div class="entry-content t-center">
-                                        <h3>How to register with the site?</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia. Morbi rutrum vulputate est sed faucibus.consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia.</p>
-                                        
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        
-                        <div class="row">
-                            <article>
-                                <div class="col-1-1">
-                                    <div class="entry-content t-center">
-                                        <h3>How to register with the site?</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia. Morbi rutrum vulputate est sed faucibus.consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia.</p>
-                                        
-                                    </div>
-                                </div>
-                            </article>
+                        <div id="contentContainer">
+                            
                         </div>
                     </div>                        
                 </div>
             </section>
+            <script type="text/javascript">
+                var faqList = [
+                    <ui:repeat value="#{feedbackBean.readAll()}" var="feedback" varStatus="loop">
+                    { id: #{feedback.id},question: "#{feedback.question}", answer: "#{feedback.answer}" }#{loop.last ? '' : ','}
+                </ui:repeat>
+                ];
+                        console.log(faqList);
+                        <!--//--><![CDATA[//> < !--
+                        var html="";
+                        for(var i=0; i < faqList.length; i++){
+                            html += '<div class="row">';
+                            html += '<article>';
+                            html += '<div class="col-1-1">';
+                            html += '<div class="entry-content t-center">';
+                            html += '<h3>'+faqList[i]['question']+'</h3>';
+                            html += '<p>'+faqList[i]['answer']+'</p>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</article>';
+                            html += '</div>';
+                        }
+                        $("#contentContainer").html(html);
+                //--><!]]>
+            </script>
         </ui:define>
     </ui:composition>
 </html>

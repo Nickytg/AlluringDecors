@@ -8,56 +8,67 @@
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">            
             <section class="content-box box-style-1 box-4">
-                <div class="zerogrid" style="width: 100%">
+                <div class="zerogrid" >
                     <div class="wrap-box"><!--Start Box-->
                         <div class="box-header" style="padding-top:53px">
                             <h2>ON-GOING PROJECTS</h2>
                         </div>
-                        <div class="row">
-                            <article>
-                                <div class="col-1-2">
-                                    <img src="template/assets/images/slide1.jpg" alt=""></img>
+                        <div class="row" id="dataListContainer">
+                            <div class="col-1-3">
+                                <div class="wrap-col">
+                                    <article>
+                                        <div class="post-thumbnail-wrap">
+                                            <a href="single.html" class="portfolio-box">
+                                                <img src="template/assets/images/11.jpg" alt=""></img>
+                                                    <div class="portfolio-box-second">
+                                                        <img src="template/assets/images/1.jpg" alt=""></img>
+                                                    </div>
+                                            </a>
+                                        </div>
+                                        <div class="entry-header ">
+                                            <h3 class="entry-title">Lovely Smiles</h3>
+                                            <div class="l-tags"><a href="#">Design</a> / <a href="#">Illustrations</a></div>
+                                        </div>
+                                    </article>
                                 </div>
-                                <div class="col-1-2">
-                                    <div class="entry-content t-center">
-                                        <h3>The title on the article</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia. Morbi rutrum vulputate est sed faucibus.consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia.</p>
-                                        <a class="button" href="single.html">Read More</a>
-                                    </div>
-                                </div>
-                            </article>
+                            </div>
+                            
                         </div>
-                        <div class="row">
-                            <article>
-                                <div class="col-1-2 f-right">
-                                    <img src="template/assets/images/slide2.jpg" alt=""></img>
-                                </div>
-                                <div class="col-1-2">
-                                    <div class="entry-content t-center">
-                                        <h3>The title on the article</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia. Morbi rutrum vulputate est sed faucibus.consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia.</p>
-                                        <a class="button" href="single.html">Read More</a>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        <div class="row">
-                            <article>
-                                <div class="col-1-2">
-                                    <img src="template/assets/images/slide3.jpg" alt=""></img>
-                                </div>
-                                <div class="col-1-2">
-                                    <div class="entry-content t-center">
-                                        <h3>The title on the article</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia. Morbi rutrum vulputate est sed faucibus.consectetur adipiscing elit. Aliquam viverra convallis auctor. Sed accumsan libero quis mi commodo et suscipit enim lacinia.</p>
-                                        <a class="button" href="single.html">Read More</a>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
+
                     </div>
                 </div>
             </section>
+            <script type="text/javascript">
+                var requestedList = [
+<ui:repeat value="#{servicesRequestBean.readByTypeId(1)}" var="requested" varStatus="loop">
+    { id: #{requested.id},domainName: "#{requested.servicesOfferID.domainID.name}", offeredName: "#{requested.servicesOfferID.name}", remark: "#{requested.remark}" }#{loop.last ? '' : ','}
+</ui:repeat>
+                ];
+      <!--//--><![CDATA[//> < !--
+                        var html="";
+                        for(var i=0; i < requestedList.length; i++){
+                            html +='<div class="col-1-3">';
+                            html +='<div class="wrap-col">';
+                            html +='<article>';
+                            html +='<div class="post-thumbnail-wrap">';
+                            html +='<a href="faces/projectDetail.xhtml?id='+requestedList[i].id+'" class="portfolio-box">';
+                            html +='<img src="template/assets/images/11.jpg" alt=""></img>';
+                            html +='<div class="portfolio-box-second">';
+                            html +=' <img src="template/assets/images/1.jpg" alt=""></img>';
+                            html +='</div>';
+                            html +='</div>';
+                            html +='<div class="entry-header ">';
+                            html +='<h3 class="entry-title">'+requestedList[i]['offeredName']+'</h3>';
+                            html +='<div class="l-tags"><a href="#">Domain</a> / <a href="#">'+requestedList[i]['domainName']+'</a></div>';
+                            html +='</div>';
+                            
+                            html +='</article>';
+                            html +='</div>';
+                            html +='</div>';
+                        }
+                        $("#dataListContainer").html(html);
+                //--><!]]>
+            </script>
         </ui:define>
     </ui:composition>
 </html>

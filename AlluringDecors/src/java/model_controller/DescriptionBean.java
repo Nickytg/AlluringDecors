@@ -88,6 +88,7 @@ public class DescriptionBean implements Serializable {
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
+    private final String sqlReadByTypeId = "SELECT * FROM " + tableName + " WHERE " + props[1] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
@@ -155,6 +156,36 @@ public class DescriptionBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            pst.setInt(1, id);
+            rs = pst.executeQuery();
+            if (rs.first()) {
+                DescriptionBean obj = new DescriptionBean();
+                obj.setDescriptionID(rs.getInt(props[0]));
+                obj.setDescriptionTypeID(rs.getInt(props[1]));
+                obj.setContent(rs.getString(props[2]));
+                return obj;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Read Customer base id
+     */
+    public DescriptionBean readByTypeId(int id) {
+
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlReadByTypeId, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {

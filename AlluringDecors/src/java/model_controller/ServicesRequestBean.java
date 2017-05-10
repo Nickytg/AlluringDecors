@@ -100,6 +100,7 @@ public class ServicesRequestBean implements Serializable {
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
+    private final String sqlReadByTypeId = "SELECT * FROM " + tableName + " WHERE " + props[3] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
@@ -172,6 +173,38 @@ public class ServicesRequestBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            pst.setInt(1, id);
+            rs = pst.executeQuery();
+            if (rs.first()) {
+               ServicesRequestBean obj = new ServicesRequestBean();
+                 obj.setId(rs.getInt(props[0]));
+                obj.setServicesOfferID(new ServicesOfferedBean().readById(rs.getInt(props[1])));
+                obj.setUserID(new UserBean().readById(rs.getInt(props[2])));
+                obj.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(rs.getInt(props[3])));
+                obj.setRemark(rs.getString(props[4]));
+                return obj;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Read Customer base id
+     */
+    public ServicesRequestBean readByTypeId(int id) {
+
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlReadByTypeId, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
