@@ -17,9 +17,9 @@
                         <div class="box-header" style="padding-top:53px">
                             <h2>Contact us management</h2>
                         </div>
-                        <div class="row">
-                            <center>
-                                <h:form id="tableForm">
+                        <h:form id="tableForm">
+                            <div class="row">
+                                <center>
                                     <p:dataTable id="table" var="item" value="#{contactUsBean.readAll()}" widgetVar="contactUsTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                                  paginatorPosition="bottom" lazy="true"
@@ -55,75 +55,76 @@
                                         </p:column>
 
                                     </p:dataTable>
-                                </h:form>
-                            </center>
-                            <!-- Dialog for view Detail-->
-                            <p:dialog header="Feedback Info" widgetVar="contactUsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                                <p:outputPanel id="contactUsDetail" style="text-align:center;">
-                                    <p:panelGrid  columns="2" rendered="#{not empty contactUsBean.selectedContactUs}" >
-                                        <h:outputText value="Contact Us ID" />
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.id}" />
+                                </center>
+                                <!-- Dialog for view Detail-->
+                                <p:dialog header="Feedback Info" widgetVar="contactUsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="contactUsDetail" style="text-align:center;">
+                                        <p:panelGrid  columns="2" rendered="#{not empty contactUsBean.selectedContactUs}" >
+                                            <h:outputText value="Contact Us ID" />
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.id}" />
 
-                                        <h:outputText value="Name" />
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.name}" />
+                                            <h:outputText value="Name" />
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.name}" />
 
-                                        <h:outputText value="Phone" />
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.phone}" />
+                                            <h:outputText value="Phone" />
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.phone}" />
 
-                                        <h:outputText value="Address" />
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.address}"/>
+                                            <h:outputText value="Address" />
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.address}"/>
 
-                                        <h:outputText value="Content" />
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.content}"/>
+                                            <h:outputText value="Content" />
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.content}"/>
 
-                                    </p:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
 
-                            <!-- Dialog for edit-->
-                            <p:dialog header="Contact Us Edit" widgetVar="contactUsEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                                <p:outputPanel id="contactUsEdit" style="text-align:center;">
-                                    <p:panelGrid  columns="2" rendered="#{not empty contactUsBean.selectedContactUs}" >
-                                        <h:outputText value="Contact Us ID" />                                           
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.id}" />
+                                <!-- Dialog for edit-->
+                                <p:dialog header="Contact Us Edit" widgetVar="contactUsEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                                    <p:outputPanel id="contactUsEdit" style="text-align:center;">
+                                        <p:panelGrid  columns="2" rendered="#{not empty contactUsBean.selectedContactUs}" >
+                                            <h:outputText value="Contact Us ID" />                                           
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.id}" />
 
-                                        <h:outputText value="Name" />                                           
-                                        <h:outputText value="#{contactUsBean.selectedContactUs.name}" />
+                                            <h:outputText value="Name" />                                           
+                                            <h:outputText value="#{contactUsBean.selectedContactUs.name}" />
 
-                                        <h:outputText value="Phone" />
-                                        <h:inputText value="#{contactUsBean.selectedContactUs.phone}" required="true" requiredMessage="Please enter question" />    
+                                            <h:outputText value="Phone" />
+                                            <h:inputText value="#{contactUsBean.selectedContactUs.phone}" required="true" requiredMessage="Please enter question" />    
 
-                                        <h:outputText value="Address" />
-                                        <h:inputText value="#{contactUsBean.selectedContactUs.address}" required="true" requiredMessage="Please enter answer" />    
+                                            <h:outputText value="Address" />
+                                            <h:inputText value="#{contactUsBean.selectedContactUs.address}" required="true" requiredMessage="Please enter answer" />    
 
-                                        <h:outputText value="Content" />
-                                        <h:inputText value="#{contactUsBean.selectedContactUs.content}" required="true" requiredMessage="Please enter answer" />    
+                                            <h:outputText value="Content" />
+                                            <h:inputText value="#{contactUsBean.selectedContactUs.content}" required="true" requiredMessage="Please enter answer" />    
 
-                                        <p:commandButton id="save" actionListener="#{contactUsBean.update()}" update=":tableForm:table" oncomplete="PF('contactUsEditDialog').hide();" 
-                                                         value="Save"/>
-                                        <p:commandButton id="cancelButton" onclick="PF('contactUsEditDialog').hide()" value="Cancel"/>
-                                    </p:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
+                                            <p:commandButton id="save" actionListener="#{contactUsBean.update()}" update=":tableForm:table" oncomplete="PF('contactUsEditDialog').hide();" 
+                                                             value="Save"/>
+                                            <p:commandButton id="cancelButton" onclick="PF('contactUsEditDialog').hide()" value="Cancel"/>
+                                        </p:panelGrid>
+                                    </p:outputPanel>
+                                </p:dialog>
 
-                            <!-- Dialog for Delete confirmation-->
-                            <p:confirmDialog 
-                                header="Delete Feed back Confirmation" severity="alert"
-                                widgetVar="contactUsDeleteDialog"
-                                id="tourOrderDelete">
-                                <f:facet name="message">
-                                    <h:outputText value="Are you sure to delete Feed back '#{contactUsBean.selectedContactUs.id}' ?" />
-                                </f:facet>
+                                <!-- Dialog for Delete confirmation-->
+                                <p:confirmDialog 
+                                    header="Delete Feed back Confirmation" severity="alert"
+                                    widgetVar="contactUsDeleteDialog"
+                                    id="contactUsDelete">
+                                    <f:facet name="message">
+                                        <h:outputText value="Are you sure to delete Feed back '#{contactUsBean.selectedContactUs.id}' ?" />
+                                    </f:facet>
 
-                                <p:commandButton value="Yes" actionListener="#{contactUsBean.delete(contactUsBean.selectedContactUs.id)}" update=":tableForm:table"
-                                                 oncomplete="PF('contactUsDeleteDialog').hide()">
-                                    <f:ajax render="table" />
-                                </p:commandButton>
+                                    <p:commandButton value="Yes" actionListener="#{contactUsBean.delete(contactUsBean.selectedContactUs.id)}" update=":tableForm:table"
+                                                     oncomplete="PF('contactUsDeleteDialog').hide()">
+                                        <f:ajax render="table" />
+                                    </p:commandButton>
 
-                                <p:commandButton value="No" onclick="PF('contactUsDeleteDialog').hide()" type="button" />
+                                    <p:commandButton value="No" onclick="PF('contactUsDeleteDialog').hide()" type="button" />
 
-                            </p:confirmDialog>
-                        </div>                      
+                                </p:confirmDialog>
+                            </div>    
+
+                        </h:form>
                     </div>                        
                 </div>
             </section>

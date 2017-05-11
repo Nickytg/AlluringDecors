@@ -5,6 +5,7 @@
  */
 package model_controller;
 
+import java.io.IOException;
 import model_controller.*;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -96,7 +98,7 @@ public class ContactUsBean implements Serializable {
 // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "ContactUs";
     final String props[] = {"ContactUsID", "Name", "Phone", "Address", "Content"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?)";
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -111,15 +113,26 @@ public class ContactUsBean implements Serializable {
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getId());
-            pst.setString(2, this.getName());
-            pst.setString(3, this.getPhone());
-            pst.setString(4, this.getAddress());
-            pst.setString(5, this.getContent());
+            pst.setString(1, this.getName());
+            pst.setString(2, this.getPhone());
+            pst.setString(3, this.getAddress());
+            pst.setString(4, this.getContent());
             if (pst.executeUpdate() > 0) {
+                ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+                try {
+                    context.redirect(context.getRequestContextPath() + "/faces/thanksContactUs.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 return true;
             }
         } catch (SQLException ex) {
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+                try {
+                    context.redirect(context.getRequestContextPath() + "/faces/sorry.xhtml");
+                } catch (IOException ex1) {
+                    Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex1);
+                }
             return false;
         } finally {
             try {

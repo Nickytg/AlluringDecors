@@ -4,23 +4,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
-        <ui:define name="content">            
-            <section class="content-box box-style-1 box-4">
-                <div class="zerogrid" style="width: 100%">
-                    <div class="wrap-box"><!--Start Box-->
-                        <div class="box-header" style="padding-top:53px">
-                            <h2>ABOUT US</h2>
-                        </div>
-                        <div class="row">
-                                <div class="col-1-1">
-                                    <div class="wrap-col">
-                                        <p><h:outputText value="#{descriptionBean.readByTypeId(5).content}" escape="false"/></p>
+        <ui:define name="content">       
+            <section id="container">
+                <div class="wrap-container">
+                    <div id="main-content">
+                        <div class="wrap-content">
+                            <div class="row">
+                                <article class="single-post zerogrid">
+                                    <div class="row wrap-post">
+                                        <div class="entry-header">
+
+                                            <span class="time"><h:outputText value="#{session.lastAccessedTime}">
+                                                    <f:convertDateTime pattern="MM/dd/yyyy" type="date" />
+                                                </h:outputText>  
+                                            by Administrator</span>
+                                            <h2 class="entry-title"><a href="#">ABOUT US</a></h2>
+                                        </div>
+                                        
+                                        <div class="entry-content">
+                                            <p><h:outputText value="#{descriptionBean.readByTypeId(5).content}" escape="false"/></p>
+                                        </div>
                                     </div>
-                                </div>
+                                </article>
+                            </div>
                         </div>
-                    </div>                        
+                    </div>
                 </div>
             </section>
         </ui:define>

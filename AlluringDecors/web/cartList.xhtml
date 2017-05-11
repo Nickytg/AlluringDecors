@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <ui:composition template="/template/common/commonLayout.xhtml">
+        <ui:define name="content">    
+
+            <div class="row">
+                <article class="single-post zerogrid">
+                    <div class="row wrap-post"><!--Start Box-->
+                        <div class="entry-header">
+                            <h2 class="entry-title"><a href="#">SERVICES OFFERED YOU HAVE ADDED</a></h2>
+
+                        </div>
+                        <div class="entry-content">
+                            <table style="width:50%; border:1px solid; margin:0px auto; text-align: center">
+                                <thead style="font-weight: bold">
+                                    <tr>
+                                        <td>Domain</td>
+                                        <td>Service Offered</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataRow">
+                                    <tr>
+                                        <td>Domain</td>
+                                        <td>Service Offered</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="entry-header">
+                            <h2 class="entry-title"><a href="#">YOUR PERSONAL INFORMATION</a></h2>                            
+                        </div>
+                        <div class="entry-content">
+                            <table style="width:50%; border:1px solid; margin:0px auto;">
+                                <tbody id="dataRow">
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 35px">First name</td>
+                                        <td id="columnFirstName">Bao</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 35px">Last name</td>
+                                        <td id="columnLastName">Bao</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 35px">Email</td>
+                                        <td id="columnEmail">Bao</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 35px">Phone Number</td>
+                                        <td id="columnPhoneNumber">Bao</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;padding-left: 35px">Address</td>
+                                        <td id="columnAddress">Bao</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <center>
+                            <h:form>
+                            <h:commandButton styleClass="sendButton" value="SEND REQUEST" actionListener="#{servicesRequestBean.sendRequestToServer()}"></h:commandButton>
+                            </h:form>
+                        </center>
+                    </div>
+                </article>
+            </div>
+            <script type="text/javascript">
+                var cartList = [
+<ui:repeat value="#{servicesRequestBean.getCartList()}" var="requested" varStatus="loop">
+{ lastname:"#{requested.userID.lastname}",firstname:"#{requested.userID.firstname}",email:"#{requested.userID.email}",phone:"#{requested.userID.phone}",address:"#{requested.userID.address}" ,offeredID: #{requested.offeredID.id}, domainName: "#{requested.offeredID.domainID.name}", offeredName: "#{requested.offeredID.name}"}#{loop.last ? '' : ','}
+</ui:repeat>
+                ];
+      <!--//--><![CDATA[//> < !--
+                        //console.log(cartList);
+                var html = "";
+                for (var i = 0; i < cartList.length; i++){
+                html += "<tr>";
+                html += "<td>" + cartList[i]['domainName'] + "</td>";
+                html += "<td>" + cartList[i]['offeredName'] + "</td>";
+                html += "</tr>";
+                
+                $("#columnFirstName").html(cartList[0]['firstname']);
+                $("#columnLastName").html(cartList[0]['lastname:']);
+                $("#columnEmail").html(cartList[0]['email']);
+                $("#columnPhoneNumber").html(cartList[0]['phone']);
+                $("#columnAddress").html(cartList[0]['address']);
+                }
+                $("#dataRow").html(html);
+                //--><!]]>
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

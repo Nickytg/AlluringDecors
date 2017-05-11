@@ -5,6 +5,7 @@
  */
 package model_controller;
 
+import java.io.IOException;
 import model_controller.*;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -15,9 +16,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import utils.DBConnector;
+import utils.SessionUtils;
 
 /**
  *
@@ -298,6 +302,61 @@ public class ServicesRequestBean implements Serializable {
             }
         }
         return false;
+    }
+    
+    public void addToCart(){
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+        .getRequest();
+        int offeredID = Integer.parseInt(request.getParameter("offeredID"));
+        
+        HttpSession session = SessionUtils.getSession();
+        //Get list
+        boolean flag = false;
+        ArrayList<addToCartBean> cartList = (ArrayList<addToCartBean>) session.getAttribute("cartList");    
+        if(cartList == null){
+            cartList = new ArrayList<>();
+        }
+        for(int i=0; i<cartList.size() ; i++){
+            if(cartList.get(i).getOfferedID().id == offeredID){
+                flag = true;
+                break;
+            }
+        }
+        if(flag){
+            
+        }else{
+            addToCartBean temp = new addToCartBean();
+            temp.setOfferedID(new ServicesOfferedBean().readById(offeredID));
+            int userId = Integer.parseInt(session.getAttribute("userid").toString());
+            temp.setUserID(new UserBean().readById(userId));
+            cartList.add(temp);
+            session.setAttribute("cartList", cartList);
+        }
+    }
+    
+    public ArrayList<addToCartBean> getCartList(){
+        HttpSession session = SessionUtils.getSession();
+        ArrayList<addToCartBean> cartList = (ArrayList<addToCartBean>) session.getAttribute("cartList");
+        return cartList;
+    }
+    
+    public void sendRequestToServer(){
+        ArrayList<addToCartBean> list = getCartList();
+        for(int i=0 ; i< list.size();i++){
+            ServicesRequestBean temp = new ServicesRequestBean();
+            temp.setUserID(list.get(i).getUserID());
+            temp.setServicesOfferID(list.get(i).getOfferedID());
+            temp.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(1));
+            temp.create();
+        }
+        HttpSession session = SessionUtils.getSession();
+        session.invalidate();
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        try {
+            context.redirect(context.getRequestContextPath() + "/faces/thanks.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 //    public UserBean getUser(){

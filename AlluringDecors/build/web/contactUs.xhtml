@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">            
@@ -15,35 +16,34 @@
                             <h2>CONTACT US</h2>
                         </div>
                         <div id="contact_form">
-                            <form name="form1" id="ff" method="post" action="contact.php">
+                            <h:form>
                                 <label class="row">
                                     <div class="col-1-2">
                                         <div class="wrap-col">
-                                            <input type="text" name="name" id="name" placeholder="Please enter your name" required="required"></input>
+                                            <h:inputText value="#{contactUsBean.name}" a:placeholder="Your Name" />
                                         </div>
                                     </div>
                                     <div class="col-1-2">
                                         <div class="wrap-col">
-                                            <input type="text" name="password" id="phone" placeholder="Please enter your phone" required="required"></input>
+                                            <h:inputText value="#{contactUsBean.phone}" a:placeholder="Your Phone Number" />
                                         </div>
                                     </div>
                                     <div class="col-1-2">
                                         <div class="wrap-col">
-                                            <input type="text" name="password" id="address" placeholder="Please enter your address" required="required"></input>
+                                            <h:inputText value="#{contactUsBean.address}" a:placeholder="Your Address" />
                                         </div>
                                     </div>
                                     
                                 </label>
                                 <label class="row">
                                     <div class="wrap-col">
-                                        <textarea name="content" id="content" class="form-control" rows="4" cols="25" required="required"
-                                                  placeholder="Please enter your "></textarea>
+                                        <h:inputTextarea value="#{contactUsBean.content}" a:placeholder="Content" />                                        
                                     </div>
                                 </label>
                                 <center>
-                                    <input class="sendButton" type="submit" name="submitcontact" value="Submit"></input>
+                                    <h:commandButton styleClass="sendButton" actionListener="#{contactUsBean.create()}" value="SEND"/>
                                 </center>
-                            </form>
+                            </h:form>
                         </div>
                     </div>   
                     <!-- END -->

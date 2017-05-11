@@ -4,10 +4,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
-        <ui:define name="content">       
+        <ui:define name="content">    
             <section id="container">
                 <div class="wrap-container">
                     <div id="main-content">
@@ -21,11 +22,14 @@
                                                     <f:convertDateTime pattern="MM/dd/yyyy" type="date" />
                                                 </h:outputText>  
                                             by Administrator</span>
-                                            <h2 class="entry-title"><a href="#">ABOUT US</a></h2>
+                                            <h2 class="entry-title"><a href="#">THANK YOU FOR SHOPPING WITH US</a></h2>
                                         </div>
                                         
                                         <div class="entry-content">
-                                            <p><h:outputText value="#{descriptionBean.readByTypeId(5).content}" escape="false"/></p>
+                                            <center>
+                                            <p>Your services request had been sent to Us.<br></br> We will contact to you by email and mobile phone about 24 hour from now.</p>
+                                            </center>
+                                            <center><a class="button " href="index.xhtml">Home page</a></center>
                                         </div>
                                     </div>
                                 </article>
