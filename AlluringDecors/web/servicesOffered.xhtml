@@ -9,19 +9,39 @@
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">    
-            
-            <section class="content-box box-style-1 box-4">
-                <div class="zerogrid" >
-                    <h:form rendered="#{accountBean.client}">
-                        <p:commandButton actionListener="#{servicesRequestBean.addToCart()}" value="Add to cart">
-                            <f:param name="offeredID" value="#{param['id']}"></f:param>
-                        </p:commandButton>
-                    </h:form>
-                    <h1><b><h:outputText value="#{servicesOfferedBean.readById(param['id']).name}" /></b></h1>
-                    <h:outputText value="#{servicesOfferedBean.readById(param['id']).content}" escape="false"/>
-                    
+            <section id="container">
+                <div class="wrap-container">
+                    <div id="main-content">
+                        <div class="wrap-content">
+                            <div class="row">
+                                <article class="single-post zerogrid">
+                                    <div class="row wrap-post">
+                                        <div class="entry-header">
+
+                                            <h2 class="entry-title"><a href="#">SERVICE OFFERED DETAIL</a></h2>
+                                            <span class="time">
+                                                <h:form rendered="#{accountBean.client}">
+                                                    <p:commandButton styleClass="sendButton" actionListener="#{servicesRequestBean.addToCart()}" value="Add to cart">
+                                                        <f:param name="offeredID" value="#{param['id']}"></f:param>
+                                                    </p:commandButton>
+                                                </h:form>
+                                            </span>
+                                        </div>
+
+                                        <div class="entry-content">
+                                            <center>
+                                                <h1><b><h:outputText value="#{servicesOfferedBean.readById(param['id']).name}" /></b></h1>
+                                                <h:outputText value="#{servicesOfferedBean.readById(param['id']).content}" escape="false"/>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
+
         </ui:define>
     </ui:composition>
 </html>

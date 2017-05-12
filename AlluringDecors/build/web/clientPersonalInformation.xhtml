@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      >
+    <ui:composition template="/template/common/commonLayout.xhtml">
+        <ui:define name="content"> 
+            <h:form id="formId">
+                <div class="row">
+                    <article class="single-post zerogrid">
+                        <div class="row wrap-post"><!--Start Box-->
+                            <div class="entry-header">
+                                <h2 class="entry-title"><a href="#">PERSONAL INFORMATION</a></h2>
+                            </div>
+                            <div class="entry-content">
+                                <div class="wrap-box" id="registerForm">
+                                    <div id="contact_form">
+                                        <label class="row">
+                                            <h:inputHidden value="#{accountBean.loggedAccountData.userID.id}" id="userID"/>
+                                            <div class="col-1-2">
+                                                <div class="wrap-col">
+                                                    <h:inputText id="firstname" value="#{accountBean.loggedAccountData.userID.firstname}" a:placeholder="Firstname" />
+                                                </div>
+                                            </div>
+                                            <div class="col-1-2">
+                                                <div class="wrap-col">
+                                                    <h:inputText id="lastname" value="#{accountBean.loggedAccountData.userID.lastname}" a:placeholder="Lastname" requiredMessage="Please enter question" />    
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="row">
+                                            <div class="col-1-3">
+                                                <div class="wrap-col">
+                                                    <h:inputText id="email" a:placeholder="Email" value="#{accountBean.loggedAccountData.userID.email}"  requiredMessage="Please enter question" />                                        </div>
+                                            </div>
+                                            <div class="col-1-3">
+                                                <div class="wrap-col">
+                                                    <h:inputText id="address" a:placeholder="Address" value="#{accountBean.loggedAccountData.userID.address}" requiredMessage="Please enter question" />                                        </div>
+                                            </div>
+                                            <div class="col-1-3">
+                                                <div class="wrap-col">
+                                                    <h:inputText id="phone" a:placeholder="Phone number" value="#{accountBean.loggedAccountData.userID.phone}"  requiredMessage="Please enter question" />                                        </div>
+                                            </div>
+                                        </label>
+                                        <label class="row">
+                                            <div class="col-1-2">
+                                                <div class="wrap-col">
+                                                    <h:inputText id="username" a:placeholder="Username" value="#{accountBean.loggedAccountData.username}" requiredMessage="Please enter answer" />                                         </div>
+                                            </div>
+                                            <div class="col-1-2">
+                                                <div class="wrap-col">
+                                                    <h:inputSecret id="password" a:placeholder="Password" value="#{accountBean.loggedAccountData.password}" requiredMessage="Please enter answer" />                                        </div>
+                                            </div>
+                                        </label>
+                                        <center>
+                                            <p:commandButton id="add" actionListener="#{accountBean.updateForClient()}" value="Update">
+                                            </p:commandButton>     
+                                        </center>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </h:form>
+            
+                </ui:define>
+    </ui:composition>
+</html>

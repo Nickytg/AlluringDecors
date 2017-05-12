@@ -11,17 +11,18 @@
 
             <header class="">
                 <div class="logo">
-                    <a href="#">Alluring Decoration</a>
+                    <a href="index.xhtml">Alluring Decoration</a>
                     <span>Collectible Vintage a  Antique Photos</span>
                 </div>
                 <div id="cssmenu" class="align-center">
                     <ul>
-                        <li><h:link rendered="#{accountBean.administrator}" outcome="adminIndex" ><span>Administrator Panel</span></h:link></li>
+                        <li><h:link rendered="#{accountBean.administrator}" outcome="adminAccount" ><span>Administrator Panel</span></h:link></li>
                         <h:panelGroup  rendered="#{accountBean.client}">
                         <li class="has-sub"><a href="#"><span>Client Panel</span></a>
                             <ul>
                                 <li ><h:link outcome="cartList" ><span>Check out</span></h:link></li>
-                                <li class="last"><h:link outcome="upCommingProjects" ><span>Services Offered </span></h:link></li>
+                                <li ><h:link outcome="clientPersonalInformation" ><span>Personal information</span></h:link></li>
+                                <li class="last"><h:link outcome="clientServicesOffered" ><span>Services Offered </span></h:link></li>
                             </ul>
                         </li>
                         </h:panelGroup>

@@ -31,8 +31,8 @@ import utils.SessionUtils;
 @SessionScoped
 public class ServicesRequestBean implements Serializable {
 
-  // <editor-fold desc="DTO" defaultstate="collapsed">
-      /**
+    // <editor-fold desc="DTO" defaultstate="collapsed">
+    /**
      * Creates a new instance of ServicesRequestBean
      */
     public ServicesRequestBean() {
@@ -51,7 +51,6 @@ public class ServicesRequestBean implements Serializable {
     public void setSelectedServicesRequest(ServicesRequestBean selectedServicesRequest) {
         this.selectedServicesRequest = selectedServicesRequest;
     }
-    
 
     public int getId() {
         return id;
@@ -62,7 +61,9 @@ public class ServicesRequestBean implements Serializable {
     }
 
     public ServicesOfferedBean getServicesOfferID() {
-        if(servicesOfferID == null) servicesOfferID = new ServicesOfferedBean();
+        if (servicesOfferID == null) {
+            servicesOfferID = new ServicesOfferedBean();
+        }
         return servicesOfferID;
     }
 
@@ -71,7 +72,9 @@ public class ServicesRequestBean implements Serializable {
     }
 
     public UserBean getUserID() {
-        if(userID == null) userID = new UserBean();
+        if (userID == null) {
+            userID = new UserBean();
+        }
         return userID;
     }
 
@@ -80,15 +83,15 @@ public class ServicesRequestBean implements Serializable {
     }
 
     public ServicesRequestStatusBean getServicesRequestStatusID() {
-        if(servicesRequestStatusID == null) servicesRequestStatusID = new ServicesRequestStatusBean();
+        if (servicesRequestStatusID == null) {
+            servicesRequestStatusID = new ServicesRequestStatusBean();
+        }
         return servicesRequestStatusID;
     }
 
     public void setServicesRequestStatusID(ServicesRequestStatusBean servicesRequestStatusID) {
         this.servicesRequestStatusID = servicesRequestStatusID;
     }
-
-    
 
     public String getRemark() {
         return remark;
@@ -98,12 +101,13 @@ public class ServicesRequestBean implements Serializable {
         this.remark = remark;
     }
     // </editor-fold>
-      // <editor-fold desc="DAO" defaultstate="collapsed">  
+    // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "ServicesRequest";
-    final String props[] = {"ServicesRequestID", "ServicesOfferedID", "UserID","ServicesRequestStatusID","Remark"};
+    final String props[] = {"ServicesRequestID", "ServicesOfferedID", "UserID", "ServicesRequestStatusID", "Remark"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
+    private final String sqlReadByUserId = "SELECT * FROM " + tableName + " WHERE " + props[2] + " = ?";
     private final String sqlReadByTypeId = "SELECT * FROM " + tableName + " WHERE " + props[3] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
@@ -180,8 +184,8 @@ public class ServicesRequestBean implements Serializable {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-               ServicesRequestBean obj = new ServicesRequestBean();
-                 obj.setId(rs.getInt(props[0]));
+                ServicesRequestBean obj = new ServicesRequestBean();
+                obj.setId(rs.getInt(props[0]));
                 obj.setServicesOfferID(new ServicesOfferedBean().readById(rs.getInt(props[1])));
                 obj.setUserID(new UserBean().readById(rs.getInt(props[2])));
                 obj.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(rs.getInt(props[3])));
@@ -201,25 +205,62 @@ public class ServicesRequestBean implements Serializable {
         }
         return null;
     }
-    
+
     /**
      * Read Customer base id
      */
-    public ServicesRequestBean readByTypeId(int id) {
-
+    public ArrayList<ServicesRequestBean> readByLoggedUserId() {
+        HttpSession session = SessionUtils.getSession();
+        int userId = Integer.parseInt(session.getAttribute("userid").toString());
+        ArrayList<ServicesRequestBean> list = new ArrayList<ServicesRequestBean>();
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlReadByTypeId, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            pst.setInt(1, id);
+            pst = DBConnector.getConnection().prepareStatement(sqlReadByUserId, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            pst.setInt(1, userId);
             rs = pst.executeQuery();
-            if (rs.first()) {
-               ServicesRequestBean obj = new ServicesRequestBean();
-                 obj.setId(rs.getInt(props[0]));
+            while (rs.next()) {
+                ServicesRequestBean obj = new ServicesRequestBean();
+                obj.setId(rs.getInt(props[0]));
                 obj.setServicesOfferID(new ServicesOfferedBean().readById(rs.getInt(props[1])));
                 obj.setUserID(new UserBean().readById(rs.getInt(props[2])));
                 obj.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(rs.getInt(props[3])));
                 obj.setRemark(rs.getString(props[4]));
-                return obj;
+                list.add(obj);
             }
+            
+        return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                rs.close();
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Read Customer base id
+     */
+    public ArrayList<ServicesRequestBean> readByTypeId(int id) {
+        ArrayList<ServicesRequestBean> list = new ArrayList<ServicesRequestBean>();
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlReadByTypeId, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            pst.setInt(1, id);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                ServicesRequestBean obj = new ServicesRequestBean();
+                obj.setId(rs.getInt(props[0]));
+                obj.setServicesOfferID(new ServicesOfferedBean().readById(rs.getInt(props[1])));
+                obj.setUserID(new UserBean().readById(rs.getInt(props[2])));
+                obj.setServicesRequestStatusID(new ServicesRequestStatusBean().readById(rs.getInt(props[3])));
+                obj.setRemark(rs.getString(props[4]));
+                list.add(obj);
+            }
+            return list;
         } catch (SQLException ex) {
             Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -243,7 +284,7 @@ public class ServicesRequestBean implements Serializable {
         this.servicesOfferID = data.getServicesOfferID();
         this.servicesRequestStatusID = data.getServicesRequestStatusID();
         this.userID = data.getUserID();
-        this.remark=data.getRemark();
+        this.remark = data.getRemark();
     }
 
     /**
@@ -303,28 +344,28 @@ public class ServicesRequestBean implements Serializable {
         }
         return false;
     }
-    
-    public void addToCart(){
+
+    public void addToCart() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-        .getRequest();
+                .getRequest();
         int offeredID = Integer.parseInt(request.getParameter("offeredID"));
-        
+
         HttpSession session = SessionUtils.getSession();
         //Get list
         boolean flag = false;
-        ArrayList<addToCartBean> cartList = (ArrayList<addToCartBean>) session.getAttribute("cartList");    
-        if(cartList == null){
+        ArrayList<addToCartBean> cartList = (ArrayList<addToCartBean>) session.getAttribute("cartList");
+        if (cartList == null) {
             cartList = new ArrayList<>();
         }
-        for(int i=0; i<cartList.size() ; i++){
-            if(cartList.get(i).getOfferedID().id == offeredID){
+        for (int i = 0; i < cartList.size(); i++) {
+            if (cartList.get(i).getOfferedID().id == offeredID) {
                 flag = true;
                 break;
             }
         }
-        if(flag){
-            
-        }else{
+        if (flag) {
+
+        } else {
             addToCartBean temp = new addToCartBean();
             temp.setOfferedID(new ServicesOfferedBean().readById(offeredID));
             int userId = Integer.parseInt(session.getAttribute("userid").toString());
@@ -333,16 +374,16 @@ public class ServicesRequestBean implements Serializable {
             session.setAttribute("cartList", cartList);
         }
     }
-    
-    public ArrayList<addToCartBean> getCartList(){
+
+    public ArrayList<addToCartBean> getCartList() {
         HttpSession session = SessionUtils.getSession();
         ArrayList<addToCartBean> cartList = (ArrayList<addToCartBean>) session.getAttribute("cartList");
         return cartList;
     }
-    
-    public void sendRequestToServer(){
+
+    public void sendRequestToServer() {
         ArrayList<addToCartBean> list = getCartList();
-        for(int i=0 ; i< list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             ServicesRequestBean temp = new ServicesRequestBean();
             temp.setUserID(list.get(i).getUserID());
             temp.setServicesOfferID(list.get(i).getOfferedID());
@@ -358,7 +399,7 @@ public class ServicesRequestBean implements Serializable {
             Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 //    public UserBean getUser(){
 //        return new UserBean().readById(this.userID);
 //        

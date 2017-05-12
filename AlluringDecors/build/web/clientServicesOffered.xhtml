@@ -17,7 +17,7 @@
 
                         </div>
                         <div class="entry-content">
-                            <table style="width:50%; border:1px solid; margin:0px auto; text-align: center">
+                            <table style="width:100%; border:1px solid; margin:0px auto; text-align: center">
                                 <thead style="font-weight: bold">
                                     <tr>
                                         <td>Request ID</td>
@@ -30,42 +30,33 @@
                                     </tr>
                                 </thead>
                                 <tbody id="dataRow">
-                                    <tr>
-                                        <td>Domain</td>
-                                        <td>Service Offered</td>
-                                    </tr>
                                 </tbody>
                             </table>
 
                         </div>
-                        <center>
-                            <h:form>
-                            <h:commandButton styleClass="sendButton" value="SEND REQUEST" actionListener="#{servicesRequestBean.sendRequestToServer()}"></h:commandButton>
-                            </h:form>
-                        </center>
                     </div>
                 </article>
             </div>
             <script type="text/javascript">
-                var cartList = [
-<ui:repeat value="#{servicesRequestBean.getCartList()}" var="requested" varStatus="loop">
-{ lastname:"#{requested.userID.lastname}",firstname:"#{requested.userID.firstname}",email:"#{requested.userID.email}",phone:"#{requested.userID.phone}",address:"#{requested.userID.address}" ,offeredID: #{requested.offeredID.id}, domainName: "#{requested.offeredID.domainID.name}", offeredName: "#{requested.offeredID.name}"}#{loop.last ? '' : ','}
-</ui:repeat>
+                var requestedList = [
+                       <ui:repeat value="#{servicesRequestBean.readByLoggedUserId()}" var="item" varStatus="loop">
+                    { requestedID: #{item.id},domainName:"#{item.servicesOfferID.domainID.name}",offeredName:"#{item.servicesOfferID.name}",email:"#{item.userID.email}",phone:"#{item.userID.phone}",address:"#{item.userID.address}",email:"#{item.userID.email}",status:"#{item.servicesRequestStatusID.name}" }#{loop.last ? '' : ','}
+                </ui:repeat>
                 ];
+                        console.log("requestedList");
       <!--//--><![CDATA[//> < !--
-                        //console.log(cartList);
                 var html = "";
-                for (var i = 0; i < cartList.length; i++){
+                for (var i = 0; i < requestedList.length; i++){
                 html += "<tr>";
-                html += "<td>" + cartList[i]['domainName'] + "</td>";
-                html += "<td>" + cartList[i]['offeredName'] + "</td>";
+                html += "<td>" + requestedList[i]['requestedID'] + "</td>";
+                html += "<td>" + requestedList[i]['domainName'] + "</td>";
+                html += "<td>" + requestedList[i]['offeredName'] + "</td>";
+                html += "<td>" + requestedList[i]['email'] + "</td>";
+                html += "<td>" + requestedList[i]['address'] + "</td>";
+                html += "<td>" + requestedList[i]['phone'] + "</td>";
+                html += "<td>" + requestedList[i]['status'] + "</td>";
                 html += "</tr>";
                 
-                $("#columnFirstName").html(cartList[0]['firstname']);
-                $("#columnLastName").html(cartList[0]['lastname:']);
-                $("#columnEmail").html(cartList[0]['email']);
-                $("#columnPhoneNumber").html(cartList[0]['phone']);
-                $("#columnAddress").html(cartList[0]['address']);
                 }
                 $("#dataRow").html(html);
                 //--><!]]>

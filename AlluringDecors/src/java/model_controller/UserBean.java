@@ -254,7 +254,7 @@ UserBean selectedItem;
      */
     public boolean update() {
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 //            FacesContext fc = FacesContext.getCurrentInstance();
 //            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
 //            int id = Integer.valueOf(request.getParameter("id"));
