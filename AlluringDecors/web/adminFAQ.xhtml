@@ -37,20 +37,20 @@
                                 <label class="row">
                                     <div class="col-1-2">
                                         <div class="wrap-col">
-                                            <h:inputText value="#{fAQBean.question}" required="true" requiredMessage="Password required" id="errPasswordMess"/>
+                                            <h:inputText value="#{fAQBean.question}" />
                                         </div>
                                     </div>
                                     <div class="col-1-2">
                                         <div class="wrap-col">
-                                            <h:inputText value="#{fAQBean.answer}" required="true" requiredMessage="Role No required" id="errDesMess"/>
+                                            <h:inputText value="#{fAQBean.answer}"  />
                                         </div>
                                     </div>
                                 </label>
-                                
+                                <p:messages id="messages" autoUpdate="true"/>
                                 <p:commandButton id="add" actionListener="#{fAQBean.create()}" update=":tableForm:table" value="Add">
                                 </p:commandButton>   
                         </center>
-                            <div class="row">
+                            <div class="row" style="margin-top:20px">
                                 <center>
                                     <p:dataTable id="table" var="item" value="#{fAQBean.readAll()}" widgetVar="faqTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 

@@ -29,7 +29,9 @@
                                         <textarea class="ckeditor" cols="80" id="editor1" rows="10"/>
 
                                         <center>
-                                            <p:commandButton onclick="document.getElementById('tableForm:editorValue').value = CKEDITOR.instances.editor1.getData();"  id="add" action="#{descriptionBean.update()}" value="Update">
+                                            <p:messages id="messages" autoUpdate="true"/>
+
+                                            <p:commandButton onclick="document.getElementById('tableForm:editorValue').value = CKEDITOR.instances.editor1.getData();"  id="add" actionListener="#{descriptionBean.update}" value="Update">
                                             </p:commandButton>
                                         </center>
                                         <script>
@@ -45,7 +47,7 @@
                                 </div>  
                             </center>
                             <center>
-                                <div class="row">
+                                <div class="row" style="margin-top:20px">
                                     <p:dataTable id="table" var="item" value="#{descriptionBean.readAll()}" widgetVar="descriptionTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                                  paginatorPosition="bottom" lazy="true"
@@ -83,7 +85,7 @@
                                         <h:outputText value="#{descriptionBean.selectedItem.descriptionType.name}" />
 
                                         <h:outputText value="Content" />
-                                        <h:outputText value="#{descriptionBean.selectedItem.content}" />
+                                        <h:outputText value="#{descriptionBean.selectedItem.content}" escape="false"/>
 
 
                                     </p:panelGrid>

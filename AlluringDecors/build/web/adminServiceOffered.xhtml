@@ -58,6 +58,7 @@
                                             <textarea class="ckeditor" cols="80" id="editor1" rows="10"/>
                                         </div>
                                     </label>
+                                    <p:messages id="messages" autoUpdate="true"/>
                                     <p:commandButton id="add" onclick="document.getElementById('tableForm:editorValue').value = CKEDITOR.instances.editor1.getData();" actionListener="#{servicesOfferedBean.create()}" update=":tableForm:table" value="Create">
                                     </p:commandButton>    
                                     <script>
@@ -72,7 +73,7 @@
                                 </center>
                             </p:outputPanel>
                             <center>
-                                <div class="row">
+                                <div class="row" style="margin-top:20px">
                                     <p:dataTable id="table" var="item" value="#{servicesOfferedBean.readAll()}" widgetVar="servicesOfferedTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                                  paginatorPosition="bottom" lazy="true"

@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -104,6 +105,8 @@ public class FeedbackBean implements Serializable {
             pst.setString(2, this.getAnswer());
             pst.setInt(3, this.getUserID().id);
             if (pst.executeUpdate() > 0) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
                 return true;
             }
         } catch (SQLException ex) {

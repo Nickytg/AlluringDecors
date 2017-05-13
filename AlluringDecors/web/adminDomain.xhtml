@@ -37,12 +37,13 @@
                                         </div>
                                     </div>
                                 </label>
+                                <p:messages id="messages" autoUpdate="true"/>
                                 <p:commandButton id="add" actionListener="#{domainBean.create()}" update=":tableForm:table" value="Create">
                                 </p:commandButton>      
                             </center>
 
                             <center>
-                                <div class="row">
+                                <div class="row" style="margin-top:20px">
                                     <p:dataTable id="table" var="item" value="#{domainBean.readAll()}" widgetVar="domainTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                                  paginatorPosition="bottom" lazy="true"

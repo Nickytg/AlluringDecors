@@ -8,17 +8,38 @@
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">    
-            
-            <section class="content-box box-style-1 box-4">
-                <div class="zerogrid" >
-                    <h1><b><h:outputText value="#{servicesRequestBean.readById(param['id']).userID.email}" /></b></h1>
-                    <h1><b><h:outputText value="#{servicesRequestBean.readById(param['id']).userID.address}" /></b></h1>
-                    <h1><b><h:outputText value="#{servicesRequestBean.readById(param['id']).remark}" /></b></h1>
-                    <h1><b><h:outputText value="#{servicesRequestBean.readById(param['id']).servicesRequestStatusID.name}" /></b></h1>
-                    <h:outputText value="#{servicesOfferedBean.readById(param['id']).content}" escape="false"/>
-                    
+            <section id="container">
+                <div class="wrap-container">
+                    <div id="main-content">
+                        <div class="wrap-content">
+                            <div class="row">
+                                <article class="single-post zerogrid">
+                                    <div class="row wrap-post">
+                                        <div class="entry-header">
+
+                                            <h2 class="entry-title"><a href="#">PROJECT DETAIL</a></h2>
+                                            <span class="cat-links">
+                                                <h:outputText value="#{servicesRequestBean.readById(param['id']).userID.email}" /><br></br>
+                                                <h:outputText value="#{servicesRequestBean.readById(param['id']).userID.address}" /> <br></br>
+                                                <h:outputText value="#{servicesRequestBean.readById(param['id']).servicesRequestStatusID.name}" /><br></br>
+                                                <h:outputText value="#{servicesRequestBean.readById(param['id']).remark}" /><br></br>
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="entry-content">
+                                            <center>
+                                            <p><h:outputText value="#{servicesOfferedBean.readById(param['id']).content}" escape="false"/></p>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
+            
+            
         </ui:define>
     </ui:composition>
 </html>

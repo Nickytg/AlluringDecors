@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -150,6 +151,8 @@ public class PaymentDetailsBean implements Serializable {
                 pst.setDouble(6, this.getTotalPaidAmount());
                 pst.setBoolean(7, isMaintained());
                 if (pst.executeUpdate() > 0) {
+                    FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
                     return true;
                 }
             }

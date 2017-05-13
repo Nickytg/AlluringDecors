@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -230,6 +231,8 @@ public class DescriptionBean implements Serializable {
             if (rs.first()) {
                 rs.updateInt(props[1], this.selectedItem.getDescriptionTypeID());
                 rs.updateString(props[2], this.selectedItem.getContent());
+FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated Successfully","Successfully"));
 
                 rs.updateRow();
                 return true;
@@ -245,6 +248,9 @@ public class DescriptionBean implements Serializable {
                 Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Something went wrong, this process had been cancel","Error"));
+
         return false;
     }
 

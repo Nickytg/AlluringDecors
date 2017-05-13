@@ -249,6 +249,9 @@ public class AccountBean implements Serializable {
                 pst.setInt(4, this.roleID.id);
 
                 if (pst.executeUpdate() > 0) {
+                    FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
+
                     return true;
                 }
             } else {

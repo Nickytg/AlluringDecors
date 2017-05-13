@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -127,6 +128,8 @@ public class ServicesRequestBean implements Serializable {
             pst.setInt(3, this.getServicesRequestStatusID().id);
             pst.setString(4, this.getRemark());
             if (pst.executeUpdate() > 0) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
                 return true;
             }
         } catch (SQLException ex) {
@@ -292,7 +295,7 @@ public class ServicesRequestBean implements Serializable {
      */
     public boolean update() {
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 //            FacesContext fc = FacesContext.getCurrentInstance();
 //            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
 //            int id = Integer.valueOf(request.getParameter("id"));

@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -27,14 +28,14 @@ import utils.DBConnector;
 @SessionScoped
 public class FAQBean implements Serializable {
 
-   // <editor-fold desc="DTO" defaultstate="collapsed">
-     /**
+    // <editor-fold desc="DTO" defaultstate="collapsed">
+    /**
      * Creates a new instance of FAQBean
      */
     public FAQBean() {
     }
     int id;
-    String question,answer;
+    String question, answer;
     FAQBean selectedFAQ;
 
     public FAQBean getSelectedFAQ() {
@@ -44,7 +45,6 @@ public class FAQBean implements Serializable {
     public void setSelectedFAQ(FAQBean selectedFAQ) {
         this.selectedFAQ = selectedFAQ;
     }
-    
 
     public int getId() {
         return id;
@@ -69,7 +69,7 @@ public class FAQBean implements Serializable {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
-    
+
     // </editor-fold>
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "FAQ";
@@ -93,9 +93,14 @@ public class FAQBean implements Serializable {
             pst.setString(1, this.getQuestion());
             pst.setString(2, this.getAnswer());
             if (pst.executeUpdate() > 0) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully", "Successfully"));
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Something went wrong, this operation has been canceled", "Error"));
+
             return false;
         } finally {
             try {
@@ -105,6 +110,8 @@ public class FAQBean implements Serializable {
                 Logger.getLogger(FAQBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Something went wrong, this operation has been canceled", "Error"));
         return false;
     }
 
@@ -183,7 +190,7 @@ public class FAQBean implements Serializable {
      */
     public boolean update() {
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 //            FacesContext fc = FacesContext.getCurrentInstance();
 //            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
 //            int id = Integer.valueOf(request.getParameter("id"));
@@ -191,8 +198,8 @@ public class FAQBean implements Serializable {
             pst.setInt(1, this.selectedFAQ.id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                rs.updateString(props[1], this.getQuestion());
-                rs.updateString(props[2], this.getAnswer());
+                rs.updateString(props[1], this.selectedFAQ.getQuestion());
+                rs.updateString(props[2], this.selectedFAQ.getAnswer());
 
                 rs.updateRow();
                 return true;
