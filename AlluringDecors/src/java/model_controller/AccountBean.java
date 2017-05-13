@@ -5,7 +5,6 @@
  */
 package model_controller;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import model_controller.*;
 import java.io.Serializable;
@@ -50,7 +49,6 @@ public class AccountBean implements Serializable {
     public void setLoggedAccountData(AccountBean loggedAccountData) {
         this.loggedAccountData = loggedAccountData;
     }
-    
 
     public UserBean getUserID() {
         if (userID == null) {
@@ -99,7 +97,7 @@ public class AccountBean implements Serializable {
     }
 
     //</editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">
+    // <editor-fold desc="DAO">
     private final String sqlCreate = "INSERT INTO Account VALUES(?, ?, ?, ?)";
     private final String sqlRead = "SELECT * FROM Account";
     private final String sqlReadById = "SELECT * FROM Account WHERE UserID = ?";
@@ -122,7 +120,7 @@ public class AccountBean implements Serializable {
             return false;
         }
     }
-    
+
     public boolean isClient() {
         try {
             HttpSession session = SessionUtils.getSession();
@@ -136,8 +134,8 @@ public class AccountBean implements Serializable {
             return false;
         }
     }
-    
-    public AccountBean getLoggedUserData(){
+
+    public AccountBean getLoggedUserData() {
         try {
             HttpSession session = SessionUtils.getSession();
             int userId = Integer.parseInt(session.getAttribute("userid").toString());
@@ -153,7 +151,8 @@ public class AccountBean implements Serializable {
                 return cus;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 rs.close();
@@ -196,7 +195,7 @@ public class AccountBean implements Serializable {
                 cus.setRoleID(new RoleBean().readById(rs.getInt("RoleID")));
                 cus.setPassword(rs.getString("Password"));
                 loggedAccountData = cus;
-                
+
                 HttpSession session = SessionUtils.getSession();
                 session.setAttribute("username", rs.getString("Username"));
                 session.setAttribute("userid", rs.getInt("UserID"));
@@ -206,7 +205,8 @@ public class AccountBean implements Serializable {
                 context.redirect(context.getRequestContextPath() + "/faces/index.xhtml");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 rs.close();
@@ -217,8 +217,8 @@ public class AccountBean implements Serializable {
             }
         }
         FacesMessage message = new FacesMessage("Your username and password combination are not correct!");
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, message);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, message);
 
 //        return false;
     }
@@ -242,15 +242,15 @@ public class AccountBean implements Serializable {
                 pst.setInt(1, newUserID);
                 pst.setString(2, this.getUsername());
                 pst.setString(3, this.getPassword());
-                if(this.roleID == null){
+                if (this.roleID == null) {
                     this.roleID = new RoleBean();
                     this.roleID.id = 2;
                 }
                 pst.setInt(4, this.roleID.id);
 
                 if (pst.executeUpdate() > 0) {
-                    FacesContext.getCurrentInstance().addMessage(null, 
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully", "Successfully"));
 
                     return true;
                 }
@@ -258,6 +258,8 @@ public class AccountBean implements Serializable {
                 return false;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return false;
         } finally {
             try {
@@ -289,7 +291,8 @@ public class AccountBean implements Serializable {
             }
             return cusList;
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 rs.close();
@@ -319,7 +322,8 @@ public class AccountBean implements Serializable {
                 return cus;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 rs.close();
@@ -373,7 +377,8 @@ public class AccountBean implements Serializable {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 rs.close();
@@ -385,7 +390,7 @@ public class AccountBean implements Serializable {
         }
         return false;
     }
-    
+
     public boolean updateForClient() {
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -412,7 +417,8 @@ public class AccountBean implements Serializable {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 rs.close();
@@ -424,7 +430,6 @@ public class AccountBean implements Serializable {
         }
         return false;
     }
-
 
     /**
      * Delete TourBean base id
@@ -439,7 +444,8 @@ public class AccountBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 pst.close();

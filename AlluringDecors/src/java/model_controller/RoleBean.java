@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -27,15 +28,15 @@ import utils.DBConnector;
 @SessionScoped
 public class RoleBean implements Serializable {
 
-  // <editor-fold desc="DTO" defaultstate="collapsed">
-      /**
+    // <editor-fold desc="DTO" defaultstate="collapsed">
+    /**
      * Creates a new instance of RoleBean
      */
     public RoleBean() {
     }
     int id;
     String name;
-RoleBean selectedItem;
+    RoleBean selectedItem;
 
     public RoleBean getSelectedItem() {
         return selectedItem;
@@ -61,7 +62,7 @@ RoleBean selectedItem;
         this.name = name;
     }
     // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
+    // <editor-fold desc="DAO">  
     final String tableName = "Role";
     final String props[] = {"RoleID", "Name"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?)";
@@ -85,12 +86,16 @@ RoleBean selectedItem;
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return false;
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -114,12 +119,16 @@ RoleBean selectedItem;
             }
             return list;
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -142,6 +151,8 @@ RoleBean selectedItem;
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -149,6 +160,8 @@ RoleBean selectedItem;
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -183,6 +196,8 @@ RoleBean selectedItem;
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -190,6 +205,8 @@ RoleBean selectedItem;
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -207,12 +224,16 @@ RoleBean selectedItem;
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(RoleBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

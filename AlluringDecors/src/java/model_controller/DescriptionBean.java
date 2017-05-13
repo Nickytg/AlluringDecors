@@ -36,7 +36,7 @@ public class DescriptionBean implements Serializable {
 //        DescriptionBean selectedItem = new DescriptionBean();
 //        selectedItem = this.readAll().get(0);
 //            this.selectedItem = new DescriptionBean();
-        
+
     }
     int id, descriptionTypeID;
     String content;
@@ -49,7 +49,7 @@ public class DescriptionBean implements Serializable {
             temp.setDescriptionID(0);
             temp.setDescriptionID(0);
             temp.setContent("");
-            selectedItem =temp;
+            selectedItem = temp;
         }
         return selectedItem;
     }
@@ -86,39 +86,12 @@ public class DescriptionBean implements Serializable {
     // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "[Description]";
     final String props[] = {"DescriptionID", "DescriptionTypeID", "Content"};
-    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlReadByTypeId = "SELECT * FROM " + tableName + " WHERE " + props[1] + " = ?";
-    private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
     private PreparedStatement pst;
-
-    /**
-     * Create new Customer
-     */
-    public boolean create() {
-        try {
-            pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            pst.setInt(1, this.getDescriptionID());
-            pst.setInt(2, this.getDescriptionTypeID());
-            pst.setString(3, this.getContent());
-            if (pst.executeUpdate() > 0) {
-                return true;
-            }
-        } catch (SQLException ex) {
-            return false;
-        } finally {
-            try {
-                pst.close();
-                DBConnector.closeConnection();
-            } catch (SQLException ex) {
-                Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return false;
-    }
 
     /**
      * read all Customer in database
@@ -138,12 +111,16 @@ public class DescriptionBean implements Serializable {
             }
             return list;
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -167,6 +144,8 @@ public class DescriptionBean implements Serializable {
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -174,12 +153,14 @@ public class DescriptionBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
-    
+
     /**
      * Read Customer base id
      */
@@ -197,6 +178,8 @@ public class DescriptionBean implements Serializable {
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -204,6 +187,8 @@ public class DescriptionBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -231,13 +216,15 @@ public class DescriptionBean implements Serializable {
             if (rs.first()) {
                 rs.updateInt(props[1], this.selectedItem.getDescriptionTypeID());
                 rs.updateString(props[2], this.selectedItem.getContent());
-FacesContext.getCurrentInstance().addMessage(null, 
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated Successfully","Successfully"));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated Successfully", "Successfully"));
 
                 rs.updateRow();
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -245,11 +232,13 @@ FacesContext.getCurrentInstance().addMessage(null,
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        FacesContext.getCurrentInstance().addMessage(null, 
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Something went wrong, this process had been cancel","Error"));
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Something went wrong, this process had been cancel", "Error"));
 
         return false;
     }
@@ -265,12 +254,16 @@ FacesContext.getCurrentInstance().addMessage(null,
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(DescriptionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

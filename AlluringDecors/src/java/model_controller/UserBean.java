@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -28,15 +29,15 @@ import utils.DBConnector;
 @SessionScoped
 public class UserBean implements Serializable {
 
-   // <editor-fold desc="DTO" defaultstate="collapsed">
-     /**
+    // <editor-fold desc="DTO" defaultstate="collapsed">
+    /**
      * Creates a new instance of UserBean
      */
     public UserBean() {
     }
     int id;
-    String firstname,lastname,email,address,phone;
-UserBean selectedItem;
+    String firstname, lastname, email, address, phone;
+    UserBean selectedItem;
 
     public UserBean getSelectedItem() {
         return selectedItem;
@@ -96,7 +97,7 @@ UserBean selectedItem;
     // </editor-fold>
     // <editor-fold desc="DAO">  
     final String tableName = "[User]";
-    final String props[] = {"UserID", "FirstName", "LastName", "Email", "Address","Phone"};
+    final String props[] = {"UserID", "FirstName", "LastName", "Email", "Address", "Phone"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?)";
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
@@ -112,7 +113,7 @@ UserBean selectedItem;
 
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
-            
+
             pst.setString(1, this.getFirstname());
             pst.setString(2, this.getLastname());
             pst.setString(3, this.getEmail());
@@ -122,26 +123,30 @@ UserBean selectedItem;
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return false;
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-    
+
     /**
      * Create new Customer
      */
     public int createReturnID() {
 
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlCreate,Statement.RETURN_GENERATED_KEYS);
-            
+            pst = DBConnector.getConnection().prepareStatement(sqlCreate, Statement.RETURN_GENERATED_KEYS);
+
             pst.setString(1, this.getFirstname());
             pst.setString(2, this.getLastname());
             pst.setString(3, this.getEmail());
@@ -151,19 +156,22 @@ UserBean selectedItem;
                 try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         return generatedKeys.getInt(1);
-                    }
-                    else {
+                    } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return 0;
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -191,12 +199,16 @@ UserBean selectedItem;
             }
             return list;
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -214,7 +226,7 @@ UserBean selectedItem;
             rs = pst.executeQuery();
             if (rs.first()) {
                 UserBean obj = new UserBean();
-                 obj.setId(rs.getInt(props[0]));
+                obj.setId(rs.getInt(props[0]));
                 obj.setFirstname(rs.getString(props[1]));
                 obj.setLastname(rs.getString(props[2]));
                 obj.setEmail(rs.getString(props[3]));
@@ -223,6 +235,8 @@ UserBean selectedItem;
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -230,6 +244,8 @@ UserBean selectedItem;
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -246,7 +262,7 @@ UserBean selectedItem;
         this.lastname = data.getLastname();
         this.phone = data.getPhone();
         this.address = data.getAddress();
-        this.email=data.getEmail();
+        this.email = data.getEmail();
     }
 
     /**
@@ -266,12 +282,14 @@ UserBean selectedItem;
                 rs.updateString(props[2], this.selectedItem.getLastname());
                 rs.updateString(props[3], this.selectedItem.getEmail());
                 rs.updateString(props[4], this.selectedItem.getAddress());
-                 rs.updateString(props[5], this.selectedItem.getPhone());
+                rs.updateString(props[5], this.selectedItem.getPhone());
 
                 rs.updateRow();
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -279,6 +297,8 @@ UserBean selectedItem;
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -296,12 +316,16 @@ UserBean selectedItem;
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

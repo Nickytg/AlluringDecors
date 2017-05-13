@@ -34,9 +34,9 @@ public class FeedbackBean implements Serializable {
      */
     public FeedbackBean() {
     }
-    int id ;
+    int id;
     UserBean userID;
-    String question,answer;
+    String question, answer;
     FeedbackBean selectedFeedback;
 
     public FeedbackBean getSelectedFeedback() {
@@ -46,7 +46,7 @@ public class FeedbackBean implements Serializable {
     public void setSelectedFeedback(FeedbackBean selectedFeedback) {
         this.selectedFeedback = selectedFeedback;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -56,16 +56,16 @@ public class FeedbackBean implements Serializable {
     }
 
     public UserBean getUserID() {
-        if(userID == null) userID = new UserBean();
+        if (userID == null) {
+            userID = new UserBean();
+        }
         return userID;
     }
 
     public void setUserID(UserBean userID) {
-        
+
         this.userID = userID;
     }
-
-    
 
     public String getQuestion() {
         return question;
@@ -83,7 +83,7 @@ public class FeedbackBean implements Serializable {
         this.answer = answer;
     }
     // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
+    // <editor-fold desc="DAO">  
     final String tableName = "[FeedBack]";
     final String props[] = {"FeedBackID", "Question", "Answer", "UserID"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
@@ -105,17 +105,21 @@ public class FeedbackBean implements Serializable {
             pst.setString(2, this.getAnswer());
             pst.setInt(3, this.getUserID().id);
             if (pst.executeUpdate() > 0) {
-                FacesContext.getCurrentInstance().addMessage(null, 
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully", "Successfully"));
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return false;
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -141,15 +145,10 @@ public class FeedbackBean implements Serializable {
             }
             return list;
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-//            try {
-////                rs.close();
-//                DBConnector.closeConnection();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        }
+        } 
         return null;
     }
 
@@ -171,6 +170,8 @@ public class FeedbackBean implements Serializable {
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -178,6 +179,8 @@ public class FeedbackBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -216,8 +219,10 @@ public class FeedbackBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return false;
     }
 
@@ -232,18 +237,22 @@ public class FeedbackBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-    
+
 //    public UserBean getUser(){
 //        return new UserBean().readById(this.userID);
 //    }

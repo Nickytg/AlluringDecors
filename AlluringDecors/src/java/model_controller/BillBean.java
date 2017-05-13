@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import utils.DBConnector;
@@ -28,14 +29,12 @@ import utils.DBConnector;
 @SessionScoped
 public class BillBean implements Serializable {
 
-
-    
 // <editor-fold desc="DTO" defaultstate="collapsed">
     public BillBean() {
     }
     int id;
     ServicesRequestBean serviceRequestID;
-    
+
     BillBean selectedItem;
 
     public BillBean getSelectedItem() {
@@ -45,9 +44,7 @@ public class BillBean implements Serializable {
     public void setSelectedItem(BillBean selectedItem) {
         this.selectedItem = selectedItem;
     }
-    
-    
-    
+
     public int getBillID() {
         return id;
     }
@@ -57,7 +54,9 @@ public class BillBean implements Serializable {
     }
 
     public ServicesRequestBean getServiceRequestID() {
-        if(serviceRequestID == null) serviceRequestID = new ServicesRequestBean();
+        if (serviceRequestID == null) {
+            serviceRequestID = new ServicesRequestBean();
+        }
         return serviceRequestID;
     }
 
@@ -65,81 +64,89 @@ public class BillBean implements Serializable {
         this.serviceRequestID = serviceRequestID;
     }
 
-    
 // </editor-fold>
 // <editor-fold desc="DAO" defaultstate="collapsed">  
     final String tableName = "Bill";
-    final String props[] = {"BillID","ServicesRequestID","DomainID"};
-     private final String sqlCreate = "INSERT INTO "+tableName+" VALUES(?)";
-    private final String sqlRead = "SELECT * FROM "+tableName;
-    private final String sqlReadById = "SELECT * FROM "+tableName+" WHERE "+props[0]+" = ?";
-    private final String sqlUpdate = "UPDATE "+tableName+" WHERE "+props[0]+" = ?";
-    private final String sqlDelete = "DELETE FROM "+tableName+" WHERE "+props[0]+" = ?";
+    final String props[] = {"BillID", "ServicesRequestID", "DomainID"};
+    private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?)";
+    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
+    private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
+    private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
     private PreparedStatement pst;
-    
+
     /**
      * Create new Customer
      */
     public boolean create() {
-      
+
         try {
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
             pst.setInt(1, this.getBillID());
             pst.setInt(2, this.getServiceRequestID().id);
-           
+
             if (pst.executeUpdate() > 0) {
                 return true;
             }
         } catch (SQLException ex) {
-            return false;
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-    
+
     /**
      * Create new Customer
      */
     public int createReturnID() {
-      
+
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlCreate,Statement.RETURN_GENERATED_KEYS);
+            pst = DBConnector.getConnection().prepareStatement(sqlCreate, Statement.RETURN_GENERATED_KEYS);
             //pst.setInt(1, this.getBillID());
             pst.setInt(1, this.getServiceRequestID().id);
-           
+
             if (pst.executeUpdate() > 0) {
                 try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         return generatedKeys.getInt(1);
-                    }
-                    else {
+                    } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return 0;
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return 0;
     }
-    
+
     /**
      * read all Customer in database
-     * @return 
+     *
+     * @return
      */
     public ArrayList<BillBean> readAll() {
         try {
@@ -153,18 +160,22 @@ public class BillBean implements Serializable {
             }
             return list;
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
-    
+
     /**
      * Read Customer base id
      */
@@ -175,12 +186,14 @@ public class BillBean implements Serializable {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             if (rs.first()) {
-                  BillBean obj = new BillBean();
+                BillBean obj = new BillBean();
                 obj.setBillID(rs.getInt(props[0]));
                 obj.setServiceRequestID(new ServicesRequestBean().readById(rs.getInt(props[1])));
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -188,11 +201,14 @@ public class BillBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
+
     public void editRedirect() {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
@@ -201,7 +217,7 @@ public class BillBean implements Serializable {
         this.id = id;
         this.serviceRequestID = data.getServiceRequestID();
     }
-    
+
     /**
      * Update Customer base id
      */
@@ -211,15 +227,17 @@ public class BillBean implements Serializable {
 //            FacesContext fc = FacesContext.getCurrentInstance();
 //        HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
 //        int id = Integer.valueOf(request.getParameter("id"));
-        
+
             pst.setInt(1, this.selectedItem.id);
             rs = pst.executeQuery();
-            if(rs.first()) {
+            if (rs.first()) {
                 rs.updateInt(props[1], this.selectedItem.getServiceRequestID().id);
                 rs.updateRow();
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -227,12 +245,14 @@ public class BillBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-    
+
     /**
      * Delete TourBean base id
      */
@@ -244,18 +264,22 @@ public class BillBean implements Serializable {
                 return true;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(BillBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
     }
-    
+
 //    public DomainBean getDomain(){
 //        return new DomainBean().readById(this.domainID);
 //    }

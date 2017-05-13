@@ -119,7 +119,7 @@ public class PaymentDetailsBean implements Serializable {
     }
 
     // </editor-fold>
-    // <editor-fold desc="DAO" defaultstate="collapsed">  
+    // <editor-fold desc="DAO" >  
     final String tableName = "PaymentDetail";
     final String props[] = {"PaymentDetaiID", "BillID", "Date", "TotalBillAmount", "DueAmount", "BalanceAmount", "TotalPaidAmount", "isMaintained"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?,?)";
@@ -144,25 +144,29 @@ public class PaymentDetailsBean implements Serializable {
 //            pst.setInt(1, this.getId());
                 java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
                 pst.setInt(1, newBillID);
-                pst.setTimestamp(2,date);
+                pst.setTimestamp(2, date);
                 pst.setDouble(3, this.getTotalBillAmount());
                 pst.setDouble(4, this.getDueAmount());
                 pst.setDouble(5, this.getBalanceAmount());
                 pst.setDouble(6, this.getTotalPaidAmount());
                 pst.setBoolean(7, isMaintained());
                 if (pst.executeUpdate() > 0) {
-                    FacesContext.getCurrentInstance().addMessage(null, 
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully","Successfully"));
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully", "Successfully"));
                     return true;
                 }
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             return false;
         } finally {
             try {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -192,12 +196,16 @@ public class PaymentDetailsBean implements Serializable {
             }
             return list;
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -226,6 +234,8 @@ public class PaymentDetailsBean implements Serializable {
                 return obj;
             }
         } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -233,6 +243,8 @@ public class PaymentDetailsBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -254,69 +266,5 @@ public class PaymentDetailsBean implements Serializable {
         this.maintained = data.isMaintained();
     }
 
-    /**
-     * Update Customer base id
-     */
-    public boolean update() {
-        try {
-            pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            FacesContext fc = FacesContext.getCurrentInstance();
-//            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
-//            int id = Integer.valueOf(request.getParameter("id"));
-
-            pst.setInt(1, this.selectedItem.id);
-            rs = pst.executeQuery();
-            if (rs.first()) {
-                rs.updateInt(props[1], this.selectedItem.getBillID().id);
-                rs.updateDate(props[2], this.selectedItem.getDatetime());
-                rs.updateDouble(props[3], this.selectedItem.getTotalBillAmount());
-                rs.updateDouble(props[4], this.selectedItem.getDueAmount());
-                rs.updateDouble(props[5], this.selectedItem.getBalanceAmount());
-                rs.updateDouble(props[6], this.selectedItem.getTotalPaidAmount());
-                rs.updateBoolean(props[7], this.selectedItem.isMaintained());
-
-                rs.updateRow();
-                return true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                rs.close();
-                pst.close();
-                DBConnector.closeConnection();
-            } catch (SQLException ex) {
-                Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Delete TourBean base id
-     */
-    public boolean delete(int id) {
-        try {
-            pst = DBConnector.getConnection().prepareStatement(sqlDelete, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            pst.setInt(1, id);
-            if (pst.executeUpdate() > 0) {
-                return true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                pst.close();
-                DBConnector.closeConnection();
-            } catch (SQLException ex) {
-                Logger.getLogger(PaymentDetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return false;
-    }
-
-//    public BillBean getBill(){
-//        return new BillBean().readById(this.billID);
-//    }
 // </editor-fold>
 }
