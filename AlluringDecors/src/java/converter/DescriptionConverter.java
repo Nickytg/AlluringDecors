@@ -27,11 +27,17 @@ public class DescriptionConverter implements Converter{
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.isEmpty()) {
+            return null;
+        }
         return em.find(DescriptionBean.class, new BigInteger(value));
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
+        if (value == null) {
+            return "";
+        }
         return String.valueOf(((DescriptionBean) value).getDescriptionID());
     }
     

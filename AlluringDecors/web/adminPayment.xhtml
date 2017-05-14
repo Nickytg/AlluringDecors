@@ -188,22 +188,22 @@
                                             </h:selectOneMenu> 
 
                                             <h:outputText value="Date" />
-                                            <h:inputText value="#{paymentDetailsBean.datetime}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{paymentDetailsBean.datetime}"  />    
 
                                             <h:outputText value="Total Bill" />
-                                            <h:inputText value="#{paymentDetailsBean.totalBillAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />
+                                            <h:inputText value="#{paymentDetailsBean.totalBillAmount}" a:placeholder="Total bill amount"  />
 
                                             <h:outputText value="Due" />
-                                            <h:inputText value="#{paymentDetailsBean.dueAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{paymentDetailsBean.dueAmount}" a:placeholder="Total bill amount"  />    
 
                                             <h:outputText value="Balance" />
-                                            <h:inputText value="#{paymentDetailsBean.balanceAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{paymentDetailsBean.balanceAmount}" a:placeholder="Total bill amount"  />    
 
                                             <h:outputText value="Total Paid" />
-                                            <h:inputText value="#{paymentDetailsBean.totalPaidAmount}" a:placeholder="Total bill amount" requiredMessage="Please enter answer" /> 
+                                            <h:inputText value="#{paymentDetailsBean.totalPaidAmount}" a:placeholder="Total bill amount"  /> 
 
                                             <h:outputText value="isMaintance" />
-                                            <h:inputText value="#{paymentDetailsBean.maintained}" a:placeholder="Total bill amount" requiredMessage="Please enter answer" />
+                                            <h:inputText value="#{paymentDetailsBean.maintained}" a:placeholder="Total bill amount"  />
 
                                             <p:commandButton id="save" actionListener="#{paymentDetailsBean.update()}" update=":tableForm:table" oncomplete="PF('paymentDetailsEditDialog').hide();" 
                                                              value="Save"/>

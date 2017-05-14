@@ -134,13 +134,13 @@
                                         <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.id}" />
 
                                         <h:outputText value="Name" />                                           
-                                        <h:outputText value="#{servicesOfferedBean.selectedServicesOffered.name}" />
+                                        <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.name}" />
 
                                         <h:outputText value="Domain ID" />
-                                        <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.domainID}" required="true" requiredMessage="Please enter question" />    
+                                        <h:outputText  value="#{servicesOfferedBean.selectedServicesOffered.domainID.name}"/>    
 
                                         <h:outputText value="Content" />
-                                        <h:inputText value="#{servicesOfferedBean.selectedServicesOffered.content}" required="true" requiredMessage="Please enter answer" />    
+                                        <h:inputTextarea value="#{servicesOfferedBean.selectedServicesOffered.content}" />    
 
                                         <p:commandButton id="save" actionListener="#{servicesOfferedBean.update()}" update=":tableForm:table" oncomplete="PF('servicesOfferedEditDialog').hide();" 
                                                          value="Save"/>

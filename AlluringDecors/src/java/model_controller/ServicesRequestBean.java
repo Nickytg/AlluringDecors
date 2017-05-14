@@ -141,8 +141,8 @@ public class ServicesRequestBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -169,16 +169,16 @@ public class ServicesRequestBean implements Serializable {
             }
             return list;
         } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 rs.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -204,8 +204,8 @@ public class ServicesRequestBean implements Serializable {
                 return obj;
             }
         } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -213,8 +213,8 @@ public class ServicesRequestBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -244,8 +244,8 @@ public class ServicesRequestBean implements Serializable {
 
             return list;
         } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -253,8 +253,8 @@ public class ServicesRequestBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -281,8 +281,8 @@ public class ServicesRequestBean implements Serializable {
             }
             return list;
         } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
             Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -290,8 +290,8 @@ public class ServicesRequestBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -341,8 +341,8 @@ public class ServicesRequestBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -368,8 +368,8 @@ public class ServicesRequestBean implements Serializable {
                 pst.close();
                 DBConnector.closeConnection();
             } catch (SQLException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+//                FacesContext.getCurrentInstance().addMessage(null,
+//                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
                 Logger.getLogger(ServicesRequestBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -395,6 +395,8 @@ public class ServicesRequestBean implements Serializable {
             }
         }
         if (flag) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "This offered already on your cart", "Failed"));
 
         } else {
             addToCartBean temp = new addToCartBean();
@@ -403,6 +405,8 @@ public class ServicesRequestBean implements Serializable {
             temp.setUserID(new UserBean().readById(userId));
             cartList.add(temp);
             session.setAttribute("cartList", cartList);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "This service is added to cart, Please go to check out page for next step", "Success"));
         }
     }
 

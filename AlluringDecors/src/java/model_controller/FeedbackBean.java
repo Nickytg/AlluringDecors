@@ -5,6 +5,7 @@
  */
 package model_controller;
 
+import java.io.IOException;
 import model_controller.*;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -16,9 +17,12 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import utils.DBConnector;
+import utils.SessionUtils;
 
 /**
  *
@@ -107,6 +111,42 @@ public class FeedbackBean implements Serializable {
             if (pst.executeUpdate() > 0) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully", "Successfully"));
+                return true;
+            }
+        } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+            return false;
+        } finally {
+            try {
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, "All fields are required", "Failed"));
+                Logger.getLogger(FeedbackBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+    
+    public boolean createFromClient() {
+
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlCreate);
+//            pst.setInt(1, this.getId());
+            HttpSession session = SessionUtils.getSession();
+            int userId = Integer.parseInt(session.getAttribute("userid").toString());
+            pst.setString(1, this.getQuestion());
+            pst.setString(2, "Waiting...");
+            pst.setInt(3, userId);
+            if (pst.executeUpdate() > 0) {
+//                ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+//                try {
+//                    context.redirect(context.getRequestContextPath() + "/faces/thanksContactUs.xhtml");
+//                } catch (IOException ex) {
+//                    Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
+//                }
                 return true;
             }
         } catch (SQLException ex) {

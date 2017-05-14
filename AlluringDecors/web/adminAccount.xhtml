@@ -52,11 +52,11 @@
                                     </div>
                                     <div class="col-1-4">
                                         <div class="wrap-col">
-                                            <h:inputText value="#{accountBean.userID.lastname}" a:placeholder="Lastname" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.userID.lastname}" a:placeholder="Lastname"  />    
                                         </div>
                                     </div>
-                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Email" value="#{accountBean.userID.email}"  requiredMessage="Please enter question" /> </div>   </div>
-                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Address" value="#{accountBean.userID.address}" requiredMessage="Please enter question" /></div> </div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Email" value="#{accountBean.userID.email}"  /> </div>   </div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Address" value="#{accountBean.userID.address}"  /></div> </div>
                                 </label>
                                 <label class="row">
                                     <div class="col-1-4">
@@ -81,9 +81,9 @@
                                     </div>
                                 </label>
                                 <label class="row">
-                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Phone number" value="#{accountBean.userID.phone}"  requiredMessage="Please enter question" /></div></div>
-                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Username" value="#{accountBean.username}" requiredMessage="Please enter answer" /> </div></div>
-                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Password" value="#{accountBean.password}" requiredMessage="Please enter answer" /></div></div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Phone number" value="#{accountBean.userID.phone}"   /></div></div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Username" value="#{accountBean.username}" /> </div></div>
+                                    <div class="col-1-4"><div class="wrap-col"><h:inputText a:placeholder="Password" value="#{accountBean.password}"  /></div></div>
                                     <div class="col-1-4">
                                         <div class="wrap-col">
                                         <h:selectOneMenu value="#{accountBean.roleID.id}"
@@ -179,25 +179,28 @@
                                             <h:outputText value="#{accountBean.selectedAccount.userID.firstname}" />
 
                                             <h:outputText value="User last name" />
-                                            <h:inputText value="#{accountBean.selectedAccount.userID.lastname}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.lastname}"  />    
 
                                             <h:outputText value="User Email" />
-                                            <h:inputText value="#{accountBean.selectedAccount.userID.email}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.email}" />    
 
                                             <h:outputText value="User Address" />
-                                            <h:inputText value="#{accountBean.selectedAccount.userID.address}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.address}" />    
 
                                             <h:outputText value="User Phone" />
-                                            <h:inputText value="#{accountBean.selectedAccount.userID.phone}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{accountBean.selectedAccount.userID.phone}"  />    
 
                                             <h:outputText value="Username" />
-                                            <h:inputText value="#{accountBean.selectedAccount.username}" required="true" requiredMessage="Please enter answer" /> 
+                                            <h:inputText value="#{accountBean.selectedAccount.username}"  /> 
 
                                             <h:outputText value="Password" />
-                                            <h:inputText value="#{accountBean.selectedAccount.password}" required="true" requiredMessage="Please enter answer" />
+                                            <h:inputText value="#{accountBean.selectedAccount.password}"  />
 
                                             <h:outputText value="Role" />
-                                            <h:inputText value="#{accountBean.selectedAccount.roleID.name}" required="true" requiredMessage="Please enter answer" />
+                                            <h:selectOneMenu value="#{accountBean.selectedAccount.roleID.id}"
+                                                             converter="#{roleConverter}" >
+                                                <f:selectItems value="#{roleBean.readAll()}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}"/>
+                                            </h:selectOneMenu>
 
                                             <p:commandButton id="save" actionListener="#{accountBean.update()}" update=":tableForm:table" oncomplete="PF('accountEditDialog').hide();" 
                                                              value="Save"/>

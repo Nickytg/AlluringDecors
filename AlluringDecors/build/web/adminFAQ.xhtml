@@ -109,10 +109,10 @@
                                         <h:outputText value="#{fAQBean.selectedFAQ.id}" />
 
                                         <h:outputText value="Question" />
-                                        <h:inputText value="#{fAQBean.selectedFAQ.question}" required="true" requiredMessage="Please enter question" />    
+                                        <h:inputText value="#{fAQBean.selectedFAQ.question}"  />    
 
                                         <h:outputText value="Answer" />
-                                        <h:inputText value="#{fAQBean.selectedFAQ.answer}" required="true" requiredMessage="Please enter answer" />    
+                                        <h:inputText value="#{fAQBean.selectedFAQ.answer}"  />    
 
                                         <p:commandButton id="save" actionListener="#{fAQBean.update()}" update=":tableForm:table" oncomplete="PF('faqEditDialog').hide();" 
                                                          value="Save"/>

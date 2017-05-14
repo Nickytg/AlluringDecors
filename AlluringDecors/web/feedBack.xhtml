@@ -4,15 +4,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       >
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">            
             <section class="content-box box-style-1 box-4">
                 <div class="zerogrid" style="width: 100%">
-                    <div class="wrap-box"><!--Start Box-->
+                    <!--Login box-->
+                    <div class="wrap-box" id="loginForm">
                         <div class="box-header" style="padding-top:53px">
                             <h2>Feedback</h2>
                         </div>
+                        <div id="contact_form">
+                            <h:form rendered="#{accountBean.client}">
+                                <label class="row">
+                                    <div class="col-1-1">
+                                        <div class="wrap-col">
+                                            <h:inputText value="#{feedbackBean.question}" a:placeholder="Your Feedback" />
+                                        </div>
+                                    </div>
+                                </label>
+                                <center>
+                                    <h:commandButton styleClass="sendButton" actionListener="#{feedbackBean.createFromClient()}" value="SEND"/>
+                                </center>
+                            </h:form>
+                        </div>
+                    </div>   
+                    <!-- END -->
+                </div>
+            </section>
+            
+            <section class="content-box box-style-1 box-4">
+                <div class="zerogrid" style="width: 100%">
+                    <div class="wrap-box"><!--Start Box-->
+                        
                         <div id="contentContainer">
                             
                         </div>

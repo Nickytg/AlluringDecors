@@ -23,7 +23,7 @@
                                     <p:dataTable id="table" var="item" value="#{contactUsBean.readAll()}" widgetVar="contactUsTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                                  paginatorPosition="bottom" lazy="true"
-                                                 style="width:900px;" emptyMessage="Data not found">  
+                                                 style="width:80%;" emptyMessage="Data not found">  
                                         <f:facet name="header">
                                             Contact us data
                                         </f:facet>
@@ -90,13 +90,13 @@
                                             <h:outputText value="#{contactUsBean.selectedContactUs.name}" />
 
                                             <h:outputText value="Phone" />
-                                            <h:inputText value="#{contactUsBean.selectedContactUs.phone}" required="true" requiredMessage="Please enter question" />    
+                                            <h:inputText value="#{contactUsBean.selectedContactUs.phone}"  />    
 
                                             <h:outputText value="Address" />
-                                            <h:inputText value="#{contactUsBean.selectedContactUs.address}" required="true" requiredMessage="Please enter answer" />    
+                                            <h:inputText value="#{contactUsBean.selectedContactUs.address}"  />    
 
                                             <h:outputText value="Content" />
-                                            <h:inputText value="#{contactUsBean.selectedContactUs.content}" required="true" requiredMessage="Please enter answer" />    
+                                            <h:inputText value="#{contactUsBean.selectedContactUs.content}" />    
 
                                             <p:commandButton id="save" actionListener="#{contactUsBean.update()}" update=":tableForm:table" oncomplete="PF('contactUsEditDialog').hide();" 
                                                              value="Save"/>

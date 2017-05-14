@@ -98,6 +98,8 @@ public class ContactUsBean implements Serializable {
 // <editor-fold desc="DAO" >  
     final String tableName = "ContactUs";
     final String props[] = {"ContactUsID", "Name", "Phone", "Address", "Content"};
+        private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
+
     private final String sqlRead = "SELECT * FROM " + tableName;
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
@@ -105,6 +107,46 @@ public class ContactUsBean implements Serializable {
     private ResultSet rs;
     private PreparedStatement pst;
 
+    
+    /**
+     * Create new Customer
+     */
+    public boolean create() {
+
+        try {
+            pst = DBConnector.getConnection().prepareStatement(sqlCreate);
+            pst.setString(1, this.getName());
+            pst.setString(2, this.getPhone());
+            pst.setString(3, this.getAddress());
+            pst.setString(4, this.getContent());
+            if (pst.executeUpdate() > 0) {
+                ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+                try {
+                    context.redirect(context.getRequestContextPath() + "/faces/thanksContactUs.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return true;
+            }
+        } catch (SQLException ex) {
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+                try {
+                    context.redirect(context.getRequestContextPath() + "/faces/sorry.xhtml");
+                } catch (IOException ex1) {
+                    Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+            return false;
+        } finally {
+            try {
+                pst.close();
+                DBConnector.closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ContactUsBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+
+    }
     /**
      * read all Customer in database
      *
@@ -194,7 +236,7 @@ public class ContactUsBean implements Serializable {
      */
     public boolean update() {
         try {
-            pst = DBConnector.getConnection().prepareStatement(sqlUpdate, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            pst = DBConnector.getConnection().prepareStatement(sqlReadById, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 //            FacesContext fc = FacesContext.getCurrentInstance();
 //            HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
 //            int id = Integer.valueOf(request.getParameter("id"));
