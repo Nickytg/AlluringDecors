@@ -8,30 +8,12 @@
     <ui:composition template="/template/common/commonLayout.xhtml">
         <ui:define name="content">            
             <section class="content-box box-style-1 box-4">
-                <div class="zerogrid" >
+                <div class="zerogrid" style="width: 80%">
                     <div class="wrap-box"><!--Start Box-->
                         <div class="box-header" style="padding-top:53px">
                             <h2>ON-GOING PROJECTS</h2>
                         </div>
                         <div class="row" id="dataListContainer">
-                            <div class="col-1-3">
-                                <div class="wrap-col">
-                                    <article>
-                                        <div class="post-thumbnail-wrap">
-                                            <a href="single.html" class="portfolio-box">
-                                                <img src="template/assets/images/11.jpg" alt=""></img>
-                                                    <div class="portfolio-box-second">
-                                                        <img src="template/assets/images/1.jpg" alt=""></img>
-                                                    </div>
-                                            </a>
-                                        </div>
-                                        <div class="entry-header ">
-                                            <h3 class="entry-title">Lovely Smiles</h3>
-                                            <div class="l-tags"><a href="#">Design</a> / <a href="#">Illustrations</a></div>
-                                        </div>
-                                    </article>
-                                </div>
-                            </div>
                             
                         </div>
 
@@ -52,9 +34,9 @@
                             html +='<article>';
                             html +='<div class="post-thumbnail-wrap">';
                             html +='<a href="faces/projectDetail.xhtml?id='+requestedList[i].id+'" class="portfolio-box">';
-                            html +='<img src="template/assets/images/11.jpg" alt=""></img>';
+                            html +='<img src="template/assets/images/prjs/'+Math.floor((Math.random()*6)+1)+'.jpg" alt=""></img>';
                             html +='<div class="portfolio-box-second">';
-                            html +=' <img src="template/assets/images/1.jpg" alt=""></img>';
+                            html +=' <img src="template/assets/images/prjs/'+Math.floor((Math.random()*6)+1)+'.jpg" alt=""></img>';
                             html +='</div>';
                             html +='</div>';
                             html +='<div class="entry-header ">';

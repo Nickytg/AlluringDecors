@@ -244,7 +244,7 @@ public class AccountBean implements Serializable {
                 pst.setString(3, this.getPassword());
                 if (this.roleID == null) {
                     this.roleID = new RoleBean();
-                    this.roleID.id = 2;
+                    this.roleID.id = 3;
                 }
                 pst.setInt(4, this.roleID.id);
 
