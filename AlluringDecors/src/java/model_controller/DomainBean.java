@@ -66,7 +66,7 @@ public class DomainBean implements Serializable {
     final String tableName = "[Domain]";
     final String props[] = {"DomainID", "Name"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName+ " ORDER BY DomainID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
@@ -78,6 +78,11 @@ public class DomainBean implements Serializable {
     public boolean create() {
 
         try {
+            if(this.getName().equals("")){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "All fields are required", "Error"));
+                return false;
+            }
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
 //            pst.setInt(1, this.getId());
             pst.setString(1, this.getName());

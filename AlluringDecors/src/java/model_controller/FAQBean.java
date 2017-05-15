@@ -75,7 +75,7 @@ public class FAQBean implements Serializable {
     final String tableName = "FAQ";
     final String props[] = {"FAQID", "Question", "Answer"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName+ " ORDER BY FAQID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
     private ResultSet rs;
@@ -91,6 +91,12 @@ public class FAQBean implements Serializable {
 //            pst.setInt(1, this.getId());
             pst.setString(1, this.getQuestion());
             pst.setString(2, this.getAnswer());
+            if(this.getQuestion().equals("") || this.getAnswer().equals("")){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "All fields are required", "Error"));
+                return false;
+            }
+            
             if (pst.executeUpdate() > 0) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Create Successfully", "Successfully"));

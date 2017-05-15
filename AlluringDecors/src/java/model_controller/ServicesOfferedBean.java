@@ -86,7 +86,7 @@ public class ServicesOfferedBean implements Serializable {
     final String tableName = "ServicesOffered";
     final String props[] = {"ServicesOfferedID", "Name", "DomainID", "Content"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName+ " ORDER BY ServicesOfferedID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";

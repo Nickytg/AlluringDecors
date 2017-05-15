@@ -123,7 +123,7 @@ public class PaymentDetailsBean implements Serializable {
     final String tableName = "PaymentDetail";
     final String props[] = {"PaymentDetaiID", "BillID", "Date", "TotalBillAmount", "DueAmount", "BalanceAmount", "TotalPaidAmount", "isMaintained"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?,?,?,?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName+ " ORDER BY PaymentDetaiID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";

@@ -69,7 +69,7 @@ public class BillBean implements Serializable {
     final String tableName = "Bill";
     final String props[] = {"BillID", "ServicesRequestID", "DomainID"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName + " ORDER BY BillID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";

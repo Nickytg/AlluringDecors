@@ -102,7 +102,7 @@
                                     <p:dataTable id="table" var="item" value="#{accountBean.readAll()}" widgetVar="accountTable" paginator="true" rows="10"
                                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
                                                  paginatorPosition="bottom" lazy="true"
-                                                 style="width:900px;" emptyMessage="Data not found">  
+                                                 style="width:80%;" emptyMessage="Data not found">  
                                         <f:facet name="header">
                                             Account data
                                         </f:facet>
@@ -115,6 +115,9 @@
                                         <p:column headerText="Password">  
                                             <h:outputText value="#{item.password}" />  
                                         </p:column> 
+                                        <p:column headerText="Email">  
+                                            <h:outputText value="#{item.userID.email}" />  
+                                        </p:column>
                                         <p:column headerText="Role">  
                                             <h:outputText value="#{item.roleID.name}" />  
                                         </p:column>

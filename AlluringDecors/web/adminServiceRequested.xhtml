@@ -168,7 +168,7 @@
                                         </h:selectOneMenu> 
 
                                         <h:outputText value="Remark" />
-                                        <h:inputText value="#{servicesRequestBean.selectedServicesRequest.remark}" required="true" requiredMessage="Please enter answer" />    
+                                        <h:inputText value="#{servicesRequestBean.selectedServicesRequest.remark}"  />    
 
                                         <p:commandButton id="save" actionListener="#{servicesRequestBean.update()}" update=":tableForm:table" oncomplete="PF('servicesRequestEditDialog').hide();" 
                                                          value="Save"/>

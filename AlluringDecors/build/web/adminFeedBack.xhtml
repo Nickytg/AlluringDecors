@@ -60,7 +60,9 @@
                                         </div>
                                     </div>
                                 </label>
-
+                                <p:messages id="messages" autoUpdate="true"/>
+                                <p:commandButton id="add" actionListener="#{feedbackBean.create()}" update=":tableForm:table" value="Add">
+                                </p:commandButton>   
                             </center>
                             <div class="row" style="margin-top:20px">
                                 <center>

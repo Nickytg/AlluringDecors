@@ -99,7 +99,7 @@ public class AccountBean implements Serializable {
     //</editor-fold>
     // <editor-fold desc="DAO">
     private final String sqlCreate = "INSERT INTO Account VALUES(?, ?, ?, ?)";
-    private final String sqlRead = "SELECT * FROM Account";
+    private final String sqlRead = "SELECT * FROM Account ORDER BY UserID desc";
     private final String sqlReadById = "SELECT * FROM Account WHERE UserID = ?";
     private final String sqlUpdate = "SELECT * FROM Account WHERE UserID = ?";
     private final String sqlDelete = "DELETE FROM Account WHERE UserID = ?";
@@ -229,6 +229,12 @@ public class AccountBean implements Serializable {
     public boolean create() {
 
         try {
+            if(this.userID.firstname.equals("") || this.userID.lastname.equals("")|| this.userID.email.equals("")|| this.userID.phone.equals("")|| this.userID.address.equals("") || this.getUsername().equals("") || this.getPassword().equals("")){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "All fields are required", "Error"));
+                return false;
+            }
+            
             UserBean userInfo = new UserBean();
             userInfo.setFirstname(this.userID.firstname);
             userInfo.setLastname(this.userID.lastname);

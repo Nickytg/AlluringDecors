@@ -100,7 +100,7 @@ public class ContactUsBean implements Serializable {
     final String props[] = {"ContactUsID", "Name", "Phone", "Address", "Content"};
         private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
 
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName+ " ORDER BY ContactUsID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlUpdate = "UPDATE " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlDelete = "DELETE FROM " + tableName + " WHERE " + props[0] + " = ?";
@@ -112,8 +112,14 @@ public class ContactUsBean implements Serializable {
      * Create new Customer
      */
     public boolean create() {
-
+        
         try {
+            if(this.getName().equals("") || this.getPhone().equals("")|| this.getAddress().equals("")|| this.getContent().equals("")){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "All fields are required", "Error"));
+                return false;
+            }
+            
             pst = DBConnector.getConnection().prepareStatement(sqlCreate);
             pst.setString(1, this.getName());
             pst.setString(2, this.getPhone());

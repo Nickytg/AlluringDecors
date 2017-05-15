@@ -46,6 +46,9 @@ public class ServicesRequestBean implements Serializable {
     ServicesRequestBean selectedServicesRequest;
 
     public ServicesRequestBean getSelectedServicesRequest() {
+        if(selectedServicesRequest == null){
+            selectedServicesRequest = new ServicesRequestBean();
+        }
         return selectedServicesRequest;
     }
 
@@ -106,7 +109,7 @@ public class ServicesRequestBean implements Serializable {
     final String tableName = "ServicesRequest";
     final String props[] = {"ServicesRequestID", "ServicesOfferedID", "UserID", "ServicesRequestStatusID", "Remark"};
     private final String sqlCreate = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
-    private final String sqlRead = "SELECT * FROM " + tableName;
+    private final String sqlRead = "SELECT * FROM " + tableName+ " ORDER BY ServicesRequestID desc";
     private final String sqlReadById = "SELECT * FROM " + tableName + " WHERE " + props[0] + " = ?";
     private final String sqlReadByUserId = "SELECT * FROM " + tableName + " WHERE " + props[2] + " = ?";
     private final String sqlReadByTypeId = "SELECT * FROM " + tableName + " WHERE " + props[3] + " = ?";
